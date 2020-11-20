@@ -2,11 +2,10 @@
 Effective","  Date
 Announced",Target Name,Acquiror Name,"Target
 CUSIP","Acquiror
- CUSIP"
-7/1/14,7/1/14,Beazer Pre-Owned Rental Homes,American Homes 4 Rent,,
-12/31/14,12/31/14,Ellington Housing,American Homes 4 Rent,,
-1/5/16,9/21/15,Colony American Homes Inc,Starwood Waypoint Residential,3A6662,85571W
-2/29/16,12/3/15,American Residential Ppty Inc,American Homes 4 Rent,02927E,02665T
-11/16/17,8/10/17,Starwood Waypoint Residential,Invitation Homes Inc,7F4169,46187W
-12/22/17,12/22/17,Broadtree Residential,Mainstreet Renewal LLC,,
-2/27/17,5/9/17,Silver Bay Realty Trust Corp,Tricon Capital Group Inc,82735Q,89612W
+ CUSIP",Articles,Appr Added,Appr Total Properties,Target States,Acquiror States
+7/1/14,7/1/14,Beazer Pre-Owned Rental Homes,American Homes 4 Rent,,,https://www.housingwire.com/articles/30512-american-homes-4-rent-acquires-beazer-pre-owned-rental-homes/,1300,27000,"AZ, CA, FL, NV","AZ, CO, FL, GA, ID, IL, IN, KT, MS, NC, NM, NV, OH, OR, SC, TN, TX, UT, WA, WI"
+12/31/14,12/31/14,Ellington Housing,American Homes 4 Rent,,,https://www.prnewswire.com/news-releases/american-homes-4-rent-announces-acquisition-of-ellington-housing-single-family-portfolio-300014876.html,900,31000,"AZ, CO, GA, NC, TN, TX","AZ, CO, FL, GA, ID, IL, IN, KT, MS, NC, NM, NV, OH, OR, SC, TN, TX, UT, WA, WI"
+1/5/16,9/21/15,Colony American Homes Inc,Starwood Waypoint Residential,3A6662,85571W,https://www.businesswire.com/news/home/20150921005525/en/Starwood-Waypoint-Residential-Trust-and-Colony-American-Homes-Announce-Merger-to-Create-Best-in-Class-Single-Family-Rental-Company,19000,31500,,
+2/29/16,12/3/15,American Residential Ppty Inc,American Homes 4 Rent,02927E,02665T,https://www.housingwire.com/articles/35754-american-homes-4-rent-announces-merger-with-american-residential-properties/,8938,47315,"GA, TX, AZ",
+11/16/17,8/10/17,Starwood Waypoint Residential,Invitation Homes Inc,7F4169,46187W,https://www.housingwire.com/articles/40970-invitation-homes-starwood-waypoint-homes-to-merge-create-nations-largest-single-family-landlord/,32000,82000,,"Atlanta, Charlotte, Chicago, Jacksonville, Las Vegas, Minneapolis, Northern California, Orlando, Phoenix, Seattle, Southern California, South Florida, Tampa"
+2/27/17,5/9/17,Silver Bay Realty Trust Corp,Tricon Capital Group Inc,82735Q,89612W,https://www.housingwire.com/articles/39386-massive-single-family-rental-merger-tricon-capital-to-acquire-silver-bay-realty-trust-for-14-billion/,9044,16800,,
