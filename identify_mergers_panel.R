@@ -1,0 +1,244 @@
+# ===================================================================
+# Identifying Merge Affected Rows 
+# ===================================================================
+# Script takes the following steps
+#   - Concats micro MLS merged data for identified states
+#   - Merges in Josh's owner names matching table 
+#   - String matches against owner names to identify the merger affected properties and time periods
+
+rm(list=ls())
+
+# Setting ===============================================
+library(tidyverse)
+library(data.table)
+library(lubridate)
+library(stringr)
+library(gridExtra)
+library(zoo)
+library(ggplot2)
+library(openxlsx)
+library(readxl)
+library(rlist)
+library(bit64)
+library(argparse)
+library(RecordLinkage)
+setwd("~/project")
+
+source("/gpfs/loomis/project/humphries/rl874/rent_project/code/cleaning/fn_dedup_rent.R")
+source("/gpfs/loomis/project/humphries/rl874/rent_project/code/cleaning/fn_misc_rent.R")
+source("/gpfs/loomis/project/humphries/rl874/rent_project/code/cleaning/fn_clean_cl.R")
+
+micro_path <- "/gpfs/loomis/scratch60/humphries/rl874/pipeline_out/micro/"
+match_path <- "/gpfs/loomis/scratch60/humphries/rl874/mergers/match_tables/"
+mergers_path <- "/gpfs/loomis/project/humphries/rl874/mergers_project/"
+
+parser <- ArgumentParser()
+
+# specify our desired options 
+# by default ArgumentParser will add an help option 
+parser$add_argument("-s", "--state", type="character", default="AZ", 
+                    help="State file to build [default %(default)s]",
+                    metavar = "abbrev")
+
+args <- parser$parse_args()
+
+# Set inputs
+state <- args$state
+
+# Read in micro data 
+t0 <- Sys.time()
+panel <- fread(paste0(micro_path, state, "_mls.csv"))
+t1 <- Sys.time() 
+print(paste("Reading took", difftime(t1,t0,units='mins'), "minutes."))
+
+print("Available memory after reading and binding")
+getAvailMem() 
+
+# Testing
+#panel <- fread(paste0(micro_path, "/", state, "_mls.csv"), nrows = 1e4)
+
+# Owner name matching ------------------------------------------------
+# Merge in owner matched names
+matched_names <- fread(paste0(match_path, state, "_matched_owners.csv"))
+n_matched_names <- uniqueN(matched_names$owner_name)
+n_owner_names <- uniqueN(panel$owner_name)
+print(paste("There are", n_matched_names, "unique names in matched owners data and", n_owner_names, "unique owner names."))
+panel <- merge(panel, matched_names, by = "owner_name", all.x = T)
+n_bad <- nrow(panel[(is.na(match_name) | match_name == "") & !(is.na(owner_name) | owner_name == "")])
+if (n_bad > 0){
+  print(paste("Warning: there are", n_bad,"names that have not been matched. Imputing with original name..."))
+  panel[is.na(match_name) | match_name == "", match_name := owner_name]
+}
+rm(matched_names)
+
+# Check owner names in panel
+n_good <- nrow(panel[!is.na(owner_name) & owner_name != ""])
+print(paste("There are", n_good, "rows with owner name out of", nrow(panel)))
+
+# Read in mergers data 
+mergers <- fread(paste0(mergers_path, "mergers_final.csv"))
+names(mergers) <- gsub("[[:space:]]", "", names(mergers))
+mergers[,DateEffective := as.POSIXct(DateEffective, format = "%m/%d/%y")]
+mergers[,DateAnnounced := as.POSIXct(DateAnnounced, format = "%m/%d/%y")]
+mergers[,Year := year(DateEffective)]
+mergers[,Target_Entities := list()]
+mergers[,Acquiror_Entities := list()]
+
+# Entity data
+base_company_names <- c("American Homes 4 Rent", "Invitation Homes Inc", "Starwood Waypoint Residential", 
+                        "Colony American Homes Inc", "Ellington Housing", "American Residential Ppty Inc", 
+                        "Tricon Capital Group Inc", "Silver Bay Realty Trust Corp", "Beazer Pre-Owned Rental Homes",
+                        "Broadtree Residential", "Mainstreet Renewal LLC")
+entity_file_names <- c("american_homes", "invitation_homes", "colony_starwood", "colony_american", "ellington_housing",
+                       "american_residential_ppty", "tricon_american_homes", "silver_bay")
+
+for (i in 1:length(base_company_names)){
+ base_name <- base_company_names[i]
+ tmp <- c(base_name)
+ if (!(base_name %in% c("Beazer Pre-Owned Rental Homes",
+     "Broadtree Residential", "Mainstreet Renewal LLC", "Amherst Holdings LLC"))){ # No subsidiaries for these
+   entity_tmp <- setDT(read.table(paste0(mergers_path, "entities/", entity_file_names[i], "_entities.txt"), header = F,
+                                  sep = "\t", strip.white=T, fill = T))
+   entity_tmp <- entity_tmp[,.(V1)]
+   setnames(entity_tmp, "V1", "Entity_Name")
+   entity_tmp[,Entity_Name := levels(Entity_Name)[as.numeric(Entity_Name)]]
+   tmp <- c(tmp, entity_tmp$Entity_Name)
+   entity_tmp[,`:=`(Year = NA, Base_Name = base_name)]
+   if (i == 1){
+      entity_dt <- entity_tmp
+   } else{
+      entity_dt <- rbindlist(list(entity_dt, entity_tmp), use.names = T)
+   }
+ }
+ if (base_name == "Mainstreet Renewal LLC"){ tmp <- c(tmp, "Amherst Holdings LLC")}
+ mergers[TargetName == base_name, Target_Entities := list(tmp)]
+ mergers[AcquirorName == base_name, Acquiror_Entities := list(tmp)]
+ entity_dt <- rbindlist(list(entity_dt, data.table(Year = NA, Entity_Name = base_name, Base_Name = base_name)), use.names=T)
+}
+
+# Clean up all the names
+company_suffixes <- c("inc", "llc")
+
+panel[,match_name := trimws(gsub("[[:punct:]]", " ", match_name))]
+panel[,match_name := trimws(gsub(paste0(company_suffixes, collapse = "|"), "", match_name, ignore.case = T))]
+panel[,match_name := toupper(gsub("\\s\\s+", " ", match_name))]
+
+mergers[,Target_Entities_Clean := list(c("placeholder"))]
+mergers[,Target_Entities_Clean := as.list(Target_Entities_Clean)]
+mergers[,Acquiror_Entities_Clean := list(c("placeholder"))]
+mergers[,Acquiror_Entities_Clean := as.list(Acquiror_Entities_Clean)]
+for (i in 1:nrow(mergers)){
+   tmp_target <- unlist(mergers[i, Target_Entities])
+   tmp_target <- trimws(gsub("[[:punct:]]", " ", tmp_target))
+   tmp_target <- trimws(gsub(paste0(company_suffixes, collapse = "|"), "", tmp_target, ignore.case = T))
+   tmp_target <- unique(toupper(gsub("\\s\\s+", " ", tmp_target)))
+   mergers[i, Target_Entities_Clean := list(c(tmp_target))]
+   
+   tmp <- unlist(mergers[i, Acquiror_Entities])
+   tmp <- trimws(gsub("[[:punct:]]", " ", tmp))
+   tmp <- trimws(gsub(paste0(company_suffixes, collapse = "|"), "", tmp, ignore.case = T))
+   tmp <- unique(setdiff(toupper(gsub("\\s\\s+", " ", tmp)), tmp_target)) # Acquiror shouldn't own same properties
+   mergers[i, Acquiror_Entities_Clean := list(tmp)]
+}
+
+mergers[,Year := year(DateEffective)]
+mergers[is.na(Year), Year := year(DateAnnounced)]
+
+mergers[,MergeID_1 := .GRP, .(Year, AcquirorName)]
+mergers[,MergeID_2 := MergeID_1]
+
+# Attempt link using RecordLinkage 
+unique_panel_names <- unique(panel[!is.na(match_name) & match_name != "", match_name])
+d1 <- data.frame("match_name" = unique_panel_names)
+d2 <- data.frame("merger_name" = unique(c(unlist(mergers$Target_Entities_Clean), unlist(mergers$Acquiror_Entities_Clean))))
+n_owners <- nrow(d1)
+n_merge_entities <- nrow(d2)
+print(paste("Linkage for", n_owners, "match names and", n_merge_entities, "merger entities."))
+t0 <- Sys.time()
+d2_tmp <- setDT(copy(d2))
+d2_tmp[,id2 := .I]
+i <- 1
+pairs_list <- list()
+while (i <= nrow(d1)){
+   end <- min(i+1e6-1, nrow(d1))
+   d1_tmp <- data.frame("match_name" = d1[i:end,])
+   output <- compare.linkage(d1_tmp, d2, strcmp = T)
+   tmp_pairs <- setDT(output$pairs)
+   tmp_pairs[match_name >= 0.95,is_match := 1]
+   
+   tmp_pairs <- tmp_pairs[is_match == 1]
+   setnames(tmp_pairs, "match_name", "jw_score")
+   d1_tmp <- setDT(d1_tmp)
+   d1_tmp[,id1 := .I]
+   
+   # Choose highest score match for a given id1 if multiple 
+   tmp_pairs[,max_jw := max(jw_score), id1]
+   tmp_pairs <- tmp_pairs[jw_score == max_jw]
+   tmp_pairs <- tmp_pairs[!duplicated(tmp_pairs$id1)] # In case of tie
+   tmp_pairs <- merge(tmp_pairs, d1_tmp, by = "id1")
+   tmp_pairs <- merge(tmp_pairs, d2_tmp, by = "id2")
+   pairs_list[[i]] <- tmp_pairs
+   i <- i + 1e6
+   print(paste0("i: ", i))
+   getAvailMem()
+}
+matched_pairs <- rbindlist(pairs_list)
+matched_pairs[,match_name := levels(match_name)[as.numeric(match_name)]]
+matched_pairs[,merger_name := levels(merger_name)[as.numeric(merger_name)]]
+t1 <- Sys.time()
+print(paste("Record linkage took", 
+            difftime(t1, t0, units="mins"), "minutes."))
+rm(pairs_list)
+
+# ID all merge affected properties 
+panel <- merge(panel, matched_pairs[,.(jw_score, match_name, merger_name)], by = "match_name", all.x = T)
+rm(matched_pairs)
+getAvailMem()
+
+# ID each merge event separately
+for (i in 1:nrow(mergers)){
+   yr <- mergers[i, Year]
+   targets_to_check <- unlist(mergers[i, Target_Entities_Clean])
+   target_name <- mergers[i, TargetName]
+   target_id <- mergers[i, MergeID_1]
+   acquirors_to_check <- unlist(mergers[i, Acquiror_Entities_Clean])
+   acquiror_name <- mergers[i, AcquirorName]
+   acquiror_id <- mergers[i, MergeID_2]
+
+   panel[year == yr & merger_name %in% targets_to_check, `:=`(TargetID = target_id)]   
+   panel[year == yr & merger_name %in% acquirors_to_check, `:=`(AcquirorID = acquiror_id)]
+   # Assign standardized merging firm names 
+   panel[merger_name %in% targets_to_check, Merger_Owner_Name := target_name] 
+   panel[merger_name %in% acquirors_to_check, Merger_Owner_Name := acquiror_name]
+}
+
+panel[,merge_affected := any(!is.na(Merger_Owner_Name)), .(id)] # Props owned by any firm that merged 
+panel[,merge_event := length(intersect(TargetID[!is.na(TargetID)], AcquirorID[!is.na(AcquirorID)])) > 0, .(year, Zip5)] # Merge event: zip-years where any TargetID == AcquirorID
+panel[order(Zip5, year),merge_cum := cumsum(merge_event), .(Zip5)]
+panel[,treated := merge_cum & merge_affected] # Treated variable in DiD: property of one of merged firms post-merger 
+
+n_tot_owned <- uniqueN(panel[merge_affected == T, id])
+print(paste("There are", n_tot_owned, "total unique properties owned by any of the merging firms in the dataset."))
+zip_yr_with_merge <- unique(panel[merge_event == 1, .(Zip5, year)])
+multi_merge_zips <- unique(zip_yr_with_merge[duplicated(Zip5), Zip5]) # Get zips affected by multiple mergers
+zips_with_merge <- unique(zip_yr_with_merge$Zip5)
+print(paste("Found", length(multi_merge_zips), "multi-merge zips out of", length(zips_with_merge), 
+            "total zips with a merge event."))
+# Zips with one of merged firms but not both 
+affected_zips_no_merge <- unique(panel[, .(n_affected = sum(merge_affected), n_events = sum(merge_event)), .(Zip5)][n_affected > 0 & n_events == 0, Zip5])
+print(paste("There are", length(affected_zips_no_merge), "zips with affected properties but no merge event."))
+
+# Approximate sample sizes
+n_props_merged_zips <- uniqueN(panel[Zip5 %in% zips_with_merge, id])
+n_props_unmerged_zips <- uniqueN(panel[Zip5 %in% affected_zips_no_merge, id])
+
+print(paste("There are", n_props_merged_zips, "unique properties in the merged zips."))
+print(paste("There are", n_props_unmerged_zips, "unique properties in the zips with only 1 of any merging firm."))
+
+# Save full panel
+fwrite(panel, paste0("/gpfs/loomis/scratch60/humphries/rl874/mergers/", state, "_full.csv"))
+
+# Save restricted panel 
+relevant_zips <- unique(panel[merge_affected == T, Zip5])
+panel <- panel[Zip5 %in% relevant_zips]
+fwrite(panel, paste0("/gpfs/loomis/scratch60/humphries/rl874/mergers/", state, "_mergers.csv"))

@@ -1,0 +1,321 @@
+1H2 PROPERTY PHOENIX
+1H3 PROPERTY WEST
+1H4 PROPERTY WEST
+2005 & 1 1H2 BORROWER
+2013 & 1 H BORROWER
+2013 1 IH BORROWER
+2013 1 IH BORROWER LIMITED PARTNERSHIP
+2013-1 IH BORROWER
+2014 & 2 IH BORROWER
+2014 & 3 IH BORROWER
+2014 & 11 HI BORROWER LLC
+2014 1 H BORROWER
+2014 1 IH BORROWER A DE
+2014 2 IH BORROWER
+2014 2 IH BORROWER & THR CALIFORNIA LP
+2014 2 IH BORROWER A DE
+2014 3 IH BORROWER
+2014 3 IH BORROWER DE
+2014 3 IH BORROWER LIMITED PARTNERSHIP
+2014-1 IH BORROWER
+2014-1 IH BORROWER LP
+2014-2 1 H BORROWER
+2014-2 IH BORROWER
+2014-2 H BORROWER LP
+2014-3 H EQUITY OWNER
+2014-3 IH BORROWER
+2015 & 1 H2 BORROWER
+2015 & 2 H2 BORROWER
+2015 & 3 1H2 BORROWER
+2015 1 IH2 BORROWER
+2015 2 IH2 BORROWER
+2015 2 IH2 BORROWER DE
+2015 2 IH2 BORROWER LTD PTP
+2015 3 1H2 BORROWER
+2015 3 1H2 BORROWER DE
+2015-1 I H 2 BORROWER
+2015-1 IH BORROWER
+2015-1 IH2 BORROWER
+2015-2 1 H 2 BORROWER
+2015-2 IH BORROWER
+2015-2 IH BORROWER
+2015-2 IH2 BORROWER
+2015-2 IH-2 BORROWER
+2015-3 1 H 2 BORROWER
+2015-3 I H2 BORROWER
+2015-3 IH2 BORROWER
+2015-3 IH2 BORROWER LLC TR
+H14 PROPERTY WEST
+I H 2 PROPERTY NEVADA
+I H 3 PROPERTY NEVADA
+I H 4 PROPERTY NEVADA
+I H 5 PROPERTY NEVADA
+I H 6 PROPERTY NEVADA
+ID6 PROPERTY WASHINGTON
+H 4 PROPERTY WASHINGTON
+IH 6 PROPERTY WEST LP
+IH BORROWER PS
+IH PROPERTY BORROWER
+IH PROPERTY WASHINGTON
+IH2 BORROWER 2015-1
+IH2 BORROWER PS
+IH2 PROP WEST
+H2 PROP WEST LIMITED PARTNERSHIP
+IH2 PROPERTY 2 LP TR
+IH2 PROPERTY 2 TR
+IH2 PROPERTY BORROWER
+IH2 PROPERTY PHOENIX
+IH2 PROPERTY WASHINGTON
+IH2 PROPERTY WEST
+IH2 PROPERTY WEST LP
+IH2 PROPERTY WEST PS
+IH3 PROP WEST
+IH3 PROP WEST LIMITED PARTNERSHIP
+IH3 PROPERTY BORROWER
+IH3 PROPERTY PHOENIX
+IH3 PROPERTY WASHINGTON
+IH3 PROPERTY WEST
+1H3 PROPERTY WEST A DE
+IH3 PROPERTY WEST PS
+IH4 PROP WEST
+1-4 PROP WEST LIMITED PARTNERSHIP
+IH4 PROPERTY BORROWER
+IH4 PROPERTY PHOENIX
+IH4 PROPERTY WASHINGTON
+IH4 PROPERTY WEST
+IH4 PROPERTY WEST PS
+IH5 PROP WEST
+IHS PROP WEST LIMITED PARTNERSHIP
+IH5 PROPERTY BORROWER
+IH5 PROPERTY PHOENIX
+IHS PROPERTY PHOENIX LP
+IH5 PROPERTY WASHINGTON
+IH5 PROPERTY WEST
+IH5 PROPERTY WEST DE
+IHS PROPERTY WEST ETAL
+IHS PROPERTY WEST LP
+IH5 PROPERTY WEST PS
+IH6 PROP WEST
+IH6 PROP WEST LIMITED PARTNERSHIP
+IH6 PROPERTY BORROWER
+IH6 PROPERTY NEVADA LP
+IH6 PROPERTY PHOENIX
+IH6 PROPERTY PHOENIX LP
+IH6 PROPERTY WASHINGTON
+IH6 PROPERTY WASHINGTON LP
+IH6 PROPERTY WEST
+IH6 PROPERTY WEST LP
+IHP PROP WEST
+IHP PROPERTY WEST
+IHS PROPERTY WEST
+INVITATION HOMES
+PROP WEST INC
+PROPERTY WEST HOLDINGS LLC
+PROPERTY WEST LLC
+PROPERTY WEST LP
+THR CA
+THR CA LIMITED PARTNERSHIP
+THR CA LLC
+THR CALIFORNIA
+THR CALIFORNIA 1
+THR CALIFORNIA ETAL
+THR CALIFORNIA LIMITED PARTNERSHIP
+THR CALIFORNIA LLC
+THR CALIFORNIA LP
+THR CALIFORNIA PS
+THR LLC
+THR PHOENIX
+THR PHOENIX LLC
+THR PHOENIX LP
+THR PROPERTIES LLC
+THR PROPERTIES LLC 50%
+THR PROPERTY BORROWER
+THR REAL ESTATE LLC
+THR WASHINGTON 11
+THR,CALIF
+2013-1 IH Borrower G.P. LLC
+2013-1 IH Borrower L.P.
+2013-1 IH Equity Owner G.P. LLC
+2013-1 IH Equity Owner L.P.
+2013-1 IH Property Holdco L.P.
+2015-3 IH2 Borrower TRS LLC
+2015-3 IH2 Property Holdco L.P.
+2015-3 IH2 Equity Owner G.P. LLC
+2015-3 IH2 Equity Owner L.P.
+2015-3 IH2 Borrower G.P. LLC
+2017-1 IH Property Holdco L.P.
+2017-1 IH Equity Owner G.P. LLC
+2017-1 IH Equity Owner L.P.
+2017-1 IH Borrower GP LLC
+2017-1 IH Borrower LP
+2017-2 IH Property Holdco L.P.
+2017-2 IH Equity Owner G.P. LLC
+2017-2 IH Equity Owner L.P.
+2017-2 IH Borrower GP LLC
+2017-2 IH Borrower LP
+2018-1 IH Equity Owner GP LLC
+2018-1 IH Borrower G.P. LLC
+2018-1 IH Borrower L.P.
+2018-1 IH Equity Owner L.P.
+2018-1 Property Holdco LP
+2018-2 IH Borrower G.P. LLC
+2018-2 IH Borrower L.P.
+2018-2 IH Equity Owner LLC
+2018-2 IH Property Holdco LLC
+2018-3 IH Borrower G.P. LLC
+2018-3 IH Borrower L.P.
+2018-3 IH Equity Owner LLC
+2018-3 IH Property Holdco LLC
+2018-4 IH Borrower G.P. LLC
+2018-4 IH Borrower L.P.
+2018-4 IH Equity Owner LLC
+2018-4 IH Property Holdco LLC
+2019-1 IH Borrower G.P. LLC
+2019-1 IH Borrower L.P.
+2019-1 IH Equity Owner LLC
+2019-1 IH Property Holdco LLC
+Adalwin, LLC
+CSFR ColFin American Investors TRS, LLC
+CSFR FM 2012-1 U.S. West, LLC
+CSH Class F, LLC
+CSH Depositor, LLC
+CSH Property One, LLC
+CSH Property Three, LLC
+CSHP One LP
+Dallin, LLC
+Dunley, LLC
+IH Asset Receiving G.P. LLC
+IH Asset Receiving Limited Partnership
+IH Merger Sub LLC
+IH2 Asset Receiving G.P. LLC
+IH2 Asset Receiving Limited Partnership
+IH2 Property Borrower L.P.
+IH2 Property Florida, L.P.
+IH2 Property Georgia, L.P.
+IH2 Property GP II LLC
+IH2 Property GP LLC
+IH2 Property Guarantor L.P.
+IH2 Property Holdco GP LLC
+IH2 Property Holdco L.P.
+IH2 Property Illinois, L.P.
+IH2 Property Nevada, L.P.
+IH2 Property North Carolina, L.P.
+IH2 Property Phoenix, L.P.
+IH2 Property TRS 2 L.P.
+IH2 Property TRS LLC
+IH2 Property Washington, L.P.
+IH2 Property West, L.P.
+IH3 Asset Receiving G.P. LLC
+IH3 Asset Receiving L.P.
+IH3 Property Borrower L.P.
+IH3 Property Florida, L.P.
+IH3 Property Georgia, L.P.
+IH3 Property GP LLC
+IH3 Property Guarantor L.P.
+IH3 Property Holdco GP LLC
+IH3 Property Holdco L.P.
+IH3 Property Illinois, L.P.
+IH3 Property Level GP LLC
+IH3 Property Minnesota, L.P.
+IH3 Property Nevada, L.P.
+IH3 Property North Carolina, L.P.
+IH3 Property Phoenix, L.P.
+IH3 Property Washington, L.P.
+IH3 Property West, L.P.
+IH4 Property Borrower L.P.
+IH4 Property Florida, L.P.
+IH4 Property Georgia, L.P.
+IH4 Property GP LLC
+IH4 Property Guarantor L.P.
+IH4 Property Holdco GP LLC
+IH4 Property Holdco L.P.
+IH4 Property Illinois, L.P.
+IH4 Property Level GP LLC
+IH4 Property Minnesota, L.P.
+IH4 Property Nevada, L.P.
+IH4 Property North Carolina, L.P.
+IH4 Property Phoenix, L.P.
+IH4 Property Washington, L.P.
+IH4 Property West, L.P.
+IH5 Property Borrower L.P.
+IH5 Property Florida, L.P.
+IH5 Property Georgia, L.P.
+IH5 Property GP LLC
+IH5 Property Guarantor L.P.
+IH5 Property Holdco GP LLC
+IH5 Property Holdco L.P.
+IH5 Property Illinois, L.P.
+IH5 Property Level GP LLC
+IH5 Property Minnesota, L.P.
+IH5 Property Nevada, L.P.
+IH5 Property North Carolina, L.P.
+IH5 Property Phoenix, L.P.
+IH5 Property Washington, L.P.
+IH5 Property West, L.P.
+IH6 Property Borrower L.P.
+IH6 Property Florida, L.P.
+IH6 Property Georgia, L.P.
+IH6 Property GP LLC
+IH6 Property Guarantor L.P.
+IH6 Property Holdco GP LLC
+IH6 Property Holdco L.P.
+IH6 Property Illinois, L.P.
+IH6 Property Level GP LLC
+IH6 Property Minnesota, L.P.
+IH6 Property Nevada, L.P.
+IH6 Property North Carolina, L.P.
+IH6 Property Phoenix, L.P.
+IH6 Property Washington, L.P.
+IH6 Property West, L.P.
+Invitation Homes 3 GP LLC
+Invitation Homes 3 L.P.
+Invitation Homes 4 GP LLC
+Invitation Homes 4 L.P.
+Invitation Homes 5 GP LLC
+Invitation Homes 5 L.P.
+Invitation Homes 6 GP LLC
+Invitation Homes 6 L.P.
+Invitation Homes GP LLC
+Invitation Homes L.P.
+Invitation Homes OP GP LLC
+Invitation Homes Operating Partnership LP
+Invitation Homes Realty LLC
+JA Property L.P.
+Louden, LLC
+Morven, LLC
+SFR 2012-1 U.S. West, LLC
+SRP Sub, LLC
+SRPS LP
+SWAY 2014-1 Borrower, LLC
+SWAY 2014-1 Equity Owner, LLC
+Invitation Homes Realty California Inc.
+SWH 2017-1 Borrower GP, LLC
+SWH 2017-1 Borrower, LP
+SWH 2017-1 Equity Owner, LLC
+THR California, L.P.
+THR Contribution L.P.
+THR Florida II, L.P.
+THR Florida, L.P.
+THR Georgia II, L.P.
+THR Georgia, L.P.
+THR Lakewood L.P.
+THR Nevada II, L.P.
+THR North Carolina II, L.P.
+THR Phoenix II, L.P.
+THR Phoenix, L.P.
+THR Property Borrower II L.P.
+THR Property Borrower L.P.
+THR Property GP II LLC
+THR Property GP LLC
+THR Property Guarantor II L.P.
+THR Property Guarantor L.P.
+THR Property Holdco GP II LLC
+THR Property Holdco GP LLC
+THR Property Holdco II L.P.
+THR Property Holdco L.P.
+THR Property Illinois II, L.P.
+THR Property Illinois, L.P.
+THR Property Management L.P.
+THR Washington II, L.P.
+THRCA II, L.P.
+Tirell, LLC
