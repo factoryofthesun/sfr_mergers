@@ -60,19 +60,19 @@ getAvailMem()
 # Owner name matching ------------------------------------------------
 # Merge in owner matched names
 matched_names <- fread(paste0(match_path, state, "_matched_owners.csv"))
-n_matched_names <- uniqueN(matched_names$owner_name)
-n_owner_names <- uniqueN(panel$owner_name)
+n_matched_names <- uniqueN(matched_names$owner_name_clean)
+n_owner_names <- uniqueN(panel$owner_name_clean)
 print(paste("There are", n_matched_names, "unique names in matched owners data and", n_owner_names, "unique owner names."))
-panel <- merge(panel, matched_names, by = "owner_name", all.x = T)
-n_bad <- nrow(panel[(is.na(match_name) | match_name == "") & !(is.na(owner_name) | owner_name == "")])
+panel <- merge(panel, matched_names, by = "owner_name_clean", all.x = T)
+n_bad <- nrow(panel[(is.na(owner_matched) | owner_matched == "") & !(is.na(owner_name_clean) | owner_name_clean == "")])
 if (n_bad > 0){
   print(paste("Warning: there are", n_bad,"names that have not been matched. Imputing with original name..."))
-  panel[is.na(match_name) | match_name == "", match_name := owner_name]
+  panel[is.na(owner_matched) | owner_matched == "", owner_matched := owner_name_clean]
 }
 rm(matched_names)
 
 # Check owner names in panel
-n_good <- nrow(panel[!is.na(owner_name) & owner_name != ""])
+n_good <- nrow(panel[!is.na(owner_name_clean) & owner_name_clean != ""])
 print(paste("There are", n_good, "rows with owner name out of", nrow(panel)))
 
 # Read in mergers data 
@@ -87,16 +87,13 @@ mergers[,Acquiror_Entities := list()]
 # Entity data
 base_company_names <- c("American Homes 4 Rent", "Invitation Homes Inc", "Starwood Waypoint Residential", 
                         "Colony American Homes Inc", "Ellington Housing", "American Residential Ppty Inc", 
-                        "Tricon Capital Group Inc", "Silver Bay Realty Trust Corp", "Beazer Pre-Owned Rental Homes",
-                        "Broadtree Residential", "Mainstreet Renewal LLC")
+                        "Tricon Capital Group Inc", "Silver Bay Realty Trust Corp", "Beazer Pre-Owned Rental Homes")
 entity_file_names <- c("american_homes", "invitation_homes", "colony_starwood", "colony_american", "ellington_housing",
-                       "american_residential_ppty", "tricon_american_homes", "silver_bay")
+                       "american_residential_ppty", "tricon_american_homes", "silver_bay", "beazer")
 
 for (i in 1:length(base_company_names)){
  base_name <- base_company_names[i]
  tmp <- c(base_name)
- if (!(base_name %in% c("Beazer Pre-Owned Rental Homes",
-     "Broadtree Residential", "Mainstreet Renewal LLC", "Amherst Holdings LLC"))){ # No subsidiaries for these
    entity_tmp <- setDT(read.table(paste0(mergers_path, "entities/", entity_file_names[i], "_entities.txt"), header = F,
                                   sep = "\t", strip.white=T, fill = T))
    entity_tmp <- entity_tmp[,.(V1)]
@@ -109,8 +106,6 @@ for (i in 1:length(base_company_names)){
    } else{
       entity_dt <- rbindlist(list(entity_dt, entity_tmp), use.names = T)
    }
- }
- if (base_name == "Mainstreet Renewal LLC"){ tmp <- c(tmp, "Amherst Holdings LLC")}
  mergers[TargetName == base_name, Target_Entities := list(tmp)]
  mergers[AcquirorName == base_name, Acquiror_Entities := list(tmp)]
  entity_dt <- rbindlist(list(entity_dt, data.table(Year = NA, Entity_Name = base_name, Base_Name = base_name)), use.names=T)
@@ -119,9 +114,9 @@ for (i in 1:length(base_company_names)){
 # Clean up all the names
 company_suffixes <- c("inc", "llc")
 
-panel[,match_name := trimws(gsub("[[:punct:]]", " ", match_name))]
-panel[,match_name := trimws(gsub(paste0(company_suffixes, collapse = "|"), "", match_name, ignore.case = T))]
-panel[,match_name := toupper(gsub("\\s\\s+", " ", match_name))]
+panel[,owner_matched := trimws(gsub("[[:punct:]]", " ", owner_matched))]
+panel[,owner_matched := trimws(gsub(paste0(company_suffixes, collapse = "|"), "", owner_matched, ignore.case = T))]
+panel[,owner_matched := toupper(gsub("\\s\\s+", " ", owner_matched))]
 
 mergers[,Target_Entities_Clean := list(c("placeholder"))]
 mergers[,Target_Entities_Clean := as.list(Target_Entities_Clean)]
@@ -147,9 +142,14 @@ mergers[is.na(Year), Year := year(DateAnnounced)]
 mergers[,MergeID_1 := .GRP, .(Year, AcquirorName)]
 mergers[,MergeID_2 := MergeID_1]
 
+merger_cols <- setdiff(names(mergers), c("Target_Entities", "Target_Entities_Clean", 
+                                         "Acquiror_Entities", "Acquiror_Entities_Clean"))
+fwrite(mergers[,..merger_cols], 
+       paste0(mergers_path, "mergers_final_cleaned.csv"))
+
 # Attempt link using RecordLinkage 
-unique_panel_names <- unique(panel[!is.na(match_name) & match_name != "", match_name])
-d1 <- data.frame("match_name" = unique_panel_names)
+unique_panel_names <- unique(panel[!is.na(owner_matched) & owner_matched != "", owner_matched])
+d1 <- data.frame("owner_matched" = unique_panel_names)
 d2 <- data.frame("merger_name" = unique(c(unlist(mergers$Target_Entities_Clean), unlist(mergers$Acquiror_Entities_Clean))))
 n_owners <- nrow(d1)
 n_merge_entities <- nrow(d2)
@@ -160,14 +160,14 @@ d2_tmp[,id2 := .I]
 i <- 1
 pairs_list <- list()
 while (i <= nrow(d1)){
-   end <- min(i+1e6-1, nrow(d1))
-   d1_tmp <- data.frame("match_name" = d1[i:end,])
+   end <- min(i+5e5-1, nrow(d1))
+   d1_tmp <- data.frame("owner_matched" = d1[i:end,])
    output <- compare.linkage(d1_tmp, d2, strcmp = T)
    tmp_pairs <- setDT(output$pairs)
-   tmp_pairs[match_name >= 0.95,is_match := 1]
+   tmp_pairs[owner_matched >= 0.95,is_match := 1]
    
    tmp_pairs <- tmp_pairs[is_match == 1]
-   setnames(tmp_pairs, "match_name", "jw_score")
+   setnames(tmp_pairs, "owner_matched", "jw_score")
    d1_tmp <- setDT(d1_tmp)
    d1_tmp[,id1 := .I]
    
@@ -178,12 +178,12 @@ while (i <= nrow(d1)){
    tmp_pairs <- merge(tmp_pairs, d1_tmp, by = "id1")
    tmp_pairs <- merge(tmp_pairs, d2_tmp, by = "id2")
    pairs_list[[i]] <- tmp_pairs
-   i <- i + 1e6
+   i <- i + 5e5
    print(paste0("i: ", i))
    getAvailMem()
 }
 matched_pairs <- rbindlist(pairs_list)
-matched_pairs[,match_name := levels(match_name)[as.numeric(match_name)]]
+matched_pairs[,owner_matched := levels(owner_matched)[as.numeric(owner_matched)]]
 matched_pairs[,merger_name := levels(merger_name)[as.numeric(merger_name)]]
 t1 <- Sys.time()
 print(paste("Record linkage took", 
@@ -191,7 +191,7 @@ print(paste("Record linkage took",
 rm(pairs_list)
 
 # ID all merge affected properties 
-panel <- merge(panel, matched_pairs[,.(jw_score, match_name, merger_name)], by = "match_name", all.x = T)
+panel <- merge(panel, matched_pairs[,.(jw_score, owner_matched, merger_name)], by = "owner_matched", all.x = T)
 rm(matched_pairs)
 getAvailMem()
 
@@ -207,6 +207,7 @@ for (i in 1:nrow(mergers)){
 
    panel[year == yr & merger_name %in% targets_to_check, `:=`(TargetID = target_id)]   
    panel[year == yr & merger_name %in% acquirors_to_check, `:=`(AcquirorID = acquiror_id)]
+   
    # Assign standardized merging firm names 
    panel[merger_name %in% targets_to_check, Merger_Owner_Name := target_name] 
    panel[merger_name %in% acquirors_to_check, Merger_Owner_Name := acquiror_name]

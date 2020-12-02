@@ -301,12 +301,8 @@ deed[,year:=sale_yr]
 deed[,deed_event := 1] # deed event indicator
 tax[,year:=as.integer(tax_year)]
 
-# Set variables to keep in merge
-deed_vars <- names(deed)
-tax_vars <- names(tax)
-
 t0 <- Sys.time() 
-panel <- merge(deed[,..deed_vars], tax[,..tax_vars], 
+panel <- merge(deed, tax, 
                by=c(id_vars, "year"), all=T, suffixes = c("_deed", "_tax"))
 t1 <- Sys.time()
 print(paste("Merge with", nrow(panel), "rows and", ncol(panel),
@@ -351,8 +347,8 @@ date_vars <- c("sale_yr", "sale_dt", "tax_year", "eff_year_built")
 keep_vars <- c(date_vars, id_vars, "sale_price", "resale_or_new_clean", "foreclosure_clean", "cash_sale_clean", 
                "const_loan_clean", "n_deed", "n_tax", "deed_event", "trans_type_clean", "seller1_name",
                "seller1_name_clean", "seller1_name_bank")
-misc_old_vars <- c("story_n_clean", "st_ct", "st_lat", "st_long", "st_num2", "tax_amt", "unit_n_clean")
-new_vars <- unique(setdiff(c(rfill_new, misc_old_vars, "owner_name_bank", "owner_name_clean"), keep_vars))
+misc_old_vars <- c("story_n_clean", "st_ct", "st_lat", "st_long", "st_num2", "tax_amt", "unit_n_clean", "deed_code_clean")
+new_vars <- unique(setdiff(c(rfill_new, misc_old_vars, "owner_name_bank", "owner_name_clean", "owner_impute", "owner_impute_clean"), keep_vars))
 full_vars <- c(id_vars, "sqft", "bldg_sqft_code", "tot_val", "land_sqft", "story_n_clean", "unit_n_clean", 
                "units_number_clean")
 
@@ -366,6 +362,41 @@ fill <- sapply(new_vars, function(x) ifelse(grepl("^st_", x), "full", ifelse(x %
 
 stopifnot(sum(duplicated(c(new_vars, keep_vars, key_vars))) == 0)
 stopifnot(length(rfill_new) == length(rfill_old))
+
+# Collapse columns ------------------------------------------------------
+# Some tax vars need to be matched on sale year 
+sale_match_vars <- c("sale_price", "trans_type_clean")
+sale_var_inds <- grep(paste0(sale_match_vars, collapse="|"), rfill_new)
+for (var in sale_match_vars){
+  deed_var <- paste0(var, "_deed")
+  tax_var <- paste0(var, "_tax")
+  panel[,(var) := get(deed_var)]
+  panel[(is.na(get(var))|get(var) == "") & sale_yr == year, (var) := get(tax_var)]
+}
+ranked_fill(panel, new_vars = rfill_new[-sale_var_inds], old_vars = rfill_old[-sale_var_inds])
+
+# Impute owner name -----------------------------------------------------
+# NA to empty string 
+name_cols <- c("owner1_fn", "owner1_ln", "owner2_fn", "owner2_ln")
+for (c in name_cols){
+  panel[is.na(get(c)), (c) := ""]
+}
+
+panel[,owner_impute_fill := trimws(paste(owner1_fn, owner1_ln))]
+panel[owner_impute_fill == "", owner_impute_fill := trimws(paste(owner2_fn, owner2_ln))]
+panel[,owner_impute := owner_name]
+panel[is.na(owner_impute)|owner_impute=="", owner_impute := owner_impute_fill]
+
+# Identify banks and adjust corporate owned flag ----------------------------------
+identify_banks(panel, "owner_name") # Output indicator: owner_name_bank
+print("Before adjusting for banks:")
+print(panel[,.N,owner_corp_clean])
+panel[owner_name_bank == TRUE, owner_corp_clean := "0"]
+print("After bank adjustment:")
+print(panel[,.N,owner_corp_clean])
+
+identify_banks(panel, "seller1_name") # Output indicator: seller1_name_bank
+identify_banks(panel, "owner_impute") 
 
 # Impute absentee owner -------------------------------------------------
 # Concat key address fields
@@ -411,39 +442,10 @@ if (micro == T & length(cities) == 0){
   # Absentee owners
   panel <- panel[abs_owner_clean == "1"]
 }
-getAvailMem()
-# Collapse columns ------------------------------------------------------
-# Some tax vars need to be matched on sale year 
-sale_match_vars <- c("sale_price", "trans_type_clean")
-sale_var_inds <- grep(paste0(sale_match_vars, collapse="|"), rfill_new)
-for (var in sale_match_vars){
-  deed_var <- paste0(var, "_deed")
-  tax_var <- paste0(var, "_tax")
-  panel[,(var) := get(deed_var)]
-  panel[(is.na(get(var))|get(var) == "") & sale_yr == year, (var) := get(tax_var)]
-}
-ranked_fill(panel, new_vars = rfill_new[-sale_var_inds], old_vars = rfill_old[-sale_var_inds])
 
-# Impute owner name -----------------------------------------------------
-# NA to empty string 
-name_cols <- c("owner1_fn", "owner1_ln", "owner2_fn", "owner2_ln")
-for (c in name_cols){
-  panel[is.na(get(c)), (c) := ""]
-}
+# All empty string to NA again
+panel[panel == ""] <- NA
 
-panel[,owner_impute := trimws(paste(owner1_fn, owner1_ln))]
-panel[owner_impute == "", owner_impute := trimws(paste(owner2_fn, owner2_ln))]
-panel[is.na(owner_name)|owner_name=="", owner_name := owner_impute]
-
-# Identify banks and adjust corporate owned flag ----------------------------------
-identify_banks(panel, "owner_name") # Output indicator: owner_name_bank
-print("Before adjusting for banks:")
-print(panel[,.N,owner_corp_clean])
-panel[owner_name_bank == TRUE, owner_corp_clean := "0"]
-print("After bank adjustment:")
-print(panel[,.N,owner_corp_clean])
-
-identify_banks(panel, "seller1_name") # Output indicator: seller1_name_bank
 # Collate --------------------------------------------------------------
 # Don't parallel if collate_cores == 1
 if (collate_cores == 1){

@@ -17,13 +17,14 @@ library(openxlsx)
 library(readxl)
 library(rlist)
 library(bit64)
+library(reticulate)
 library(argparse)
 setwd("~/project")
 
 source("/gpfs/loomis/project/humphries/rl874/rent_project/code/cleaning/fn_dedup_rent.R")
 source("/gpfs/loomis/project/humphries/rl874/rent_project/code/cleaning/fn_misc_rent.R")
 source("/gpfs/loomis/project/humphries/rl874/rent_project/code/cleaning/fn_clean_cl.R")
-source("/gpfs/loomis/project/humphries/rl874/rent_project/code/richard/match_panel_tmp.R")
+source_python("/gpfs/loomis/project/humphries/rl874/rent_project/code/cleaning/cluster_efficiently.py")
 
 micro_path <- "/gpfs/loomis/scratch60/humphries/rl874/pipeline_out/micro"
 mergers_path <- "/gpfs/loomis/project/humphries/rl874/mergers_project"
@@ -43,39 +44,43 @@ state <- args$state
 
 # Read in micro data 
 t0 <- Sys.time()
-panel <- fread(paste0(micro_path, "/", state, "_mls.csv"), select = c("owner_name", "owner_corp_clean"))
+panel <- fread(paste0(micro_path, "/", state, "_mls.csv"), select = c("owner_name_clean", "owner_corp_clean", "abs_owner_clean", "resid_clean"))
 t1 <- Sys.time() 
 print(paste("Reading took", difftime(t1,t0,units='mins'), "minutes."))
 
 # For testing
-#panel <- fread(paste0("~/scratch60/pipeline_tmp/micro/CT.csv"), nrows = 1e5)
+#panel <- fread(paste0("~/scratch60/pipeline_tmp/micro/IL.csv"), nrows = 1e5)
 
 # Owner name matching ------------------------------------------------
 
 # Create owner name matching table
-unique_names <- unique(panel[owner_name != "" & !is.na(owner_name), owner_name])
-n_bad <- nrow(panel[(owner_name == "" | is.na(owner_name))])
-print(paste("Found", length(unique_names), "unique absentee names and", n_bad, "missing absentee name rows"))
-cleaned_dt <- data.table(owner_name = unique_names)
+unique_names <- unique(panel[abs_owner_clean == 1 & resid_clean == 1 & owner_corp_clean == 1 & owner_name_clean != "" & !is.na(owner_name_clean), owner_name_clean])
+n_bad <- nrow(panel[(owner_name_clean == "" | is.na(owner_name_clean))])
+print(paste("Found", length(unique_names), "unique names and", n_bad, "missing name rows"))
+cleaned_dt <- data.table(owner_name_clean = unique_names)
 
 rm(panel)
 
-cleaned_dt_size <- object.size(cleaned_dt)/1e9
+cleaned_dt_size <- nrow(cleaned_dt)
 print("Cleaned names size:")
 print(cleaned_dt_size)
 
 print("Available memory after subsetting:")
 getAvailMem() 
 
+
+# Match names 
+jw_thresh<-.82
+hash_num<-10L
+hash_thresh<-.8
+
+
 t0 <- Sys.time()
-match_table<-build_matched_name_panel(cleaned_dt,"owner_name","match_name",c(),list(jw_threshold=.83,num_hashes=10L,hash_threshold=.9),c(),c(),"ref")
+matched_names <- match_unique(unique_names,jw_thresh,hash_num,hash_thresh)
 t1 <- Sys.time()
 print(paste("Owner name match table construction with", nrow(cleaned_dt),
             "rows took", difftime(t1,t0,units='mins'), "minutes."))
-
-match_names <- unlist(match_table$match_name) # Need to unlist match name column
-match_table[,match_name := NULL]
-match_table[,match_name := match_names]
+matched_df <- data.table(owner_name_clean = unique_names, owner_matched = matched_names)
 
 # Write 
-fwrite(match_table, paste0("~/scratch60/mergers/match_tables/", state, "_matched_owners.csv"))
+fwrite(matched_df, paste0("~/scratch60/mergers/match_tables/", state, "_matched_owners.csv"))
