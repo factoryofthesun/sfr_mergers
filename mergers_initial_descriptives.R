@@ -294,7 +294,8 @@ for (merge_id in unique(mergers$MergeID_1)){
       n_dt_zip <- dt_tmp[!is.na(group) & !is.na(price) & event_yr >= -5 & event_yr <= 5, .N, .(group, rent_type, event_yr)]
       n_dt_zip[,log_N := log(N)]
       ggplot(n_dt_zip, aes(x = rent_type, y = log_N, fill = group, group = group)) + geom_bar(stat="identity", position="dodge") +
-        labs(y = "log N", title = paste0("Zip Price Counts, Merger:",merge_label)) + facet_wrap(~ event_yr)
+        labs(y = "log N", title = paste0("Zip Price Counts, Merger:",merge_label)) + facet_wrap(~ event_yr) + 
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) + 
         ggsave(paste0(prepost_figs, "zip/n_zori_", merge_id, ".png"), dpi = "screen")
       
       # Median across zips
@@ -320,17 +321,25 @@ for (merge_id in unique(mergers$MergeID_1)){
         labs(y = "log N", title = paste0("Zip HHI Counts, Merger:",merge_label)) + 
       ggsave(paste0(prepost_figs, "zip/n_hhi_", merge_id, ".png"), dpi = "screen")
       
-      # Agg per year 
-      ggplot(data = dt_zip[!is.na(group) & event_yr >= -5 & !is.na(hhi) & event_yr <= 5], aes(x = event_yr, y = hhi, color = group)) + geom_point(shape = 16, size = 3, alpha = 0.5) +
+      # Median HHI per year 
+      dt_med_tmp <- dt_tmp[!is.na(group) & !is.na(price) & event_yr >= -5 & event_yr <= 5,.(median_hhi = median_na0(hhi)), .(event_yr, group)]
+      ggplot(data = dt_med_tmp, aes(x = event_yr, y = median_hhi, color = group)) + geom_point(shape = 16, size = 3, alpha = 0.5) +
         geom_line(linetype = "dashed") + geom_vline(xintercept=0) + geom_vline(xintercept=norm_year_announced) +
         labs(x = "Normalized Year", y = var, title = paste("Zip HHI by Year, Merger:",merge_label)) + 
-        ggsave(paste0(prepost_figs, "zip/prepost_hhi_",merge_id, ".png"), width = 15, height = 6)
+        ggsave(paste0(prepost_figs, "zip/prepost_med_hhi_",merge_id, ".png"), width = 15, height = 6)
+      
+      # Mean HHI per year 
+      dt_mean_tmp <- dt_tmp[!is.na(group) & !is.na(price) & event_yr >= -5 & event_yr <= 5,.(mean_hhi = mean_na0(hhi)), .(event_yr, group)]
+      ggplot(data = dt_mean_tmp, aes(x = event_yr, y = mean_hhi, color = group)) + geom_point(shape = 16, size = 3, alpha = 0.5) +
+        geom_line(linetype = "dashed") + geom_vline(xintercept=0) + geom_vline(xintercept=norm_year_announced) +
+        labs(x = "Normalized Year", y = var, title = paste("Zip HHI by Year, Merger:",merge_label)) + 
+        ggsave(paste0(prepost_figs, "zip/prepost_mean_hhi_",merge_id, ".png"), width = 15, height = 6)
       
       # Save delta HHI tables
       dt[Zip5 %in% treated_zips & Merger_Owner_Name %in% target_name, merge_group := "Target"]
       dt[Zip5 %in% treated_zips & Merger_Owner_Name %in% acquiror_name, merge_group := "Acquiror"]
       dt[,event_yr := as.integer(year - norm_year)]
-      dt_delta_hhi <- dt[event_yr == -1, .(delta_hhi = 2 * sum_na(merge_group == "Target") * sum_na(merge_group == "Acquiror")/(.N^2)*100^2), .(Zip5)]
+      dt_delta_hhi <- dt[event_yr == -1 & !is.na(owner_matched) & owner_matched != "", .(delta_hhi = 2 * sum_na(merge_group == "Target") * sum_na(merge_group == "Acquiror")/(.N^2)*100^2), .(Zip5)]
       dt_zip_tmp <- merge(dt_zip, dt_delta_hhi, by = "Zip5", all.x = T)
       dt_zip_tmp[,merge_label := merge_label]
       dt_zip_tmp[,merge_id := merge_id]

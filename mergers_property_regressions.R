@@ -45,7 +45,7 @@ print(paste0("There are ", n_multi_drop, " observations that are multi-merge aff
 
 treated_zips <- unique(dt[treated == 1, Zip5])
 dt_multi_check <- dt[year >= 2007 & Zip5 %in% treated_zips,.(median_rent = median_na0(RentPrice)), .(multi_merge, year)]
-ggplot(dt_multi_check, aes(x = year, y = median_rent, color = multi_merge)) + geom_line() + 
+ggplot(dt_multi_check, aes(x = year, y = median_rent, color = factor(multi_merge))) + geom_line() + 
   labs(title = "Median Rent for Treated Zips") + ggsave(paste0(mergers_path, "figs/diagnostics/multi_merge_property_rent.png"))
 
 # ============= Property Level Regressions ===================================================
@@ -65,13 +65,13 @@ dt_tmp[,post := as.integer(rowSums(.SD) == 1), .SDcols = post_names]
 label_names <- grep("^merge_label_", names(dt), value = T)
 dt_tmp[,merge_label := as.character(NA)]
 for (label in label_names){
-  dt_tmp[is.na(merge_label), merge_label := get(label)]
+  dt_tmp[is.na(merge_label)|merge_label == "", merge_label := get(label)]
 }
 
 hhi_names <- grep("^delta_hhi_", names(dt), value = T)
-dt_tmp[,delta_hhi := as.numeric(NA)]
-for (hhi in hhi_names){
-  dt_tmp[is.na(delta_hhi), delta_hhi := get(hhi)]
+dt_tmp[,delta_hhi := 0]
+for (hhi_col in hhi_names){
+  dt_tmp[is.na(delta_hhi) | delta_hhi == 0, delta_hhi := get(hhi_col)]
 }
 reg0 <- felm(RentPrice ~ delta_hhi*post + delta_hhi*post*merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
 reg1 <- felm(RentPrice ~ delta_hhi*post + delta_hhi*post*merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
@@ -92,28 +92,28 @@ out <- gsub("\\end{tabular}", "\\end{tabular}}", out, fixed = T)
 out <- gsub("!htbp", "H", out, fixed = T)
 cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=F)
 
-# 2-way FE with delta HHI and firm-owned indicator and excluding multi-merge zips
-reg0 <- felm(RentPrice ~ delta_hhi*post + delta_hhi*post*merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
-reg1 <- felm(RentPrice ~ delta_hhi*post + delta_hhi*post*merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
-reg2 <- felm(log_rent ~ delta_hhi*post + delta_hhi*post*merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
-reg3 <- felm(log_rent ~ delta_hhi*post + delta_hhi*post*merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
-reg4 <- felm(rent_sqft ~ delta_hhi*post + delta_hhi*post*merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
-reg5 <- felm(rent_sqft ~ delta_hhi*post + delta_hhi*post*merge_firm_owned + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+# 2-way FE with event-time dummies -- NOT FEASIBLE WHILE RENT COUNTS ARE STILL LOW
+# reg0 <- felm(RentPrice ~ delta_hhi*post + delta_hhi*post*merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+# reg1 <- felm(RentPrice ~ delta_hhi*post + delta_hhi*post*merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+# reg2 <- felm(log_rent ~ delta_hhi*post + delta_hhi*post*merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+# reg3 <- felm(log_rent ~ delta_hhi*post + delta_hhi*post*merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+# reg4 <- felm(rent_sqft ~ delta_hhi*post + delta_hhi*post*merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+# reg5 <- felm(rent_sqft ~ delta_hhi*post + delta_hhi*post*merge_firm_owned + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+# 
+# out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4,reg5,
+#                                 column.labels = c("Rent", "Log Rent", "Rent/Sqft"), column.separate = c(2,2,2), 
+#                                 title = "2-Way FE with delta HHI and firm owned indicator, All Treated Zips"))
+# 
+# # Wrap tabular environment in resizebox
+# out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
+# out <- gsub("\\end{tabular}", "\\end{tabular}}", out, fixed = T)
+# 
+# # Set position
+# out <- gsub("!htbp", "H", out, fixed = T)
+# cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
 
-out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4,reg5,
-                                column.labels = c("Rent", "Log Rent", "Rent/Sqft"), column.separate = c(2,2,2), 
-                                title = "2-Way FE with delta HHI and firm owned indicator, All Treated Zips"))
 
-# Wrap tabular environment in resizebox
-out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
-out <- gsub("\\end{tabular}", "\\end{tabular}}", out, fixed = T)
-
-# Set position
-out <- gsub("!htbp", "H", out, fixed = T)
-cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
-
-
-mergers <- fread(paste0(mergers_path, "mergers_cleaned.csv"))
+mergers <- fread(paste0(mergers_path, "mergers_final_cleaned.csv"))
 # Each merger: basic DiD -- pre-post flags 
 for (merge_id in unique(mergers$MergeID_1)){
   # Skip American Residential Ppty (no props found)
