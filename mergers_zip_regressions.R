@@ -33,7 +33,7 @@ prepost_figs <- "/gpfs/loomis/project/humphries/rl874/mergers_project/figs/prepo
 estimate_path <- paste0(mergers_path, "estimates/")
 
 t0 <- Sys.time()
-dt <- fread(paste0(data_path, "panel_zip_hhi.csv"), integer64 = "character", colClasses = list("character" = c("st_ct", "apn_unformatted")))
+dt <- fread(paste0(data_path, "panel_zip_hhi.csv"), integer64 = "character")
 # dt <- fread(paste0(data_path, "panel_zip_hhi.csv"), integer64 = "character", colClasses = list("character" = c("st_ct", "apn_unformatted")), nrows=1e6)
 t1 <- Sys.time() 
 print(paste("Reading took", difftime(t1,t0,units='mins'), "minutes."))
@@ -50,10 +50,13 @@ colors <- c("coral1","coral1", "dodgerblue", "darkorange", "forestgreen", "plum"
 mergers$label <- merge_labels
 mergers$colors <- colors
 # ============= (0) Preprocessing ===================================================
+# Year between 2000 and 2020
+dt <- dt[year >= 2000 & year <= 2020]
+
 # Define new vars 
 dt[,log_zori := log(ZORI)]
 dt[,zori_sqft := ZORI/median_tot_unit_val]
-dt[,monthyear := paste0(year, "-", month)]
+dt[!is.na(month) & !is.na(year),monthyear := parse_date_time(paste0(year, "-", month), "ym")]
 
 #TODO: Figure out better way to deal with multi-merge zips 
 dt[is.na(multi_merge), multi_merge := 0]
@@ -61,15 +64,19 @@ dt[is.na(multi_merge), multi_merge := 0]
 # Document dropped multi-merge zips 
 n_multi_zips <- uniqueN(dt[multi_merge == 1, Zip5])
 print(paste0("Dropping ", n_multi_zips, " zips with multi-merge."))
+treated_zips <- unique(dt[treated == 1, Zip5])
+dt_multi_check <- dt[Zip5 %in% treated_zips,.(median_zori = as.numeric(median_na0(ZORI))), .(multi_merge, monthyear)]
 
-dt_multi_check <- dt[,.(median_median_rent = median_na0(median_rent)), .(multi_merge, year, month)]
-
+ggplot(dt_multi_check, aes(x = monthyear, y = median_zori, color = multi_merge)) + geom_line() + 
+  labs(title = "Median Monthly ZORI for Treated Zips") + ggsave(paste0(mergers_path, "figs/diagnostics/multi_merge_zip_rent.png"))
 
 # Remove multi-merge zips 
 dt <- dt[multi_merge != 1]
 
 # ============= (1) Zip Level Regressions ===================================================
-# 2-way FE + delta HHI, each merger
+# Basic pre-post, each merger 
+
+# 2-way FE + delta HHI, all mergers, merger clustered SE
 for (merge_label in unique(dt$merge_label)){
   # Merger vars 
   month <- max(unique(mergers[label == merge_label, month_effective]))
@@ -78,13 +85,13 @@ for (merge_label in unique(dt$merge_label)){
   # Adjust panel depending on merger
   dt_tmp <- dt[affected == 1 & merge_label == merge_label & year >= 2000]
   dt_tmp[, post := 0]
-  dt_tmp[year == year & month >= month, post := 1]
+  dt_tmp[year == year & month > month, post := 1]
   dt_tmp[year > year, post := 1]
 
-  reg0 <- felm(log_zori ~ delta_hhi*post|factor(monthyear) + factor(Zip5)|0|merge_label, data = dt_tmp)
-  reg1 <- felm(log_zori ~ delta_hhi*post + sqft + tot_unit_val|factor(monthyear) + factor(Zip5)|0|merge_label, data = dt_tmp)
-  reg2 <- felm(zori_sqft ~ delta_hhi*post|factor(monthyear) + factor(Zip5)|0|merge_label, data = dt_tmp)
-  reg3 <- felm(zori_sqft ~ delta_hhi*post + tot_unit_val|factor(monthyear) + factor(Zip5)|0|merge_label, data = dt_tmp)
+  reg0 <- felm(log_zori ~ delta_hhi*post|factor(monthyear) + factor(Zip5), data = dt_tmp)
+  reg1 <- felm(log_zori ~ delta_hhi*post + sqft + tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
+  reg2 <- felm(zori_sqft ~ delta_hhi*post|factor(monthyear) + factor(Zip5), data = dt_tmp)
+  reg3 <- felm(zori_sqft ~ delta_hhi*post + tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
   
 
   out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4,
@@ -99,7 +106,7 @@ for (merge_label in unique(dt$merge_label)){
   cat(paste(out, "\n\n"), file = paste0(estimate_path, "initial_zip_did.tex"), append=F)
 }
 
-# 2-way FE + delta HHI * year-month dummy
+# 2-way FE + delta HHI * event-time dummy (-600 to 600 months), all mergers, merger clustered SE
 for (merge_label in unique(dt$merge_label)){
   # Merger vars 
   month <- max(unique(mergers[label == merge_label, month_effective]))
@@ -111,10 +118,10 @@ for (merge_label in unique(dt$merge_label)){
   dt_tmp[year == year & month >= month, post := 1]
   dt_tmp[year > year, post := 1]
   
-  reg0 <- felm(log_zori ~ delta_hhi*post*factor(monthyear)|factor(monthyear) + factor(Zip5)|0|merge_label, data = dt_tmp)
-  reg1 <- felm(log_zori ~ delta_hhi*post*factor(monthyear) + sqft + tot_unit_val|factor(monthyear) + factor(Zip5)|0|merge_label, data = dt_tmp)
-  reg2 <- felm(zori_sqft ~ delta_hhi*post*factor(monthyear)|factor(monthyear) + factor(Zip5)|0|merge_label, data = dt_tmp)
-  reg3 <- felm(zori_sqft ~ delta_hhi*post*factor(monthyear) + tot_unit_val|factor(monthyear) + factor(Zip5)|0|merge_label, data = dt_tmp)
+  reg0 <- felm(log_zori ~ delta_hhi*post*factor(monthyear)|factor(monthyear) + factor(Zip5), data = dt_tmp)
+  reg1 <- felm(log_zori ~ delta_hhi*post*factor(monthyear) + sqft + tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
+  reg2 <- felm(zori_sqft ~ delta_hhi*post*factor(monthyear)|factor(monthyear) + factor(Zip5), data = dt_tmp)
+  reg3 <- felm(zori_sqft ~ delta_hhi*post*factor(monthyear) + tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
   
   
   out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4,
