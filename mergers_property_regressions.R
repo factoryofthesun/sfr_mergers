@@ -73,12 +73,12 @@ dt_tmp[,delta_hhi := 0]
 for (hhi_col in hhi_names){
   dt_tmp[is.na(delta_hhi) | delta_hhi == 0, delta_hhi := get(hhi_col)]
 }
-reg0 <- felm(RentPrice ~ delta_hhi*post + delta_hhi*post*merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
-reg1 <- felm(RentPrice ~ delta_hhi*post + delta_hhi*post*merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
-reg2 <- felm(log_rent ~ delta_hhi*post + delta_hhi*post*merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
-reg3 <- felm(log_rent ~ delta_hhi*post + delta_hhi*post*merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
-reg4 <- felm(rent_sqft ~ delta_hhi*post + delta_hhi*post*merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
-reg5 <- felm(rent_sqft ~ delta_hhi*post + delta_hhi*post*merge_firm_owned + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+reg0 <- felm(RentPrice ~ delta_hhi:post + delta_hhi:post:merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+reg1 <- felm(RentPrice ~ delta_hhi:post + delta_hhi:post:merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+reg2 <- felm(log_rent ~ delta_hhi:post + delta_hhi:post:merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+reg3 <- felm(log_rent ~ delta_hhi:post + delta_hhi:post:merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+reg4 <- felm(rent_sqft ~ delta_hhi:post + delta_hhi:post:merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+reg5 <- felm(rent_sqft ~ delta_hhi:post + delta_hhi:post:merge_firm_owned + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
 
 out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4,reg5,
                                 column.labels = c("Rent", "Log Rent", "Rent/Sqft"), column.separate = c(2,2,2), 
@@ -93,12 +93,12 @@ out <- gsub("!htbp", "H", out, fixed = T)
 cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=F)
 
 # 2-way FE with event-time dummies -- NOT FEASIBLE WHILE RENT COUNTS ARE STILL LOW
-# reg0 <- felm(RentPrice ~ delta_hhi*post + delta_hhi*post*merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
-# reg1 <- felm(RentPrice ~ delta_hhi*post + delta_hhi*post*merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
-# reg2 <- felm(log_rent ~ delta_hhi*post + delta_hhi*post*merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
-# reg3 <- felm(log_rent ~ delta_hhi*post + delta_hhi*post*merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
-# reg4 <- felm(rent_sqft ~ delta_hhi*post + delta_hhi*post*merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
-# reg5 <- felm(rent_sqft ~ delta_hhi*post + delta_hhi*post*merge_firm_owned + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+# reg0 <- felm(RentPrice ~ delta_hhi:post + delta_hhi:post:merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+# reg1 <- felm(RentPrice ~ delta_hhi:post + delta_hhi:post:merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+# reg2 <- felm(log_rent ~ delta_hhi:post + delta_hhi:post:merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+# reg3 <- felm(log_rent ~ delta_hhi:post + delta_hhi:post:merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+# reg4 <- felm(rent_sqft ~ delta_hhi:post + delta_hhi:post:merge_firm_owned|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
+# reg5 <- felm(rent_sqft ~ delta_hhi:post + delta_hhi:post:merge_firm_owned + tot_unit_val|factor(year) + factor(id)|0|merge_label, data = dt_tmp)
 # 
 # out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4,reg5,
 #                                 column.labels = c("Rent", "Log Rent", "Rent/Sqft"), column.separate = c(2,2,2), 
@@ -131,12 +131,12 @@ for (merge_id in unique(mergers$MergeID_1)){
   # 1) Control = merging-zip non-affected 
   sample_var <- paste0("sample_", merge_id, "_c1")
   dt_tmp <- dt[year >= 2000 & get(sample_var) == 1]
-  reg0 <- felm(RentPrice ~ treated + post + treated*post, data = dt_tmp)
-  reg1 <- felm(RentPrice ~ treated + post + treated*post + sqft + tot_unit_val, data = dt_tmp)
-  reg2 <- felm(log_rent ~ treated + post + treated*post, data = dt_tmp)
-  reg3 <- felm(log_rent ~ treated + post + treated*post + sqft + tot_unit_val, data = dt_tmp)
-  reg4 <- felm(rent_sqft ~ treated + post + treated*post, data = dt_tmp)
-  reg5 <- felm(rent_sqft ~ treated + post + treated*post + tot_unit_val, data = dt_tmp)
+  reg0 <- felm(RentPrice ~ treated + post + treated:post, data = dt_tmp)
+  reg1 <- felm(RentPrice ~ treated + post + treated:post + sqft + tot_unit_val, data = dt_tmp)
+  reg2 <- felm(log_rent ~ treated + post + treated:post, data = dt_tmp)
+  reg3 <- felm(log_rent ~ treated + post + treated:post + sqft + tot_unit_val, data = dt_tmp)
+  reg4 <- felm(rent_sqft ~ treated + post + treated:post, data = dt_tmp)
+  reg5 <- felm(rent_sqft ~ treated + post + treated:post + tot_unit_val, data = dt_tmp)
   
   out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4,reg5,
                                   column.labels = c("Rent", "Log Rent", "Rent/Sqft"), column.separate = c(2,2,2), 
@@ -148,21 +148,22 @@ for (merge_id in unique(mergers$MergeID_1)){
   
   # Set position
   out <- gsub("!htbp", "H", out, fixed = T)
+  
   cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
   
   # 2) Control = merging firms in unmerged zips
   sample_var <- paste0("sample_", merge_id, "_c2")
   dt_tmp <- dt[year >= 2000 & get(sample_var) == 1]
-  reg0 <- felm(RentPrice ~ treated + post + treated*post, data = dt_tmp)
-  reg1 <- felm(RentPrice ~ treated + post + treated*post + sqft + tot_unit_val, data = dt_tmp)
-  reg2 <- felm(log_rent ~ treated + post + treated*post, data = dt_tmp)
-  reg3 <- felm(log_rent ~ treated + post + treated*post + sqft + tot_unit_val, data = dt_tmp)
-  reg4 <- felm(rent_sqft ~ treated + post + treated*post, data = dt_tmp)
-  reg5 <- felm(rent_sqft ~ treated + post + treated*post + sqft + tot_unit_val, data = dt_tmp)
+  reg0 <- felm(RentPrice ~ treated + post + treated:post, data = dt_tmp)
+  reg1 <- felm(RentPrice ~ treated + post + treated:post + sqft + tot_unit_val, data = dt_tmp)
+  reg2 <- felm(log_rent ~ treated + post + treated:post, data = dt_tmp)
+  reg3 <- felm(log_rent ~ treated + post + treated:post + sqft + tot_unit_val, data = dt_tmp)
+  reg4 <- felm(rent_sqft ~ treated + post + treated:post, data = dt_tmp)
+  reg5 <- felm(rent_sqft ~ treated + post + treated:post + tot_unit_val, data = dt_tmp)
   
   out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4,reg5,
                                   column.labels = c("Rent", "Log Rent", "Rent/Sqft"), column.separate = c(2,2,2), 
-                                  title = paste0("Prepost Basic, Merger: ", merge_label,", Control: Unmerged Firm")))
+                                  title = paste0("Prepost Basic, Merger: ", merge_label,", Control: Outside-Zip Firm")))
   
   # Wrap tabular environment in resizebox
   out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
@@ -175,12 +176,12 @@ for (merge_id in unique(mergers$MergeID_1)){
   # 3) Control = all properties unmerged zips with 1 firm
   sample_var <- paste0("sample_", merge_id, "_c3")
   dt_tmp <- dt[year >= 2000 & get(sample_var) == 1]
-  reg0 <- felm(RentPrice ~ treated + post + treated*post, data = dt_tmp)
-  reg1 <- felm(RentPrice ~ treated + post + treated*post + sqft + tot_unit_val, data = dt_tmp)
-  reg2 <- felm(log_rent ~ treated + post + treated*post, data = dt_tmp)
-  reg3 <- felm(log_rent ~ treated + post + treated*post + sqft + tot_unit_val, data = dt_tmp)
-  reg4 <- felm(rent_sqft ~ treated + post + treated*post, data = dt_tmp)
-  reg5 <- felm(rent_sqft ~ treated + post + treated*post + sqft + tot_unit_val, data = dt_tmp)
+  reg0 <- felm(RentPrice ~ treated + post + treated:post, data = dt_tmp)
+  reg1 <- felm(RentPrice ~ treated + post + treated:post + sqft + tot_unit_val, data = dt_tmp)
+  reg2 <- felm(log_rent ~ treated + post + treated:post, data = dt_tmp)
+  reg3 <- felm(log_rent ~ treated + post + treated:post + sqft + tot_unit_val, data = dt_tmp)
+  reg4 <- felm(rent_sqft ~ treated + post + treated:post, data = dt_tmp)
+  reg5 <- felm(rent_sqft ~ treated + post + treated:post + tot_unit_val, data = dt_tmp)
   
   out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4,reg5,
                                   column.labels = c("Rent", "Log Rent", "Rent/Sqft"), column.separate = c(2,2,2), 
@@ -209,6 +210,7 @@ for (merge_id in unique(mergers$MergeID_1)){
   sample_var1 <- paste0("sample_", merge_id, "_c1")
   sample_var2 <- paste0("sample_", merge_id, "_c3")
   treated_zips <- unique(dt[get(treated_var) == 1, Zip5])
+  merge_label <- unique(mergers[MergeID_1 == merge_id, label])
   
   dt[,treated_zip := 0]
   dt[Zip5 %in% treated_zips, treated_zip := 1]
@@ -216,20 +218,20 @@ for (merge_id in unique(mergers$MergeID_1)){
   dt[, post := get(post_var)]
   dt[, delta_hhi := get(hhi_var)]
   dt_tmp <- dt[year >= 2000 & (get(sample_var1) == 1 | get(sample_var2) == 1)]
-  reg0 <- felm(RentPrice ~ treated_zip + post + delta_hhi + treated + post*treated_zip + post*treated +
-                 post*treated_zip*delta_hhi + post*treated_zip*delta_hhi*treated, data = dt_tmp)
-  reg1 <- felm(RentPrice ~ treated_zip + post + delta_hhi + treated + post*treated_zip + post*treated +
-                 post*treated_zip*delta_hhi + post*treated_zip*delta_hhi*treated +
+  reg0 <- felm(RentPrice ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
+                 post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated, data = dt_tmp)
+  reg1 <- felm(RentPrice ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
+                 post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated +
                  sqft + tot_unit_val, data = dt_tmp)
-  reg2 <- felm(log_rent ~ treated_zip + post + delta_hhi + treated + post*treated_zip + post*treated +
-                 post*treated_zip*delta_hhi + post*treated_zip*delta_hhi*treated, data = dt_tmp)
-  reg3 <- felm(log_rent ~ treated_zip + post + delta_hhi + treated + post*treated_zip + post*treated +
-                 post*treated_zip*delta_hhi + post*treated_zip*delta_hhi*treated +
+  reg2 <- felm(log_rent ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
+                 post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated, data = dt_tmp)
+  reg3 <- felm(log_rent ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
+                 post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated +
                  sqft + tot_unit_val, data = dt_tmp)
-  reg4 <- felm(rent_sqft ~ treated_zip + post + delta_hhi + treated + post*treated_zip + post*treated +
-                 post*treated_zip*delta_hhi + post*treated_zip*delta_hhi*treated, data = dt_tmp)
-  reg5 <- felm(rent_sqft ~ treated_zip + post + delta_hhi + treated + post*treated_zip + post*treated +
-                 post*treated_zip*delta_hhi + post*treated_zip*delta_hhi*treated +
+  reg4 <- felm(rent_sqft ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
+                 post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated, data = dt_tmp)
+  reg5 <- felm(rent_sqft ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
+                 post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated +
                  tot_unit_val, data = dt_tmp)
   
   out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4,reg5,
