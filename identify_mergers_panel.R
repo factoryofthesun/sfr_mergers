@@ -47,7 +47,7 @@ state <- args$state
 
 # Read in micro data 
 t0 <- Sys.time()
-panel <- fread(paste0(micro_path, state, "_mls.csv"))
+panel <- fread(paste0(micro_path, state, "_mls_fixed.csv"))
 t1 <- Sys.time() 
 print(paste("Reading took", difftime(t1,t0,units='mins'), "minutes."))
 
@@ -76,11 +76,7 @@ n_good <- nrow(panel[!is.na(owner_name_clean) & owner_name_clean != ""])
 print(paste("There are", n_good, "rows with owner name out of", nrow(panel)))
 
 # Read in mergers data 
-mergers <- fread(paste0(mergers_path, "mergers_final.csv"))
-names(mergers) <- gsub("[[:space:]]", "", names(mergers))
-mergers[,DateEffective := as.POSIXct(DateEffective, format = "%m/%d/%y")]
-mergers[,DateAnnounced := as.POSIXct(DateAnnounced, format = "%m/%d/%y")]
-mergers[,Year := year(DateEffective)]
+mergers <- fread(paste0(mergers_path, "mergers_final_cleaned.csv"))
 mergers[,Target_Entities := list()]
 mergers[,Acquiror_Entities := list()]
 
@@ -135,17 +131,6 @@ for (i in 1:nrow(mergers)){
    tmp <- unique(setdiff(toupper(gsub("\\s\\s+", " ", tmp)), tmp_target)) # Acquiror shouldn't own same properties
    mergers[i, Acquiror_Entities_Clean := list(tmp)]
 }
-
-mergers[,Year := year(DateEffective)]
-mergers[is.na(Year), Year := year(DateAnnounced)]
-
-mergers[,MergeID_1 := .GRP, .(Year, AcquirorName)]
-mergers[,MergeID_2 := MergeID_1]
-
-merger_cols <- setdiff(names(mergers), c("Target_Entities", "Target_Entities_Clean", 
-                                         "Acquiror_Entities", "Acquiror_Entities_Clean"))
-fwrite(mergers[,..merger_cols], 
-       paste0(mergers_path, "mergers_final_cleaned.csv"))
 
 # Attempt link using RecordLinkage 
 unique_panel_names <- unique(panel[!is.na(owner_matched) & owner_matched != "", owner_matched])

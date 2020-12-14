@@ -55,7 +55,6 @@ dt <- dt[year >= 2000 & year <= 2020]
 
 # Define new vars 
 dt[,log_zori := log(ZORI)]
-dt[,zori_sqft := ZORI/median_tot_unit_val]
 dt[!is.na(month) & !is.na(year),monthyear := parse_date_time(paste0(year, "-", month), "ym")]
 treated_names <- grep("^treated_", names(dt), value=T)
 dt[,treated_overlap := rowSums(.SD, na.rm = T), .SDcols = treated_names]
@@ -89,20 +88,20 @@ for (merge_id in unique(mergers$MergeID_1)){
   dt_tmp <- dt[get(sample_var) == 1]
   dt_tmp[, treated := get(treated_var)]
   dt_tmp[, post := get(post_var)]
+  avg_zori <- mean_na0(dt_tmp$ZORI)
   avg_log_zori <- mean_na0(dt_tmp$log_zori)
-  avg_zori_sqft <- mean_na0(dt_tmp$zori_sqft)
-  avg_rent_sqft <- mean_na0(dt_tmp$median_rent_sqft)
+  avg_log_rent <- mean_na0(dt_tmp$median_log_rent)
   
-  reg0 <- felm(log_zori ~ delta_hhi:post|factor(monthyear) + factor(Zip5), data = dt_tmp)
-  reg1 <- felm(log_zori ~ delta_hhi:post + sqft + tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
-  reg2 <- felm(zori_sqft ~ delta_hhi:post|factor(monthyear) + factor(Zip5), data = dt_tmp)
-  reg3 <- felm(zori_sqft ~ delta_hhi:post + tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
-  reg4 <- felm(median_rent_sqft ~ delta_hhi:post|factor(monthyear) + factor(Zip5), data = dt_tmp)
-  reg5 <- felm(median_rent_sqft ~ delta_hhi:post + tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
+  reg0 <- felm(ZORI ~ delta_hhi:post|factor(monthyear) + factor(Zip5), data = dt_tmp)
+  reg1 <- felm(ZORI ~ delta_hhi:post + median_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
+  reg2 <- felm(log_zori ~ delta_hhi:post|factor(monthyear) + factor(Zip5), data = dt_tmp)
+  reg3 <- felm(log_zori ~ delta_hhi:post + median_log_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
+  reg4 <- felm(median_log_rent ~ delta_hhi:post|factor(monthyear) + factor(Zip5), data = dt_tmp)
+  reg5 <- felm(median_log_rent ~ delta_hhi:post + median_log_sqft + tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
   
 
   out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4,reg5,
-                        column.labels = c("Log Zori", "Zori/Sqft", "Median Rent/Sqft"), column.separate = c(2,2,2), 
+                        column.labels = c("Zori", "Log Zori", "Median Log Rent"), column.separate = c(2,2,2), 
                         title = paste0("2-Way FE Zip, Merger: ", merge_label)))
 
   # Wrap tabular environment in resizebox
@@ -114,8 +113,8 @@ for (merge_id in unique(mergers$MergeID_1)){
   
   # Replace notes
   note.latex <- paste0("\\multicolumn{7}{l} {\\parbox[t]{\\textwidth}{ \\textit{Notes:} Sample is zip level, with month-year and zip FE. 
-                       Sample average log ZORI: ", avg_log_zori, ". Sample average ZORI/sqft: ", avg_zori_sqft,
-                       " Sample average rent/sqft: ", avg_rent_sqft,
+                       Sample average log ZORI: ", avg_log_zori, ". Sample average ZORI: ", avg_zori,
+                       " Sample average log rent: ", avg_log_rent,
                        "ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\\\")
   note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
   out[grepl("Note",out)] <- note.latex
@@ -123,8 +122,10 @@ for (merge_id in unique(mergers$MergeID_1)){
   cat(paste(out, "\n\n"), file = paste0(estimate_path, "zip_did.tex"), append=F)
 }
 
-# 2-way FE + delta HHI, all mergers/drop multi-merged zips ---------
-dt_tmp <- dt[!is.na(monthyear) & multi_merge != 1 & treated_overlap == 1]
+# 2-way FE + delta HHI, all mergers ---------
+#TODO: multiple additive delta HHI????
+#TODO: What should sample be here? Keeping single-firm zips for now
+dt_tmp <- dt[!is.na(monthyear)]
 post_names <- grep("^post_", names(dt), value = T)
 dt_tmp[,post := 0]
 dt_tmp[,post := as.integer(rowSums(.SD) == 1), .SDcols = post_names]
@@ -137,24 +138,27 @@ for (label in label_names){
 
 hhi_names <- grep("^delta_hhi_", names(dt), value = T)
 dt_tmp[,delta_hhi := 0]
-for (hhi_col in hhi_names){
-  dt_tmp[is.na(delta_hhi) | delta_hhi == 0, delta_hhi := get(hhi_col)]
+# Delta HHI for multi-merged zips will be discontinuous jumps (add new delta HHI after every additional post period)
+for (i in 1:length(post_names)){
+  post_var <- post_names[i]
+  hhi_var <- hhi_names[i]
+  dt_tmp[get(post_var) == 1, delta_hhi := delta_hhi + get(hhi_var)]
 }
 
+avg_zori <- mean_na0(dt_tmp$ZORI)
 avg_log_zori <- mean_na0(dt_tmp$log_zori)
-avg_zori_sqft <- mean_na0(dt_tmp$zori_sqft)
-avg_rent_sqft <- mean_na0(dt_tmp$median_rent_sqft)
+avg_log_rent <- mean_na0(dt_tmp$median_log_rent)
 
-reg0 <- felm(log_zori ~ delta_hhi:post|factor(monthyear) + factor(Zip5), data = dt_tmp)
-reg1 <- felm(log_zori ~ delta_hhi:post + median_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
-reg2 <- felm(zori_sqft ~ delta_hhi:post|factor(monthyear) + factor(Zip5), data = dt_tmp)
-reg3 <- felm(zori_sqft ~ delta_hhi:post + median_tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
-reg4 <- felm(median_rent_sqft ~ delta_hhi:post|factor(monthyear) + factor(Zip5), data = dt_tmp)
-reg5 <- felm(median_rent_sqft ~ delta_hhi:post + median_tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
+reg0 <- felm(ZORI ~ delta_hhi:post|factor(monthyear) + factor(Zip5), data = dt_tmp)
+reg1 <- felm(ZORI ~ delta_hhi:post + median_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
+reg2 <- felm(log_zori ~ delta_hhi:post|factor(monthyear) + factor(Zip5), data = dt_tmp)
+reg3 <- felm(log_zori ~ delta_hhi:post + median_log_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
+reg4 <- felm(median_log_rent ~ delta_hhi:post|factor(monthyear) + factor(Zip5), data = dt_tmp)
+reg5 <- felm(median_log_rent ~ delta_hhi:post + median_log_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
 
 
 out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4,reg5,
-                                column.labels = c("Log Zori", "Zori/Sqft", "Median Rent/Sqft"), column.separate = c(2,2,2), 
+                                column.labels = c("Zori", "Log ZORI", "Median Log Rent"), column.separate = c(2,2,2), 
                                 title = paste0("2-Way FE Zip, All Mergers, No Multi-Merge Zips")))
 
 # Wrap tabular environment in resizebox
@@ -166,8 +170,8 @@ out <- gsub("!htbp", "H", out, fixed = T)
 
 # Replace notes
 note.latex <- paste0("\\multicolumn{7}{l} {\\parbox[t]{\\textwidth}{ \\textit{Notes:} Sample is zip level, with month-year and zip FE. 
-                       Sample average log ZORI: ", avg_log_zori, ". Sample average ZORI/sqft: ", avg_zori_sqft,
-                     " Sample average rent/sqft: ", avg_rent_sqft, "ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\\\")
+                       Sample average ZORI: ", avg_zori, ". Sample average log ZORI: ", avg_log_zori,
+                     " Sample average median log rent: ", avg_log_rent, "ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\\\")
 note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
 out[grepl("Note",out)] <- note.latex
 
@@ -182,9 +186,12 @@ out <- gsub("!htbp", "H", out, fixed = T)
 cat(paste(out, "\n\n"), file = paste0(estimate_path, "zip_did.tex"), append=T)
 
 # 2-way FE + delta HHI : event-time dummy (-36 to 36), all mergers/drop multi-merged zips ----
+#TODO: Any way to keep multi-merge zips here?
+dt_tmp <- dt_tmp[treated_overlap <= 1]
 setorder(dt_tmp, monthyear)
 
 # Event-time variable for each merger
+dt_tmp[, event_month := -999]
 for (i in 1:length(post_names)){
   post_var <- post_names[i]
   treated_var <- treated_names[i]
@@ -192,16 +199,16 @@ for (i in 1:length(post_names)){
   dt_tmp[get(treated_var) == 1, event_month := 12 * (as.yearmon(monthyear) - as.yearmon(post_date))]
 }
 
-reg0 <- felm(log_zori ~ delta_hhi:event_month|factor(monthyear) + factor(Zip5), data = dt_tmp)
-reg1 <- felm(log_zori ~ delta_hhi:event_month + median_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
-reg2 <- felm(zori_sqft ~ delta_hhi:event_month|factor(monthyear) + factor(Zip5), data = dt_tmp)
-reg3 <- felm(zori_sqft ~ delta_hhi:event_month + median_tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
-reg4 <- felm(median_rent_sqft ~ delta_hhi:event_month|factor(monthyear) + factor(Zip5), data = dt_tmp)
-reg5 <- felm(median_rent_sqft ~ delta_hhi:event_month + median_tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
+reg0 <- felm(ZORI ~ delta_hhi:event_month|factor(monthyear) + factor(Zip5), data = dt_tmp)
+reg1 <- felm(ZORI ~ delta_hhi:event_month + median_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
+reg2 <- felm(log_zori ~ delta_hhi:event_month|factor(monthyear) + factor(Zip5), data = dt_tmp)
+reg3 <- felm(log_zori ~ delta_hhi:event_month + median_log_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
+reg4 <- felm(median_log_rent ~ delta_hhi:event_month|factor(monthyear) + factor(Zip5), data = dt_tmp)
+reg5 <- felm(median_log_rent ~ delta_hhi:event_month + median_log_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5), data = dt_tmp)
 
 
 out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4,reg5,
-                                column.labels = c("Log Zori", "Zori/Sqft", "Median Rent/Sqft"), column.separate = c(2,2,2), 
+                                column.labels = c("Zori", "Log ZORI", "Median Log Rent"), column.separate = c(2,2,2), 
                                 title = paste0("2-Way FE Zip with Event-Month, All Mergers, No Multi-Merge Zips")))
 
 # Wrap tabular environment in resizebox
@@ -213,8 +220,8 @@ out <- gsub("!htbp", "H", out, fixed = T)
 
 # Replace notes
 note.latex <- paste0("\\multicolumn{7}{l} {\\parbox[t]{\\textwidth}{ \\textit{Notes:} Sample is zip level, with month-year and zip FE. 
-                       Sample average log ZORI: ", avg_log_zori, ". Sample average ZORI/sqft: ", avg_zori_sqft,
-                     " Sample average rent/sqft: ", avg_rent_sqft, "ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\\\")
+                       Sample average ZORI: ", avg_zori, ". Sample average log ZORI: ", avg_log_zori,
+                     " Sample average median log rent: ", avg_log_rent, "ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\\\")
 note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
 out[grepl("Note",out)] <- note.latex
 
