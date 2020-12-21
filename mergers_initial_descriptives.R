@@ -220,7 +220,7 @@ for (merge_id in unique(mergers$MergeID_1)){
 
 # Fill rest of owner hhi variable
 dt[is.na(owner_hhi) | owner_hhi == "", owner_hhi := Merger_Owner_Name]
-dt[is.na(owner_hhi) | owner_hhi == "", owner_hhi := owner_matched]
+dt[is.na(owner_hhi) | owner_hhi == "", owner_hhi := owner_name_clean]
 
 # Zip level event-time charts --------------------------------------------------------------
 # Clean Zillow

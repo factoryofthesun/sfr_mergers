@@ -62,6 +62,10 @@ dt[, zip_firm := paste0(Zip5, Merger_Owner_Name)]
 dt[,merge_firm_owned := as.integer(treated_overlap >= 1)]
 dt_tmp <- dt[year >= 2009]
   
+treated_names <- setdiff(grep("^treated_", names(dt_tmp), value = T), "treated_overlap")
+dt_tmp[,treated := 0]
+dt_tmp[,treated := as.integer(rowSums(.SD) >= 1), .SDcols = treated_names]
+
 post_names <- grep("^post_", names(dt_tmp), value = T)
 dt_tmp[,post := 0]
 dt_tmp[,post := as.integer(rowSums(.SD) >= 1), .SDcols = post_names]
@@ -77,23 +81,24 @@ dt_tmp[,delta_hhi := 0]
 # Delta HHI for multi-merged zips will be discontinuous jumps (add new delta HHI after every additional post period)
 for (i in 1:length(post_names)){
   post_var <- post_names[i]
+  treated_var <- treated_names[i]
   hhi_var <- hhi_names[i]
   dt_tmp[get(post_var) == 1, delta_hhi := delta_hhi + get(hhi_var)]
 }
 
-reg0 <- felm(RentPrice ~ delta_hhi:post + delta_hhi:post:merge_firm_owned|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
-reg1 <- felm(RentPrice ~ delta_hhi:post + delta_hhi:post:merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
-reg2 <- felm(log_rent ~ delta_hhi:post + delta_hhi:post:merge_firm_owned|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
-reg3 <- felm(log_rent ~ delta_hhi:post + delta_hhi:post:merge_firm_owned + log_sqft + tot_unit_val|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
+reg0 <- felm(RentPrice ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
+reg1 <- felm(RentPrice ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
+reg2 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
+reg3 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:merge_firm_owned:treated + log_sqft + tot_unit_val|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
 # reg4 <- felm(rent_sqft ~ delta_hhi:post + delta_hhi:post:merge_firm_owned|factor(year) + factor(Zip5)|0|merge_label, data = dt_tmp)
 # reg5 <- felm(rent_sqft ~ delta_hhi:post + delta_hhi:post:merge_firm_owned + tot_unit_val|factor(year) + factor(Zip5)|0|merge_label, data = dt_tmp)
 
 out <- capture.output(stargazer(reg0,reg1, reg2, reg3,
                                 column.labels = c("Rent", "Log Rent"), column.separate = c(2,2), 
-                                title = "2-Way FE with delta HHI and firm owned indicator, All Treated Zips"))
+                                title = "2-Way FE with delta HHI and firm owned indicator, All Treated Zips, All Controls"))
 
 # Wrap tabular environment in resizebox
-out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidt_tmph}{!}{\\begin{tabular}", out, fixed = T)
+out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
 out <- gsub("\\end{tabular}", "\\end{tabular}}", out, fixed = T)
 
 # Set position
@@ -102,38 +107,19 @@ cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append
 
 # Second estimation -- all values in control groups 1 and 2
 sample_cols <- grep("_c1|_c2", names(dt), value=T)
-dt[, sample_1_and_2 := rowSums(.SD), .SDcols=sample_cols]
-dt_tmp <- dt[year >= 2009 & sample_1_and_2 >= 1]
+dt_tmp[, sample_1_and_2 := rowSums(.SD), .SDcols=sample_cols]
+dt_tmp <- dt_tmp[year >= 2009 & sample_1_and_2 >= 1]
 
-post_names <- grep("^post_", names(dt), value = T)
-dt_tmp[,post := 0]
-dt_tmp[,post := as.integer(rowSums(.SD) >= 1), .SDcols = post_names]
-
-label_names <- grep("^merge_label_", names(dt), value = T)
-dt_tmp[,merge_label := as.character(NA)]
-for (label in label_names){
-  dt_tmp[is.na(merge_label)|merge_label == "", merge_label := get(label)]
-}
-
-hhi_names <- grep("^delta_hhi_", names(dt), value = T)
-dt_tmp[,delta_hhi := 0]
-# Delta HHI for multi-merged zips will be discontinuous jumps (add new delta HHI after every additional post period)
-for (i in 1:length(post_names)){
-  post_var <- post_names[i]
-  hhi_var <- hhi_names[i]
-  dt_tmp[get(post_var) == 1, delta_hhi := delta_hhi + get(hhi_var)]
-}
-
-reg0 <- felm(RentPrice ~ delta_hhi:post + delta_hhi:post:merge_firm_owned|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
-reg1 <- felm(RentPrice ~ delta_hhi:post + delta_hhi:post:merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
-reg2 <- felm(log_rent ~ delta_hhi:post + delta_hhi:post:merge_firm_owned|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
-reg3 <- felm(log_rent ~ delta_hhi:post + delta_hhi:post:merge_firm_owned + log_sqft + tot_unit_val|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
+reg0 <- felm(RentPrice ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
+reg1 <- felm(RentPrice ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
+reg2 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
+reg3 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
 # reg4 <- felm(rent_sqft ~ delta_hhi:post + delta_hhi:post:merge_firm_owned|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
 # reg5 <- felm(rent_sqft ~ delta_hhi:post + delta_hhi:post:merge_firm_owned + tot_unit_val|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
 
 out <- capture.output(stargazer(reg0,reg1, reg2, reg3,
                                 column.labels = c("Rent", "Log Rent"), column.separate = c(2,2), 
-                                title = "2-Way FE with delta HHI and firm owned indicator, All Treated Zips"))
+                                title = "2-Way FE with delta HHI and firm owned indicator, All Treated Zips, Control Groups 1 and 2"))
 
 # Wrap tabular environment in resizebox
 out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
@@ -251,51 +237,51 @@ for (merge_id in unique(mergers$MergeID_1)){
 }
 
 # Quadruple differences: exploit variation in cross-merge zip HHI changes, merging firm ownership, single-firm zips, and time
-for (merge_id in unique(mergers$MergeID_1)){
-  # Skip American Residential Ppty (no props found)
-  if (merge_id == 3){
-    next 
-  }
-  treated_var <- paste0("treated_", merge_id)
-  post_var <- paste0("post_", merge_id)
-  hhi_var <- paste0("delta_hhi_", merge_id)
-  sample_var1 <- paste0("sample_", merge_id, "_c1")
-  sample_var2 <- paste0("sample_", merge_id, "_c3")
-  treated_zips <- unique(dt[get(treated_var) == 1, Zip5])
-  merge_label <- unique(mergers[MergeID_1 == merge_id, label])
-  
-  dt[,treated_zip := 0]
-  dt[Zip5 %in% treated_zips, treated_zip := 1]
-  dt[, treated := get(treated_var)]
-  dt[, post := get(post_var)]
-  dt[, delta_hhi := get(hhi_var)]
-  dt_tmp <- dt[(year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year & (get(sample_var1) == 1 | get(sample_var2) == 1)]
-  reg0 <- felm(RentPrice ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
-                 post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated, data = dt_tmp)
-  reg1 <- felm(RentPrice ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
-                 post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated +
-                 sqft + tot_unit_val, data = dt_tmp)
-  reg2 <- felm(log_rent ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
-                 post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated, data = dt_tmp)
-  reg3 <- felm(log_rent ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
-                 post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated +
-                 sqft + tot_unit_val, data = dt_tmp)
-  # reg4 <- felm(rent_sqft ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
-  #                post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated, data = dt_tmp)
-  # reg5 <- felm(rent_sqft ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
-  #                post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated +
-  #                tot_unit_val, data = dt_tmp)
-  
-  out <- capture.output(stargazer(reg0,reg1, reg2, reg3,
-                                  column.labels = c("Rent", "Log Rent"), column.separate = c(2,2), 
-                                  title = paste0("Prepost Quad Differences, Merger: ", merge_label)))
-  
-  # Wrap tabular environment in resizebox
-  out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
-  out <- gsub("\\end{tabular}", "\\end{tabular}}", out, fixed = T)
-  
-  # Set position
-  out <- gsub("!htbp", "H", out, fixed = T)
-  cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
-}
-
+# for (merge_id in unique(mergers$MergeID_1)){
+#   # Skip American Residential Ppty (no props found)
+#   if (merge_id == 3){
+#     next 
+#   }
+#   treated_var <- paste0("treated_", merge_id)
+#   post_var <- paste0("post_", merge_id)
+#   hhi_var <- paste0("delta_hhi_", merge_id)
+#   sample_var1 <- paste0("sample_", merge_id, "_c1")
+#   sample_var2 <- paste0("sample_", merge_id, "_c3")
+#   treated_zips <- unique(dt[get(treated_var) == 1, Zip5])
+#   merge_label <- unique(mergers[MergeID_1 == merge_id, label])
+#   
+#   dt[,treated_zip := 0]
+#   dt[Zip5 %in% treated_zips, treated_zip := 1]
+#   dt[, treated := get(treated_var)]
+#   dt[, post := get(post_var)]
+#   dt[, delta_hhi := get(hhi_var)]
+#   dt_tmp <- dt[(year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year & (get(sample_var1) == 1 | get(sample_var2) == 1)]
+#   reg0 <- felm(RentPrice ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
+#                  post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated, data = dt_tmp)
+#   reg1 <- felm(RentPrice ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
+#                  post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated +
+#                  sqft + tot_unit_val, data = dt_tmp)
+#   reg2 <- felm(log_rent ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
+#                  post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated, data = dt_tmp)
+#   reg3 <- felm(log_rent ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
+#                  post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated +
+#                  sqft + tot_unit_val, data = dt_tmp)
+#   # reg4 <- felm(rent_sqft ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
+#   #                post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated, data = dt_tmp)
+#   # reg5 <- felm(rent_sqft ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
+#   #                post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated +
+#   #                tot_unit_val, data = dt_tmp)
+#   
+#   out <- capture.output(stargazer(reg0,reg1, reg2, reg3,
+#                                   column.labels = c("Rent", "Log Rent"), column.separate = c(2,2), 
+#                                   title = paste0("Prepost Quad Differences, Merger: ", merge_label)))
+#   
+#   # Wrap tabular environment in resizebox
+#   out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
+#   out <- gsub("\\end{tabular}", "\\end{tabular}}", out, fixed = T)
+#   
+#   # Set position
+#   out <- gsub("!htbp", "H", out, fixed = T)
+#   cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
+# }
+# 
