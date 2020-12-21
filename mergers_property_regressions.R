@@ -57,14 +57,16 @@ library(stargazer)
 #TODO: CHECK IF HAVING UNITS BE TREATED MULTIPLE TIMES IS NOT SUS
 # Want to cluster by zip-firm (treatment HHI on zip-level and sampling differs by firm in terms of level of capture)
 dt[, zip_firm := paste0(Zip5, Merger_Owner_Name)]
+dt[, treated := as.integer(treated)]
 
 # First estimation -- all values in control samples
-dt[,merge_firm_owned := as.integer(treated_overlap >= 1)]
+dt[,merge_firm_owned := as.integer(!is.na(Merger_Owner_Name) & Merger_Owner_Name != "")]
 dt_tmp <- dt[year >= 2009]
   
 treated_names <- setdiff(grep("^treated_", names(dt_tmp), value = T), "treated_overlap")
 dt_tmp[,treated := 0]
-dt_tmp[,treated := as.integer(rowSums(.SD) >= 1), .SDcols = treated_names]
+treated_zips <- unique(dt_tmp[treated_overlap >= 1, Zip5])
+dt_tmp[Zip5 %in% treated_zips,treated := 1]
 
 post_names <- grep("^post_", names(dt_tmp), value = T)
 dt_tmp[,post := 0]
@@ -83,13 +85,15 @@ for (i in 1:length(post_names)){
   post_var <- post_names[i]
   treated_var <- treated_names[i]
   hhi_var <- hhi_names[i]
-  dt_tmp[get(post_var) == 1, delta_hhi := delta_hhi + get(hhi_var)]
+  treated_zips <- unique(dt_tmp[get(treated_var) == 1, Zip5])
+  dt_tmp[get(post_var) == 1 & Zip5 %in% treated_zips & delta_hhi > 0, delta_hhi := delta_hhi + get(hhi_var)]
+  dt_tmp[Zip5 %in% treated_zips & delta_hhi == 0, delta_hhi := get(hhi_var)]
 }
 
 reg0 <- felm(RentPrice ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
 reg1 <- felm(RentPrice ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + sqft + tot_unit_val|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
 reg2 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
-reg3 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:merge_firm_owned:treated + log_sqft + tot_unit_val|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
+reg3 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val|factor(year) + factor(Zip5)|0|zip_firm, data = dt_tmp)
 # reg4 <- felm(rent_sqft ~ delta_hhi:post + delta_hhi:post:merge_firm_owned|factor(year) + factor(Zip5)|0|merge_label, data = dt_tmp)
 # reg5 <- felm(rent_sqft ~ delta_hhi:post + delta_hhi:post:merge_firm_owned + tot_unit_val|factor(year) + factor(Zip5)|0|merge_label, data = dt_tmp)
 
