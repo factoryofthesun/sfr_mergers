@@ -64,14 +64,14 @@ library(ggmap)
 merge_labels <- c("Invitation Homes Inc", "American Homes 4 Rent", "Starwood Waypoint Residential",
                   "Colony American Homes Inc", "Silver Bay Realty Trust Corp", "Tricon Capital Group Inc",
                   "Beazer Pre-Owned Rental Homes", "Ellington Housing", "American Residential Ppty Inc")
-colors <- c("coral1", "dodgerblue", "darkorange", "forestgreen", "plum", "wheat", "violet", "turquoise", "lightgray")
+colors <- c("coral1", "dodgerblue", "darkorange", "forestgreen", "violet", "brown", "gold3", "turquoise", "gray")
 
 states <- map_data("state")
 ggplot() + geom_polygon(data = states, aes(x = long, y = lat, group=group), color = "black", fill = "white") + 
   coord_fixed(1.3) + 
   geom_point(data=mergers[!is.na(Merger_Owner_Name)], aes(x = X, y = Y, color = Merger_Owner_Name),size = 0.1,shape=16) + 
   scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size = 3))) + 
-  labs(title = "SFR Owners Around the US", color="Firm") + 
+  labs(title = "SFR Owners", color="Firm") + 
   ggsave(paste0(figs_path, "US.png"))
 
 # Plot each state individually 

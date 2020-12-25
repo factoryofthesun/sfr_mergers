@@ -2,7 +2,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Mon, Dec 21, 2020 - 04:46:15 AM 
+ % Date and time: Fri, Dec 25, 2020 - 12:41:04 AM 
 
  \begin{table}[H] \centering  
 
@@ -10,69 +10,73 @@
 
    \label{}  
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccc}  
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
 
  \\[-1.8ex]\hline  
 
  \hline \\[-1.8ex]  
 
-  & \multicolumn{4}{c}{\textit{Dependent variable:}} \\  
+  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
 
- \cline{2-5}  
+ \cline{2-9}  
 
- \\[-1.8ex] & \multicolumn{2}{c}{RentPrice} & \multicolumn{2}{c}{log\_rent} \\  
+ \\[-1.8ex] & \multicolumn{3}{c}{RentPrice} & \multicolumn{5}{c}{log\_rent} \\  
 
-  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} \\  
+  & \multicolumn{3}{c}{Rent} & \multicolumn{5}{c}{Log Rent} \\  
 
- \\[-1.8ex] & (1) & (2) & (3) & (4)\\  
-
- \hline \\[-1.8ex]  
-
-  sqft &  & $-$0.0004 &  &  \\  
-
-   &  & (0.001) &  &  \\  
-
-   & & & & \\  
-
-  log\_sqft &  &  &  & 0.444$^{***}$ \\  
-
-   &  &  &  & (0.014) \\  
-
-   & & & & \\  
-
-  tot\_unit\_val &  & 0.014$^{***}$ &  & $-$0.000 \\  
-
-   &  & (0.003) &  & (0.000) \\  
-
-   & & & & \\  
-
-  delta\_hhi:post:treated & 161.354 & 191.116 & 0.001$^{***}$ & 0.001$^{***}$ \\  
-
-   & (145.574) & (159.987) & (0.0001) & (0.0001) \\  
-
-   & & & & \\  
-
-  delta\_hhi:post:treated:merge\_firm\_owned & $-$101.955 & $-$116.342 & $-$0.00002 & $-$0.0003$^{*}$ \\  
-
-   & (144.605) & (157.970) & (0.0002) & (0.0002) \\  
-
-   & & & & \\  
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
 
  \hline \\[-1.8ex]  
 
- Observations & 3,637,904 & 3,268,965 & 3,637,904 & 3,268,965 \\  
+  sqft & $-$0.0004 & $-$0.0004 & $-$0.0004 &  &  &  &  &  \\  
 
- R$^{2}$ & 0.108 & 0.113 & 0.389 & 0.429 \\  
+   & (0.001) & (0.001) & (0.001) &  &  &  &  &  \\  
 
- Adjusted R$^{2}$ & 0.107 & 0.112 & 0.389 & 0.428 \\  
+   & & & & & & & & \\  
 
- Residual Std. Error & 198,776.600 (df = 3634082) & 198,034.600 (df = 3265245) & 0.975 (df = 3634082) & 0.931 (df = 3265245) \\  
+  tot\_unit\_val & 0.014$^{***}$ & 0.014$^{***}$ & 0.014$^{***}$ &  &  & $-$0.000 & $-$0.000 & $-$0.000 \\  
+
+   & (0.003) & (0.003) & (0.003) &  &  & (0.000) & (0.000) & (0.000) \\  
+
+   & & & & & & & & \\  
+
+  log\_sqft &  &  &  &  & 0.443$^{***}$ & 0.444$^{***}$ & 0.443$^{***}$ & 0.444$^{***}$ \\  
+
+   &  &  &  &  & (0.013) & (0.014) & (0.014) & (0.014) \\  
+
+   & & & & & & & & \\  
+
+  delta\_hhi:post:treated & 191.116 & 192.045 & $-$1,060.126$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ & 0.002$^{***}$ & $-$0.002$^{*}$ \\  
+
+   & (161.899) & (167.326) & (181.220) & (0.0001) & (0.0001) & (0.0001) & (0.0002) & (0.001) \\  
+
+   & & & & & & & & \\  
+
+  delta\_hhi:post:treated:merge\_firm\_owned & $-$116.342 & $-$117.184 & $-$118.808 & $-$0.00002 & $-$0.0003$^{*}$ & $-$0.0003$^{*}$ & $-$0.0003$^{**}$ & $-$0.0003$^{*}$ \\  
+
+   & (174.656) & (176.741) & (175.092) & (0.0002) & (0.0002) & (0.0002) & (0.0002) & (0.0002) \\  
+
+   & & & & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & Yes & No & No & No & No & Yes & No \\  
+
+ Delta HHI*Linear Trend & No & No & Yes & No & No & No & No & Yes \\  
+
+ Observations & 3,268,965 & 3,268,160 & 3,268,965 & 3,637,904 & 3,269,097 & 3,268,965 & 3,268,160 & 3,268,965 \\  
+
+ R$^{2}$ & 0.113 & 0.119 & 0.113 & 0.389 & 0.429 & 0.429 & 0.438 & 0.429 \\  
+
+ Adjusted R$^{2}$ & 0.112 & 0.117 & 0.112 & 0.389 & 0.428 & 0.428 & 0.437 & 0.428 \\  
+
+ Residual Std. Error & 198,034.600 (df = 3265245) & 197,455.400 (df = 3261536) & 198,034.400 (df = 3265244) & 0.975 (df = 3634082) & 0.931 (df = 3265378) & 0.931 (df = 3265245) & 0.923 (df = 3261536) & 0.931 (df = 3265244) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\  
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 23600.45. Sample average log rent: 7.48. Sample average HHI: 37.07. Sample average delta HHI: 0.53. Sample SD HHI: 183.36. Sample SD delta HHI: 1.49}} \\ 
 
  \end{tabular}}  
 
@@ -82,7 +86,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Mon, Dec 21, 2020 - 04:46:34 AM 
+ % Date and time: Fri, Dec 25, 2020 - 12:43:10 AM 
 
  \begin{table}[H] \centering  
 
@@ -90,69 +94,79 @@
 
    \label{}  
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccc}  
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
 
  \\[-1.8ex]\hline  
 
  \hline \\[-1.8ex]  
 
-  & \multicolumn{4}{c}{\textit{Dependent variable:}} \\  
+  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
 
- \cline{2-5}  
+ \cline{2-9}  
 
- \\[-1.8ex] & \multicolumn{2}{c}{RentPrice} & \multicolumn{2}{c}{log\_rent} \\  
+ \\[-1.8ex] & \multicolumn{3}{c}{RentPrice} & \multicolumn{5}{c}{log\_rent} \\  
 
-  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} \\  
+  & \multicolumn{3}{c}{Rent} & \multicolumn{5}{c}{Log Rent} \\  
 
- \\[-1.8ex] & (1) & (2) & (3) & (4)\\  
-
- \hline \\[-1.8ex]  
-
-  sqft &  & 0.002 &  &  \\  
-
-   &  & (0.002) &  &  \\  
-
-   & & & & \\  
-
-  log\_sqft &  &  &  & 0.502$^{***}$ \\  
-
-   &  &  &  & (0.020) \\  
-
-   & & & & \\  
-
-  tot\_unit\_val &  & 0.022$^{***}$ &  & $-$0.000 \\  
-
-   &  & (0.005) &  & (0.000) \\  
-
-   & & & & \\  
-
-  delta\_hhi:post:treated & 238.136 & 272.678$^{*}$ & 0.001$^{***}$ & 0.001$^{***}$ \\  
-
-   & (148.296) & (162.812) & (0.0002) & (0.0002) \\  
-
-   & & & & \\  
-
-  delta\_hhi:post:treated:merge\_firm\_owned & $-$108.081 & $-$123.061 & $-$0.0001 & $-$0.0004$^{**}$ \\  
-
-   & (145.733) & (159.143) & (0.0002) & (0.0002) \\  
-
-   & & & & \\  
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
 
  \hline \\[-1.8ex]  
 
- Observations & 1,731,499 & 1,589,654 & 1,731,499 & 1,589,654 \\  
+  sqft & 0.002 & 0.002 & 0.002 &  &  &  &  &  \\  
 
- R$^{2}$ & 0.110 & 0.119 & 0.419 & 0.456 \\  
+   & (0.002) & (0.002) & (0.002) &  &  &  &  &  \\  
 
- Adjusted R$^{2}$ & 0.108 & 0.117 & 0.418 & 0.456 \\  
+   & & & & & & & & \\  
 
- Residual Std. Error & 230,532.400 (df = 1728888) & 225,356.600 (df = 1587086) & 1.089 (df = 1728888) & 1.036 (df = 1587086) \\  
+  tot\_unit\_val & 0.022$^{***}$ & 0.022$^{***}$ & 0.022$^{***}$ &  &  & $-$0.000 & $-$0.000 & $-$0.000 \\  
+
+   & (0.005) & (0.005) & (0.005) &  &  & (0.000) & (0.000) & (0.000) \\  
+
+   & & & & & & & & \\  
+
+  delta\_hhi:time\_trend &  &  & 257.656$^{***}$ &  &  &  &  & 0.001$^{***}$ \\  
+
+   &  &  & (44.614) &  &  &  &  & (0.0002) \\  
+
+   & & & & & & & & \\  
+
+  log\_sqft &  &  &  &  & 0.500$^{***}$ & 0.502$^{***}$ & 0.500$^{***}$ & 0.502$^{***}$ \\  
+
+   &  &  &  &  & (0.019) & (0.020) & (0.019) & (0.020) \\  
+
+   & & & & & & & & \\  
+
+  delta\_hhi:post:treated & 272.678$^{*}$ & 284.020$^{*}$ & $-$2,009.438$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ & 0.002$^{***}$ & $-$0.009$^{***}$ \\  
+
+   & (164.686) & (169.622) & (319.133) & (0.0002) & (0.0002) & (0.0002) & (0.0002) & (0.002) \\  
+
+   & & & & & & & & \\  
+
+  delta\_hhi:post:treated:merge\_firm\_owned & $-$123.061 & $-$120.813 & $-$127.437 & $-$0.0001 & $-$0.0004$^{**}$ & $-$0.0004$^{**}$ & $-$0.0004$^{**}$ & $-$0.0004$^{**}$ \\  
+
+   & (174.744) & (176.781) & (175.226) & (0.0002) & (0.0002) & (0.0002) & (0.0002) & (0.0002) \\  
+
+   & & & & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & Yes & No & No & No & No & Yes & No \\  
+
+ Delta HHI*Linear Trend & No & No & Yes & No & No & No & No & Yes \\  
+
+ Observations & 1,589,654 & 1,588,154 & 1,589,654 & 1,731,499 & 1,589,689 & 1,589,654 & 1,588,154 & 1,589,654 \\  
+
+ R$^{2}$ & 0.119 & 0.124 & 0.119 & 0.419 & 0.456 & 0.456 & 0.465 & 0.456 \\  
+
+ Adjusted R$^{2}$ & 0.117 & 0.122 & 0.117 & 0.418 & 0.456 & 0.456 & 0.464 & 0.456 \\  
+
+ Residual Std. Error & 225,356.600 (df = 1587086) & 224,769.800 (df = 1584176) & 225,355.000 (df = 1587085) & 1.089 (df = 1728888) & 1.036 (df = 1587122) & 1.036 (df = 1587086) & 1.028 (df = 1584176) & 1.036 (df = 1587085) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\  
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 34631.76. Sample average log rent: 7.6. Sample average HHI: 34.97. Sample average delta HHI: 0.53. Sample SD HHI: 214.33. Sample SD delta HHI: 1.49}} \\ 
 
  \end{tabular}}  
 
@@ -162,7 +176,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Mon, Dec 21, 2020 - 04:46:41 AM 
+ % Date and time: Fri, Dec 25, 2020 - 12:45:05 AM 
 
  \begin{table}[H] \centering  
 
@@ -170,81 +184,65 @@
 
    \label{}  
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccc}  
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
 
  \\[-1.8ex]\hline  
 
  \hline \\[-1.8ex]  
 
-  & \multicolumn{4}{c}{\textit{Dependent variable:}} \\  
+  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
 
- \cline{2-5}  
+ \cline{2-9}  
 
- \\[-1.8ex] & \multicolumn{2}{c}{RentPrice} & \multicolumn{2}{c}{log\_rent} \\  
+ \\[-1.8ex] & \multicolumn{4}{c}{RentPrice} & \multicolumn{4}{c}{log\_rent} \\  
 
-  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} \\  
+  & \multicolumn{4}{c}{Rent} & \multicolumn{4}{c}{Log Rent} \\  
 
- \\[-1.8ex] & (1) & (2) & (3) & (4)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & $-$23,617.160$^{***}$ & $-$20,016.610$^{***}$ & $-$0.433$^{***}$ & $-$0.506$^{***}$ \\  
-
-   & (3,613.215) & (3,828.037) & (0.023) & (0.023) \\  
-
-   & & & & \\  
-
-  post & $-$20,268.890$^{***}$ & $-$18,939.010$^{***}$ & $-$0.208$^{***}$ & $-$0.290$^{***}$ \\  
-
-   & (528.165) & (548.539) & (0.003) & (0.003) \\  
-
-   & & & & \\  
-
-  sqft &  & $-$0.002 &  &  \\  
-
-   &  & (0.002) &  &  \\  
-
-   & & & & \\  
-
-  log\_sqft &  &  &  & 0.441$^{***}$ \\  
-
-   &  &  &  & (0.002) \\  
-
-   & & & & \\  
-
-  tot\_unit\_val &  & 0.033$^{***}$ &  & 0.00000$^{***}$ \\  
-
-   &  & (0.0002) &  & (0.000) \\  
-
-   & & & & \\  
-
-  treated:post & 20,502.710$^{***}$ & 17,809.070$^{***}$ & 0.306$^{***}$ & 0.367$^{***}$ \\  
-
-   & (6,119.152) & (6,452.650) & (0.038) & (0.039) \\  
-
-   & & & & \\  
-
-  Constant & 25,243.510$^{***}$ & 17,930.290$^{***}$ & 7.472$^{***}$ & 4.170$^{***}$ \\  
-
-   & (139.368) & (154.317) & (0.001) & (0.013) \\  
-
-   & & & & \\  
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
 
  \hline \\[-1.8ex]  
 
- Observations & 2,325,594 & 2,094,977 & 2,325,594 & 2,094,977 \\  
+  sqft &  & 0.005 & 0.0002 & 0.0001 &  &  &  &  \\  
 
- R$^{2}$ & 0.001 & 0.011 & 0.002 & 0.055 \\  
+   &  & (0.005) & (0.001) & (0.001) &  &  &  &  \\  
 
- Adjusted R$^{2}$ & 0.001 & 0.011 & 0.002 & 0.055 \\  
+   & & & & & & & & \\  
 
- Residual Std. Error & 204,784.000 (df = 2325590) & 204,886.500 (df = 2094971) & 1.280 (df = 2325590) & 1.226 (df = 2094971) \\  
+  tot\_unit\_val &  &  & 0.022$^{***}$ & 0.022$^{***}$ &  &  & 0.00000$^{**}$ & 0.00000$^{*}$ \\  
+
+   &  &  & (0.004) & (0.004) &  &  & (0.000) & (0.000) \\  
+
+   & & & & & & & & \\  
+
+  log\_sqft &  &  &  &  &  & 0.475$^{***}$ & 0.466$^{***}$ & 0.465$^{***}$ \\  
+
+   &  &  &  &  &  & (0.014) & (0.015) & (0.015) \\  
+
+   & & & & & & & & \\  
+
+  treated:post & $-$1,730.788$^{**}$ & $-$2,012.926$^{**}$ & $-$1,870.773$^{**}$ & $-$2,036.479$^{*}$ & 0.011 & $-$0.018 & $-$0.018 & $-$0.019$^{*}$ \\  
+
+   & (775.348) & (816.940) & (824.158) & (1,096.473) & (0.015) & (0.011) & (0.011) & (0.011) \\  
+
+   & & & & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No & No & No & Yes \\  
+
+ Observations & 2,325,594 & 2,095,042 & 2,094,977 & 2,093,978 & 2,325,594 & 2,095,042 & 2,094,977 & 2,093,978 \\  
+
+ R$^{2}$ & 0.123 & 0.124 & 0.128 & 0.130 & 0.412 & 0.454 & 0.454 & 0.462 \\  
+
+ Adjusted R$^{2}$ & 0.121 & 0.122 & 0.127 & 0.128 & 0.411 & 0.453 & 0.454 & 0.460 \\  
+
+ Residual Std. Error & 192,004.200 (df = 2322036) & 193,005.500 (df = 2091567) & 192,544.100 (df = 2091501) & 191,339.500 (df = 2087985) & 0.983 (df = 2322036) & 0.932 (df = 2091567) & 0.932 (df = 2091501) & 0.926 (df = 2087985) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\  
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 23785.07. Sample average log rent: 7.46. Sample average HHI: 37.18. Sample SD HHI: 183.06}} \\ 
 
  \end{tabular}}  
 
@@ -254,7 +252,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Mon, Dec 21, 2020 - 04:46:49 AM 
+ % Date and time: Fri, Dec 25, 2020 - 12:46:19 AM 
 
  \begin{table}[H] \centering  
 
@@ -262,81 +260,65 @@
 
    \label{}  
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccc}  
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
 
  \\[-1.8ex]\hline  
 
  \hline \\[-1.8ex]  
 
-  & \multicolumn{4}{c}{\textit{Dependent variable:}} \\  
+  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
 
- \cline{2-5}  
+ \cline{2-9}  
 
- \\[-1.8ex] & \multicolumn{2}{c}{RentPrice} & \multicolumn{2}{c}{log\_rent} \\  
+ \\[-1.8ex] & \multicolumn{4}{c}{RentPrice} & \multicolumn{4}{c}{log\_rent} \\  
 
-  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} \\  
+  & \multicolumn{4}{c}{Rent} & \multicolumn{4}{c}{Log Rent} \\  
 
- \\[-1.8ex] & (1) & (2) & (3) & (4)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & $-$23,617.160$^{***}$ & $-$19,985.860$^{***}$ & $-$0.433$^{***}$ & $-$0.504$^{***}$ \\  
-
-   & (3,639.971) & (3,849.726) & (0.023) & (0.024) \\  
-
-   & & & & \\  
-
-  post & $-$22,908.150$^{***}$ & $-$21,401.820$^{***}$ & $-$0.274$^{***}$ & $-$0.339$^{***}$ \\  
-
-   & (3,797.038) & (3,905.818) & (0.024) & (0.024) \\  
-
-   & & & & \\  
-
-  sqft &  & $-$0.001 &  &  \\  
-
-   &  & (0.002) &  &  \\  
-
-   & & & & \\  
-
-  log\_sqft &  &  &  & 0.435$^{***}$ \\  
-
-   &  &  &  & (0.002) \\  
-
-   & & & & \\  
-
-  tot\_unit\_val &  & 0.033$^{***}$ &  & 0.00000$^{***}$ \\  
-
-   &  & (0.0002) &  & (0.000) \\  
-
-   & & & & \\  
-
-  treated:post & 23,141.970$^{***}$ & 20,262.070$^{***}$ & 0.373$^{***}$ & 0.416$^{***}$ \\  
-
-   & (7,220.458) & (7,553.870) & (0.046) & (0.046) \\  
-
-   & & & & \\  
-
-  Constant & 25,243.510$^{***}$ & 17,865.030$^{***}$ & 7.472$^{***}$ & 4.210$^{***}$ \\  
-
-   & (140.400) & (155.272) & (0.001) & (0.014) \\  
-
-   & & & & \\  
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
 
  \hline \\[-1.8ex]  
 
- Observations & 2,166,967 & 1,947,403 & 2,166,967 & 1,947,403 \\  
+  sqft &  & 0.005 & 0.0002 & 0.0002 &  &  &  &  \\  
 
- R$^{2}$ & 0.00005 & 0.011 & 0.0003 & 0.052 \\  
+   &  & (0.005) & (0.001) & (0.001) &  &  &  &  \\  
 
- Adjusted R$^{2}$ & 0.00005 & 0.011 & 0.0003 & 0.052 \\  
+   & & & & & & & & \\  
 
- Residual Std. Error & 206,300.400 (df = 2166963) & 206,047.300 (df = 1947397) & 1.313 (df = 2166963) & 1.260 (df = 1947397) \\  
+  tot\_unit\_val &  &  & 0.022$^{***}$ & 0.022$^{***}$ &  &  & 0.00000$^{**}$ & 0.00000$^{*}$ \\  
+
+   &  &  & (0.004) & (0.004) &  &  & (0.000) & (0.000) \\  
+
+   & & & & & & & & \\  
+
+  log\_sqft &  &  &  &  &  & 0.474$^{***}$ & 0.465$^{***}$ & 0.464$^{***}$ \\  
+
+   &  &  &  &  &  & (0.015) & (0.015) & (0.015) \\  
+
+   & & & & & & & & \\  
+
+  treated:post & 719.496 & 971.201 & 1,230.294 & 1,785.129$^{***}$ & 0.019 & 0.037 & 0.037 & 0.060$^{***}$ \\  
+
+   & (1,000.212) & (888.138) & (950.050) & (608.661) & (0.030) & (0.027) & (0.027) & (0.017) \\  
+
+   & & & & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No & No & No & Yes \\  
+
+ Observations & 2,166,967 & 1,947,466 & 1,947,403 & 1,946,383 & 2,166,967 & 1,947,466 & 1,947,403 & 1,946,383 \\  
+
+ R$^{2}$ & 0.129 & 0.131 & 0.135 & 0.138 & 0.416 & 0.457 & 0.457 & 0.465 \\  
+
+ Adjusted R$^{2}$ & 0.128 & 0.129 & 0.134 & 0.135 & 0.415 & 0.456 & 0.456 & 0.463 \\  
+
+ Residual Std. Error & 192,674.900 (df = 2163407) & 193,335.600 (df = 1943989) & 192,836.000 (df = 1943925) & 191,546.300 (df = 1940401) & 1.005 (df = 2163407) & 0.955 (df = 1943989) & 0.954 (df = 1943925) & 0.948 (df = 1940401) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\  
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 25158.44. Sample average log rent: 7.47. Sample average HHI: 37.36. Sample average delta HHI: 0.53. Sample SD HHI: 183.09. Sample SD delta HHI: 1.49}} \\ 
 
  \end{tabular}}  
 
@@ -346,7 +328,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Mon, Dec 21, 2020 - 04:46:54 AM 
+ % Date and time: Fri, Dec 25, 2020 - 12:48:55 AM 
 
  \begin{table}[H] \centering  
 
@@ -354,81 +336,65 @@
 
    \label{}  
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccc}  
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
 
  \\[-1.8ex]\hline  
 
  \hline \\[-1.8ex]  
 
-  & \multicolumn{4}{c}{\textit{Dependent variable:}} \\  
+  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
 
- \cline{2-5}  
+ \cline{2-9}  
 
- \\[-1.8ex] & \multicolumn{2}{c}{RentPrice} & \multicolumn{2}{c}{log\_rent} \\  
+ \\[-1.8ex] & \multicolumn{4}{c}{RentPrice} & \multicolumn{4}{c}{log\_rent} \\  
 
-  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} \\  
+  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} &  &  &  &  \\  
 
- \\[-1.8ex] & (1) & (2) & (3) & (4)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & $-$23,617.160$^{***}$ & $-$20,279.330$^{***}$ & $-$0.433$^{***}$ & $-$0.509$^{***}$ \\  
-
-   & (3,351.169) & (3,537.317) & (0.022) & (0.022) \\  
-
-   & & & & \\  
-
-  post & $-$18,849.310$^{***}$ & $-$17,994.740$^{***}$ & $-$0.218$^{***}$ & $-$0.235$^{***}$ \\  
-
-   & (314.984) & (329.492) & (0.002) & (0.002) \\  
-
-   & & & & \\  
-
-  sqft &  & $-$0.002 &  &  \\  
-
-   &  & (0.001) &  &  \\  
-
-   & & & & \\  
-
-  log\_sqft &  &  &  & 0.449$^{***}$ \\  
-
-   &  &  &  & (0.002) \\  
-
-   & & & & \\  
-
-  tot\_unit\_val &  & 0.030$^{***}$ &  & 0.00000$^{***}$ \\  
-
-   &  & (0.0002) &  & (0.000) \\  
-
-   & & & & \\  
-
-  treated:post & 19,083.130$^{***}$ & 16,948.520$^{***}$ & 0.317$^{***}$ & 0.313$^{***}$ \\  
-
-   & (5,662.951) & (5,950.157) & (0.037) & (0.037) \\  
-
-   & & & & \\  
-
-  Constant & 25,243.510$^{***}$ & 18,487.490$^{***}$ & 7.472$^{***}$ & 4.114$^{***}$ \\  
-
-   & (129.261) & (142.011) & (0.001) & (0.012) \\  
-
-   & & & & \\  
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
 
  \hline \\[-1.8ex]  
 
- Observations & 2,601,241 & 2,342,704 & 2,601,241 & 2,342,704 \\  
+  sqft &  & 0.005 & $-$0.00001 & $-$0.00005 &  &  &  &  \\  
 
- R$^{2}$ & 0.001 & 0.012 & 0.004 & 0.059 \\  
+   &  & (0.005) & (0.001) & (0.001) &  &  &  &  \\  
 
- Adjusted R$^{2}$ & 0.001 & 0.012 & 0.004 & 0.059 \\  
+   & & & & & & & & \\  
 
- Residual Std. Error & 189,932.200 (df = 2601237) & 189,326.700 (df = 2342698) & 1.242 (df = 2601237) & 1.188 (df = 2342698) \\  
+  tot\_unit\_val &  &  & 0.020$^{***}$ & 0.020$^{***}$ &  &  & 0.00000 & 0.00000 \\  
+
+   &  &  & (0.003) & (0.003) &  &  & (0.000) & (0.000) \\  
+
+   & & & & & & & & \\  
+
+  log\_sqft &  &  &  &  &  & 0.474$^{***}$ & 0.467$^{***}$ & 0.466$^{***}$ \\  
+
+   &  &  &  &  &  & (0.014) & (0.014) & (0.014) \\  
+
+   & & & & & & & & \\  
+
+  treated:post & $-$1,863.948$^{***}$ & $-$2,020.675$^{***}$ & $-$1,883.453$^{***}$ & $-$1,242.697$^{*}$ & 0.005 & $-$0.023 & $-$0.023 & 0.014 \\  
+
+   & (516.549) & (480.261) & (486.222) & (662.164) & (0.017) & (0.015) & (0.015) & (0.014) \\  
+
+   & & & & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No & No & No & Yes \\  
+
+ Observations & 2,601,241 & 2,342,793 & 2,342,704 & 2,341,737 & 2,601,241 & 2,342,793 & 2,342,704 & 2,341,737 \\  
+
+ R$^{2}$ & 0.129 & 0.131 & 0.135 & 0.137 & 0.403 & 0.446 & 0.446 & 0.454 \\  
+
+ Adjusted R$^{2}$ & 0.128 & 0.130 & 0.134 & 0.135 & 0.402 & 0.445 & 0.446 & 0.452 \\  
+
+ Residual Std. Error & 177,480.700 (df = 2597580) & 177,666.500 (df = 2339219) & 177,254.600 (df = 2339129) & 176,052.600 (df = 2335550) & 0.963 (df = 2597580) & 0.912 (df = 2339219) & 0.912 (df = 2339129) & 0.906 (df = 2335550) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\  
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 22030.39. Sample average log rent: 7.43. Sample average HHI: 36.75. Sample average delta HHI: 0.53. Sample SD HHI: 180.34. Sample SD delta HHI: 1.49}} \\ 
 
  \end{tabular}}  
 
@@ -438,7 +404,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Mon, Dec 21, 2020 - 04:47:03 AM 
+ % Date and time: Fri, Dec 25, 2020 - 12:50:39 AM 
 
  \begin{table}[H] \centering  
 
@@ -446,81 +412,65 @@
 
    \label{}  
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccc}  
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
 
  \\[-1.8ex]\hline  
 
  \hline \\[-1.8ex]  
 
-  & \multicolumn{4}{c}{\textit{Dependent variable:}} \\  
+  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
 
- \cline{2-5}  
+ \cline{2-9}  
 
- \\[-1.8ex] & \multicolumn{2}{c}{RentPrice} & \multicolumn{2}{c}{log\_rent} \\  
+ \\[-1.8ex] & \multicolumn{4}{c}{RentPrice} & \multicolumn{4}{c}{log\_rent} \\  
 
-  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} \\  
+  & \multicolumn{4}{c}{Rent} & \multicolumn{4}{c}{Log Rent} \\  
 
- \\[-1.8ex] & (1) & (2) & (3) & (4)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & 1,743.339 & 644.358 & 0.091$^{***}$ & 0.075$^{***}$ \\  
-
-   & (3,562.406) & (3,571.614) & (0.023) & (0.022) \\  
-
-   & & & & \\  
-
-  post & 44,557.970$^{***}$ & 35,791.320$^{***}$ & 0.777$^{***}$ & 0.693$^{***}$ \\  
-
-   & (800.180) & (834.310) & (0.005) & (0.005) \\  
-
-   & & & & \\  
-
-  sqft &  & $-$0.001 &  &  \\  
-
-   &  & (0.002) &  &  \\  
-
-   & & & & \\  
-
-  log\_sqft &  &  &  & 0.429$^{***}$ \\  
-
-   &  &  &  & (0.002) \\  
-
-   & & & & \\  
-
-  tot\_unit\_val &  & 0.022$^{***}$ &  & 0.00000$^{***}$ \\  
-
-   &  & (0.0002) &  & (0.000) \\  
-
-   & & & & \\  
-
-  treated:post & $-$24,869.570 & $-$17,756.790 & $-$0.232$^{**}$ & $-$0.204$^{*}$ \\  
-
-   & (18,007.280) & (18,316.390) & (0.114) & (0.112) \\  
-
-   & & & & \\  
-
-  Constant & 23,858.330$^{***}$ & 18,869.080$^{***}$ & 7.468$^{***}$ & 4.273$^{***}$ \\  
-
-   & (135.022) & (147.087) & (0.001) & (0.013) \\  
-
-   & & & & \\  
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
 
  \hline \\[-1.8ex]  
 
- Observations & 2,355,933 & 2,128,097 & 2,355,933 & 2,128,097 \\  
+  sqft &  & 0.008 & 0.001 & 0.001 &  &  &  &  \\  
 
- R$^{2}$ & 0.001 & 0.008 & 0.010 & 0.054 \\  
+   &  & (0.008) & (0.002) & (0.002) &  &  &  &  \\  
 
- Adjusted R$^{2}$ & 0.001 & 0.008 & 0.010 & 0.054 \\  
+   & & & & & & & & \\  
 
- Residual Std. Error & 204,125.500 (df = 2355929) & 203,827.800 (df = 2128091) & 1.290 (df = 2355929) & 1.248 (df = 2128091) \\  
+  tot\_unit\_val &  &  & 0.014$^{***}$ & 0.014$^{***}$ &  &  & 0.000 & $-$0.000 \\  
+
+   &  &  & (0.002) & (0.002) &  &  & (0.000) & (0.000) \\  
+
+   & & & & & & & & \\  
+
+  log\_sqft &  &  &  &  &  & 0.455$^{***}$ & 0.455$^{***}$ & 0.455$^{***}$ \\  
+
+   &  &  &  &  &  & (0.014) & (0.015) & (0.014) \\  
+
+   & & & & & & & & \\  
+
+  treated:post & $-$14,428.730 & $-$10,000.790 & $-$10,293.120 & $-$12,850.950 & $-$0.002 & 0.029 & 0.029 & 0.005 \\  
+
+   & (15,125.770) & (15,599.560) & (15,691.000) & (15,057.590) & (0.143) & (0.148) & (0.148) & (0.147) \\  
+
+   & & & & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No & No & No & Yes \\  
+
+ Observations & 2,355,933 & 2,128,162 & 2,128,097 & 2,127,208 & 2,355,933 & 2,128,162 & 2,128,097 & 2,127,208 \\  
+
+ R$^{2}$ & 0.114 & 0.116 & 0.119 & 0.123 & 0.400 & 0.439 & 0.439 & 0.445 \\  
+
+ Adjusted R$^{2}$ & 0.112 & 0.115 & 0.118 & 0.121 & 0.399 & 0.438 & 0.438 & 0.443 \\  
+
+ Residual Std. Error & 192,465.300 (df = 2352323) & 192,562.600 (df = 2124631) & 192,261.300 (df = 2124565) & 191,923.000 (df = 2121058) & 1.005 (df = 2352323) & 0.962 (df = 2124631) & 0.962 (df = 2124565) & 0.957 (df = 2121058) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\  
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 25128.83. Sample average log rent: 7.49. Sample average HHI: 37.63. Sample SD HHI: 187.74}} \\ 
 
  \end{tabular}}  
 
@@ -530,7 +480,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Mon, Dec 21, 2020 - 04:47:08 AM 
+ % Date and time: Fri, Dec 25, 2020 - 12:52:01 AM 
 
  \begin{table}[H] \centering  
 
@@ -538,81 +488,65 @@
 
    \label{}  
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccc}  
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
 
  \\[-1.8ex]\hline  
 
  \hline \\[-1.8ex]  
 
-  & \multicolumn{4}{c}{\textit{Dependent variable:}} \\  
+  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
 
- \cline{2-5}  
+ \cline{2-9}  
 
- \\[-1.8ex] & \multicolumn{2}{c}{RentPrice} & \multicolumn{2}{c}{log\_rent} \\  
+ \\[-1.8ex] & \multicolumn{4}{c}{RentPrice} & \multicolumn{4}{c}{log\_rent} \\  
 
-  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} \\  
+  & \multicolumn{4}{c}{Rent} & \multicolumn{4}{c}{Log Rent} \\  
 
- \\[-1.8ex] & (1) & (2) & (3) & (4)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & 3,507.604 & 2,298.587 & 0.112$^{***}$ & 0.095$^{***}$ \\  
-
-   & (3,346.495) & (3,354.088) & (0.022) & (0.021) \\  
-
-   & & & & \\  
-
-  post & $-$19,689.580$^{***}$ & $-$18,940.060$^{***}$ & $-$0.208$^{***}$ & $-$0.285$^{***}$ \\  
-
-   & (5,633.894) & (5,660.787) & (0.037) & (0.035) \\  
-
-   & & & & \\  
-
-  sqft &  & $-$0.002 &  &  \\  
-
-   &  & (0.002) &  &  \\  
-
-   & & & & \\  
-
-  log\_sqft &  &  &  & 0.421$^{***}$ \\  
-
-   &  &  &  & (0.002) \\  
-
-   & & & & \\  
-
-  tot\_unit\_val &  & 0.024$^{***}$ &  & 0.00000$^{***}$ \\  
-
-   &  & (0.0002) &  & (0.000) \\  
-
-   & & & & \\  
-
-  treated:post & 39,377.980$^{**}$ & 36,522.100$^{**}$ & 0.753$^{***}$ & 0.770$^{***}$ \\  
-
-   & (17,813.360) & (18,091.300) & (0.115) & (0.113) \\  
-
-   & & & & \\  
-
-  Constant & 22,094.060$^{***}$ & 16,719.620$^{***}$ & 7.447$^{***}$ & 4.302$^{***}$ \\  
-
-   & (127.962) & (140.178) & (0.001) & (0.013) \\  
-
-   & & & & \\  
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
 
  \hline \\[-1.8ex]  
 
- Observations & 2,250,083 & 2,030,286 & 2,250,083 & 2,030,286 \\  
+  sqft &  & 0.007 & 0.0001 & 0.00001 &  &  &  &  \\  
 
- R$^{2}$ & 0.00001 & 0.008 & 0.00004 & 0.049 \\  
+   &  & (0.007) & (0.001) & (0.001) &  &  &  &  \\  
 
- Adjusted R$^{2}$ & 0.00001 & 0.008 & 0.00004 & 0.049 \\  
+   & & & & & & & & \\  
 
- Residual Std. Error & 191,751.300 (df = 2250079) & 191,411.000 (df = 2030280) & 1.243 (df = 2250079) & 1.199 (df = 2030280) \\  
+  tot\_unit\_val &  &  & 0.016$^{***}$ & 0.016$^{***}$ &  &  & 0.000 & 0.000 \\  
+
+   &  &  & (0.003) & (0.003) &  &  & (0.000) & (0.000) \\  
+
+   & & & & & & & & \\  
+
+  log\_sqft &  &  &  &  &  & 0.456$^{***}$ & 0.453$^{***}$ & 0.453$^{***}$ \\  
+
+   &  &  &  &  &  & (0.014) & (0.014) & (0.014) \\  
+
+   & & & & & & & & \\  
+
+  treated:post & $-$15,774.480 & $-$13,570.680 & $-$14,799.730 & $-$12,962.480 & $-$0.041 & 0.002 & 0.002 & 0.069 \\  
+
+   & (16,430.670) & (17,201.510) & (17,352.360) & (15,265.160) & (0.143) & (0.149) & (0.149) & (0.145) \\  
+
+   & & & & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No & No & No & Yes \\  
+
+ Observations & 2,250,083 & 2,030,348 & 2,030,286 & 2,029,483 & 2,250,083 & 2,030,348 & 2,030,286 & 2,029,483 \\  
+
+ R$^{2}$ & 0.117 & 0.120 & 0.123 & 0.126 & 0.405 & 0.447 & 0.447 & 0.451 \\  
+
+ Adjusted R$^{2}$ & 0.116 & 0.119 & 0.122 & 0.124 & 0.404 & 0.446 & 0.446 & 0.450 \\  
+
+ Residual Std. Error & 180,298.000 (df = 2246502) & 180,451.200 (df = 2026846) & 180,122.000 (df = 2026783) & 179,848.900 (df = 2023378) & 0.960 (df = 2246502) & 0.915 (df = 2026846) & 0.915 (df = 2026783) & 0.912 (df = 2023378) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\  
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 22090.43. Sample average log rent: 7.45. Sample average HHI: 37.77. Sample average delta HHI: 0.53. Sample SD HHI: 188.36. Sample SD delta HHI: 1.49}} \\ 
 
  \end{tabular}}  
 
@@ -622,7 +556,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Mon, Dec 21, 2020 - 04:47:18 AM 
+ % Date and time: Fri, Dec 25, 2020 - 12:54:49 AM 
 
  \begin{table}[H] \centering  
 
@@ -630,81 +564,65 @@
 
    \label{}  
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccc}  
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
 
  \\[-1.8ex]\hline  
 
  \hline \\[-1.8ex]  
 
-  & \multicolumn{4}{c}{\textit{Dependent variable:}} \\  
+  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
 
- \cline{2-5}  
+ \cline{2-9}  
 
- \\[-1.8ex] & \multicolumn{2}{c}{RentPrice} & \multicolumn{2}{c}{log\_rent} \\  
+ \\[-1.8ex] & \multicolumn{4}{c}{RentPrice} & \multicolumn{4}{c}{log\_rent} \\  
 
-  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} \\  
+  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} &  &  &  &  \\  
 
- \\[-1.8ex] & (1) & (2) & (3) & (4)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & 3,711.190 & 2,567.193 & 0.112$^{***}$ & 0.097$^{***}$ \\  
-
-   & (3,465.579) & (3,451.807) & (0.021) & (0.020) \\  
-
-   & & & & \\  
-
-  post & $-$6,552.089$^{***}$ & $-$8,250.741$^{***}$ & $-$0.015$^{***}$ & $-$0.042$^{***}$ \\  
-
-   & (362.457) & (376.078) & (0.002) & (0.002) \\  
-
-   & & & & \\  
-
-  sqft &  & $-$0.004$^{**}$ &  &  \\  
-
-   &  & (0.002) &  &  \\  
-
-   & & & & \\  
-
-  log\_sqft &  &  &  & 0.417$^{***}$ \\  
-
-   &  &  &  & (0.002) \\  
-
-   & & & & \\  
-
-  tot\_unit\_val &  & 0.024$^{***}$ &  & 0.00000$^{***}$ \\  
-
-   &  & (0.0002) &  & (0.000) \\  
-
-   & & & & \\  
-
-  treated:post & 26,240.490 & 25,860.120 & 0.560$^{***}$ & 0.529$^{***}$ \\  
-
-   & (17,504.970) & (17,688.470) & (0.106) & (0.104) \\  
-
-   & & & & \\  
-
-  Constant & 21,890.470$^{***}$ & 16,482.620$^{***}$ & 7.447$^{***}$ & 4.331$^{***}$ \\  
-
-   & (127.720) & (138.263) & (0.001) & (0.011) \\  
-
-   & & & & \\  
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
 
  \hline \\[-1.8ex]  
 
- Observations & 2,763,724 & 2,502,092 & 2,763,724 & 2,502,092 \\  
+  sqft &  & 0.007 & $-$0.0005 & $-$0.001 &  &  &  &  \\  
 
- R$^{2}$ & 0.0001 & 0.008 & 0.00004 & 0.051 \\  
+   &  & (0.008) & (0.001) & (0.001) &  &  &  &  \\  
 
- Adjusted R$^{2}$ & 0.0001 & 0.008 & 0.00004 & 0.051 \\  
+   & & & & & & & & \\  
 
- Residual Std. Error & 198,585.100 (df = 2763720) & 196,999.200 (df = 2502086) & 1.203 (df = 2763720) & 1.157 (df = 2502086) \\  
+  tot\_unit\_val &  &  & 0.016$^{***}$ & 0.016$^{***}$ &  &  & 0.000 & 0.000 \\  
+
+   &  &  & (0.003) & (0.003) &  &  & (0.000) & (0.000) \\  
+
+   & & & & & & & & \\  
+
+  log\_sqft &  &  &  &  &  & 0.452$^{***}$ & 0.450$^{***}$ & 0.450$^{***}$ \\  
+
+   &  &  &  &  &  & (0.014) & (0.014) & (0.014) \\  
+
+   & & & & & & & & \\  
+
+  treated:post & $-$20,791.210 & $-$17,750.620 & $-$18,648.110 & $-$14,512.100 & $-$0.105 & $-$0.080 & $-$0.081 & 0.051 \\  
+
+   & (16,556.230) & (17,327.050) & (17,472.380) & (15,420.340) & (0.142) & (0.148) & (0.148) & (0.145) \\  
+
+   & & & & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No & No & No & Yes \\  
+
+ Observations & 2,763,724 & 2,502,175 & 2,502,092 & 2,501,237 & 2,763,724 & 2,502,175 & 2,502,092 & 2,501,237 \\  
+
+ R$^{2}$ & 0.100 & 0.103 & 0.106 & 0.109 & 0.392 & 0.434 & 0.434 & 0.440 \\  
+
+ Adjusted R$^{2}$ & 0.099 & 0.102 & 0.105 & 0.107 & 0.391 & 0.434 & 0.434 & 0.438 \\  
+
+ Residual Std. Error & 188,497.300 (df = 2760101) & 187,459.100 (df = 2498629) & 187,142.100 (df = 2498545) & 186,802.000 (df = 2495015) & 0.939 (df = 2760101) & 0.894 (df = 2498629) & 0.894 (df = 2498545) & 0.890 (df = 2495015) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\  
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 21083.49. Sample average log rent: 7.44. Sample average HHI: 37.28. Sample average delta HHI: 0.53. Sample SD HHI: 187.34. Sample SD delta HHI: 1.49}} \\ 
 
  \end{tabular}}  
 
@@ -714,7 +632,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Mon, Dec 21, 2020 - 04:47:24 AM 
+ % Date and time: Fri, Dec 25, 2020 - 12:56:32 AM 
 
  \begin{table}[H] \centering  
 
@@ -722,81 +640,65 @@
 
    \label{}  
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccc}  
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
 
  \\[-1.8ex]\hline  
 
  \hline \\[-1.8ex]  
 
-  & \multicolumn{4}{c}{\textit{Dependent variable:}} \\  
+  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
 
- \cline{2-5}  
+ \cline{2-9}  
 
- \\[-1.8ex] & \multicolumn{2}{c}{RentPrice} & \multicolumn{2}{c}{log\_rent} \\  
+ \\[-1.8ex] & \multicolumn{4}{c}{RentPrice} & \multicolumn{4}{c}{log\_rent} \\  
 
-  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} \\  
+  & \multicolumn{4}{c}{Rent} & \multicolumn{4}{c}{Log Rent} \\  
 
- \\[-1.8ex] & (1) & (2) & (3) & (4)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & $-$16,140.880$^{***}$ & $-$15,001.150$^{***}$ & $-$0.249$^{***}$ & $-$0.282$^{***}$ \\  
-
-   & (1,195.356) & (1,192.811) & (0.007) & (0.007) \\  
-
-   & & & & \\  
-
-  post & $-$470.772 & $-$3,226.874$^{***}$ & 0.069$^{***}$ & 0.047$^{***}$ \\  
-
-   & (557.789) & (581.507) & (0.003) & (0.003) \\  
-
-   & & & & \\  
-
-  sqft &  & $-$0.003 &  &  \\  
-
-   &  & (0.002) &  &  \\  
-
-   & & & & \\  
-
-  log\_sqft &  &  &  & 0.404$^{***}$ \\  
-
-   &  &  &  & (0.002) \\  
-
-   & & & & \\  
-
-  tot\_unit\_val &  & 0.017$^{***}$ &  & 0.00000$^{***}$ \\  
-
-   &  & (0.0002) &  & (0.000) \\  
-
-   & & & & \\  
-
-  treated:post & 60.183 & 2,188.872 & 0.040 & 0.020 \\  
-
-   & (4,522.543) & (4,577.257) & (0.027) & (0.027) \\  
-
-   & & & & \\  
-
-  Constant & 21,187.160$^{***}$ & 17,182.360$^{***}$ & 7.456$^{***}$ & 4.447$^{***}$ \\  
-
-   & (127.945) & (137.619) & (0.001) & (0.012) \\  
-
-   & & & & \\  
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
 
  \hline \\[-1.8ex]  
 
- Observations & 2,458,595 & 2,224,978 & 2,458,595 & 2,224,978 \\  
+  sqft &  & 0.007 & 0.0001 & 0.0002 &  &  &  &  \\  
 
- R$^{2}$ & 0.0001 & 0.006 & 0.001 & 0.046 \\  
+   &  & (0.007) & (0.001) & (0.001) &  &  &  &  \\  
 
- Adjusted R$^{2}$ & 0.0001 & 0.006 & 0.001 & 0.046 \\  
+   & & & & & & & & \\  
 
- Residual Std. Error & 194,124.400 (df = 2458591) & 192,291.600 (df = 2224972) & 1.171 (df = 2458591) & 1.135 (df = 2224972) \\  
+  tot\_unit\_val &  &  & 0.011$^{***}$ & 0.010$^{***}$ &  &  & $-$0.000$^{*}$ & $-$0.000$^{*}$ \\  
+
+   &  &  & (0.002) & (0.002) &  &  & (0.000) & (0.000) \\  
+
+   & & & & & & & & \\  
+
+  log\_sqft &  &  &  &  &  & 0.433$^{***}$ & 0.438$^{***}$ & 0.438$^{***}$ \\  
+
+   &  &  &  &  &  & (0.013) & (0.013) & (0.013) \\  
+
+   & & & & & & & & \\  
+
+  treated:post & 4,359.201 & 5,248.669$^{*}$ & 5,315.473$^{*}$ & 4,106.196 & 0.095$^{***}$ & 0.058$^{***}$ & 0.058$^{***}$ & 0.044$^{***}$ \\  
+
+   & (2,881.900) & (3,006.438) & (3,010.598) & (3,298.530) & (0.018) & (0.016) & (0.016) & (0.015) \\  
+
+   & & & & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No & No & No & Yes \\  
+
+ Observations & 2,458,595 & 2,225,048 & 2,224,978 & 2,223,934 & 2,458,595 & 2,225,048 & 2,224,978 & 2,223,934 \\  
+
+ R$^{2}$ & 0.103 & 0.107 & 0.109 & 0.114 & 0.383 & 0.425 & 0.425 & 0.431 \\  
+
+ Adjusted R$^{2}$ & 0.102 & 0.106 & 0.108 & 0.111 & 0.382 & 0.424 & 0.424 & 0.430 \\  
+
+ Residual Std. Error & 183,950.700 (df = 2454903) & 182,355.200 (df = 2221445) & 182,153.800 (df = 2221374) & 181,727.500 (df = 2217712) & 0.921 (df = 2454903) & 0.882 (df = 2221445) & 0.882 (df = 2221374) & 0.877 (df = 2217712) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\  
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 20973.98. Sample average log rent: 7.46. Sample average HHI: 37.06. Sample SD HHI: 187.12}} \\ 
 
  \end{tabular}}  
 
@@ -806,7 +708,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Mon, Dec 21, 2020 - 04:47:32 AM 
+ % Date and time: Fri, Dec 25, 2020 - 12:57:57 AM 
 
  \begin{table}[H] \centering  
 
@@ -814,81 +716,65 @@
 
    \label{}  
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccc}  
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
 
  \\[-1.8ex]\hline  
 
  \hline \\[-1.8ex]  
 
-  & \multicolumn{4}{c}{\textit{Dependent variable:}} \\  
+  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
 
- \cline{2-5}  
+ \cline{2-9}  
 
- \\[-1.8ex] & \multicolumn{2}{c}{RentPrice} & \multicolumn{2}{c}{log\_rent} \\  
+ \\[-1.8ex] & \multicolumn{4}{c}{RentPrice} & \multicolumn{4}{c}{log\_rent} \\  
 
-  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} \\  
+  & \multicolumn{4}{c}{Rent} & \multicolumn{4}{c}{Log Rent} \\  
 
- \\[-1.8ex] & (1) & (2) & (3) & (4)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & $-$16,140.880$^{***}$ & $-$14,942.730$^{***}$ & $-$0.249$^{***}$ & $-$0.282$^{***}$ \\  
-
-   & (1,144.958) & (1,145.273) & (0.007) & (0.007) \\  
-
-   & & & & \\  
-
-  post & $-$19,467.380$^{***}$ & $-$18,344.610$^{***}$ & $-$0.078$^{**}$ & $-$0.113$^{***}$ \\  
-
-   & (5,648.849) & (5,773.841) & (0.036) & (0.036) \\  
-
-   & & & & \\  
-
-  sqft &  & $-$0.003$^{*}$ &  &  \\  
-
-   &  & (0.002) &  &  \\  
-
-   & & & & \\  
-
-  log\_sqft &  &  &  & 0.406$^{***}$ \\  
-
-   &  &  &  & (0.002) \\  
-
-   & & & & \\  
-
-  tot\_unit\_val &  & 0.018$^{***}$ &  & 0.00000$^{***}$ \\  
-
-   &  & (0.0002) &  & (0.000) \\  
-
-   & & & & \\  
-
-  treated:post & 19,056.800$^{***}$ & 17,260.550$^{**}$ & 0.187$^{***}$ & 0.179$^{***}$ \\  
-
-   & (7,098.529) & (7,234.655) & (0.045) & (0.045) \\  
-
-   & & & & \\  
-
-  Constant & 21,187.160$^{***}$ & 16,994.800$^{***}$ & 7.456$^{***}$ & 4.436$^{***}$ \\  
-
-   & (122.550) & (132.673) & (0.001) & (0.012) \\  
-
-   & & & & \\  
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
 
  \hline \\[-1.8ex]  
 
- Observations & 2,331,831 & 2,110,537 & 2,331,831 & 2,110,537 \\  
+  sqft &  & 0.006 & 0.0001 & 0.0001 &  &  &  &  \\  
 
- R$^{2}$ & 0.0001 & 0.007 & 0.001 & 0.046 \\  
+   &  & (0.007) & (0.001) & (0.001) &  &  &  &  \\  
 
- Adjusted R$^{2}$ & 0.0001 & 0.007 & 0.001 & 0.046 \\  
+   & & & & & & & & \\  
 
- Residual Std. Error & 185,939.800 (df = 2331827) & 184,627.100 (df = 2110531) & 1.176 (df = 2331827) & 1.141 (df = 2110531) \\  
+  tot\_unit\_val &  &  & 0.011$^{***}$ & 0.011$^{***}$ &  &  & $-$0.000 & $-$0.000 \\  
+
+   &  &  & (0.002) & (0.002) &  &  & (0.000) & (0.000) \\  
+
+   & & & & & & & & \\  
+
+  log\_sqft &  &  &  &  &  & 0.439$^{***}$ & 0.444$^{***}$ & 0.444$^{***}$ \\  
+
+   &  &  &  &  &  & (0.013) & (0.013) & (0.013) \\  
+
+   & & & & & & & & \\  
+
+  treated:post & $-$600.293 & $-$267.203 & $-$411.650 & $-$2,880.415 & $-$0.017 & $-$0.004 & $-$0.004 & 0.003 \\  
+
+   & (2,480.950) & (2,591.173) & (2,593.944) & (2,768.466) & (0.024) & (0.023) & (0.023) & (0.023) \\  
+
+   & & & & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No & No & No & Yes \\  
+
+ Observations & 2,331,831 & 2,110,603 & 2,110,537 & 2,109,628 & 2,331,831 & 2,110,603 & 2,110,537 & 2,109,628 \\  
+
+ R$^{2}$ & 0.120 & 0.125 & 0.127 & 0.132 & 0.396 & 0.439 & 0.439 & 0.444 \\  
+
+ Adjusted R$^{2}$ & 0.119 & 0.123 & 0.125 & 0.129 & 0.396 & 0.438 & 0.438 & 0.442 \\  
+
+ Residual Std. Error & 174,567.000 (df = 2328163) & 173,447.900 (df = 2107025) & 173,233.200 (df = 2106958) & 172,759.700 (df = 2103434) & 0.915 (df = 2328163) & 0.875 (df = 2107025) & 0.875 (df = 2106958) & 0.872 (df = 2103434) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\  
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 20979.15. Sample average log rent: 7.45. Sample average HHI: 37.25. Sample average delta HHI: 0.53. Sample SD HHI: 187.72. Sample SD delta HHI: 1.49}} \\ 
 
  \end{tabular}}  
 
@@ -898,7 +784,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Mon, Dec 21, 2020 - 04:47:38 AM 
+ % Date and time: Fri, Dec 25, 2020 - 12:59:40 AM 
 
  \begin{table}[H] \centering  
 
@@ -906,81 +792,65 @@
 
    \label{}  
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccc}  
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
 
  \\[-1.8ex]\hline  
 
  \hline \\[-1.8ex]  
 
-  & \multicolumn{4}{c}{\textit{Dependent variable:}} \\  
+  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
 
- \cline{2-5}  
+ \cline{2-9}  
 
- \\[-1.8ex] & \multicolumn{2}{c}{RentPrice} & \multicolumn{2}{c}{log\_rent} \\  
+ \\[-1.8ex] & \multicolumn{4}{c}{RentPrice} & \multicolumn{4}{c}{log\_rent} \\  
 
-  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} \\  
+  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} &  &  &  &  \\  
 
- \\[-1.8ex] & (1) & (2) & (3) & (4)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & $-$16,140.880$^{***}$ & $-$15,061.350$^{***}$ & $-$0.249$^{***}$ & $-$0.282$^{***}$ \\  
-
-   & (1,136.160) & (1,138.538) & (0.007) & (0.007) \\  
-
-   & & & & \\  
-
-  post & $-$7,602.177$^{***}$ & $-$8,272.405$^{***}$ & $-$0.002 & $-$0.009$^{***}$ \\  
-
-   & (464.095) & (497.332) & (0.003) & (0.003) \\  
-
-   & & & & \\  
-
-  sqft &  & $-$0.004$^{**}$ &  &  \\  
-
-   &  & (0.002) &  &  \\  
-
-   & & & & \\  
-
-  log\_sqft &  &  &  & 0.398$^{***}$ \\  
-
-   &  &  &  & (0.002) \\  
-
-   & & & & \\  
-
-  tot\_unit\_val &  & 0.016$^{***}$ &  & 0.00000$^{***}$ \\  
-
-   &  & (0.0001) &  & (0.000) \\  
-
-   & & & & \\  
-
-  treated:post & 7,191.588$^{*}$ & 7,282.002$^{*}$ & 0.112$^{***}$ & 0.077$^{***}$ \\  
-
-   & (4,290.932) & (4,362.055) & (0.027) & (0.027) \\  
-
-   & & & & \\  
-
-  Constant & 21,187.160$^{***}$ & 17,377.320$^{***}$ & 7.456$^{***}$ & 4.499$^{***}$ \\  
-
-   & (121.609) & (131.173) & (0.001) & (0.012) \\  
-
-   & & & & \\  
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
 
  \hline \\[-1.8ex]  
 
- Observations & 2,500,463 & 2,255,268 & 2,500,463 & 2,255,268 \\  
+  sqft &  & 0.007 & $-$0.0005 & $-$0.0004 &  &  &  &  \\  
 
- R$^{2}$ & 0.0002 & 0.006 & 0.0005 & 0.044 \\  
+   &  & (0.007) & (0.001) & (0.001) &  &  &  &  \\  
 
- Adjusted R$^{2}$ & 0.0002 & 0.006 & 0.0005 & 0.044 \\  
+   & & & & & & & & \\  
 
- Residual Std. Error & 184,511.000 (df = 2500459) & 183,542.700 (df = 2255262) & 1.165 (df = 2500459) & 1.131 (df = 2255262) \\  
+  tot\_unit\_val &  &  & 0.010$^{***}$ & 0.010$^{***}$ &  &  & $-$0.000$^{**}$ & $-$0.000$^{**}$ \\  
+
+   &  &  & (0.002) & (0.002) &  &  & (0.000) & (0.000) \\  
+
+   & & & & & & & & \\  
+
+  log\_sqft &  &  &  &  &  & 0.430$^{***}$ & 0.437$^{***}$ & 0.436$^{***}$ \\  
+
+   &  &  &  &  &  & (0.013) & (0.013) & (0.013) \\  
+
+   & & & & & & & & \\  
+
+  treated:post & $-$4,685.630$^{*}$ & $-$3,999.461 & $-$3,936.683 & $-$4,827.993 & 0.032$^{*}$ & $-$0.005 & $-$0.006 & $-$0.020 \\  
+
+   & (2,752.926) & (2,869.525) & (2,869.532) & (3,034.312) & (0.017) & (0.015) & (0.015) & (0.018) \\  
+
+   & & & & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No & No & No & Yes \\  
+
+ Observations & 2,500,463 & 2,255,350 & 2,255,268 & 2,254,310 & 2,500,463 & 2,255,350 & 2,255,268 & 2,254,310 \\  
+
+ R$^{2}$ & 0.117 & 0.122 & 0.124 & 0.126 & 0.387 & 0.429 & 0.429 & 0.435 \\  
+
+ Adjusted R$^{2}$ & 0.116 & 0.120 & 0.122 & 0.124 & 0.386 & 0.428 & 0.429 & 0.433 \\  
+
+ Residual Std. Error & 173,518.500 (df = 2496755) & 172,678.400 (df = 2251743) & 172,479.400 (df = 2251660) & 171,731.500 (df = 2248038) & 0.913 (df = 2496755) & 0.875 (df = 2251743) & 0.875 (df = 2251660) & 0.870 (df = 2248038) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\  
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 20485.63. Sample average log rent: 7.45. Sample average HHI: 37.02. Sample average delta HHI: 0.53. Sample SD HHI: 186.68. Sample SD delta HHI: 1.49}} \\ 
 
  \end{tabular}}  
 
@@ -990,7 +860,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Mon, Dec 21, 2020 - 04:47:46 AM 
+ % Date and time: Fri, Dec 25, 2020 - 01:01:05 AM 
 
  \begin{table}[H] \centering  
 
@@ -998,81 +868,65 @@
 
    \label{}  
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccc}  
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
 
  \\[-1.8ex]\hline  
 
  \hline \\[-1.8ex]  
 
-  & \multicolumn{4}{c}{\textit{Dependent variable:}} \\  
+  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
 
- \cline{2-5}  
+ \cline{2-9}  
 
- \\[-1.8ex] & \multicolumn{2}{c}{RentPrice} & \multicolumn{2}{c}{log\_rent} \\  
+ \\[-1.8ex] & \multicolumn{4}{c}{RentPrice} & \multicolumn{4}{c}{log\_rent} \\  
 
-  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} \\  
+  & \multicolumn{4}{c}{Rent} & \multicolumn{4}{c}{Log Rent} \\  
 
- \\[-1.8ex] & (1) & (2) & (3) & (4)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & $-$19,116.640$^{***}$ & $-$16,251.640$^{***}$ & $-$0.709$^{***}$ & $-$0.670$^{***}$ \\  
-
-   & (6,277.474) & (6,255.060) & (0.039) & (0.037) \\  
-
-   & & & & \\  
-
-  post & $-$9,556.002$^{***}$ & $-$7,471.437$^{***}$ & $-$0.293$^{***}$ & $-$0.354$^{***}$ \\  
-
-   & (2,203.272) & (2,282.418) & (0.014) & (0.014) \\  
-
-   & & & & \\  
-
-  sqft &  & $-$0.003$^{*}$ &  &  \\  
-
-   &  & (0.002) &  &  \\  
-
-   & & & & \\  
-
-  log\_sqft &  &  &  & 0.404$^{***}$ \\  
-
-   &  &  &  & (0.002) \\  
-
-   & & & & \\  
-
-  tot\_unit\_val &  & 0.018$^{***}$ &  & 0.00000$^{***}$ \\  
-
-   &  & (0.0002) &  & (0.000) \\  
-
-   & & & & \\  
-
-  treated:post & 8,493.451 & 6,398.654 & 0.256 & 0.335$^{*}$ \\  
-
-   & (32,161.190) & (32,051.530) & (0.198) & (0.192) \\  
-
-   & & & & \\  
-
-  Constant & 21,009.870$^{***}$ & 16,811.240$^{***}$ & 7.453$^{***}$ & 4.445$^{***}$ \\  
-
-   & (125.449) & (136.239) & (0.001) & (0.012) \\  
-
-   & & & & \\  
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
 
  \hline \\[-1.8ex]  
 
- Observations & 2,336,343 & 2,114,631 & 2,336,343 & 2,114,631 \\  
+  sqft &  & 0.006 & 0.0001 & 0.0001 &  &  &  &  \\  
 
- R$^{2}$ & 0.00001 & 0.006 & 0.0004 & 0.046 \\  
+   &  & (0.007) & (0.001) & (0.001) &  &  &  &  \\  
 
- Adjusted R$^{2}$ & 0.00001 & 0.006 & 0.0004 & 0.046 \\  
+   & & & & & & & & \\  
 
- Residual Std. Error & 191,399.000 (df = 2336339) & 190,710.200 (df = 2114625) & 1.176 (df = 2336339) & 1.140 (df = 2114625) \\  
+  tot\_unit\_val &  &  & 0.011$^{***}$ & 0.011$^{***}$ &  &  & $-$0.000 & $-$0.000 \\  
+
+   &  &  & (0.002) & (0.002) &  &  & (0.000) & (0.000) \\  
+
+   & & & & & & & & \\  
+
+  log\_sqft &  &  &  &  &  & 0.439$^{***}$ & 0.444$^{***}$ & 0.444$^{***}$ \\  
+
+   &  &  &  &  &  & (0.013) & (0.013) & (0.013) \\  
+
+   & & & & & & & & \\  
+
+  treated:post & $-$9,194.834 & $-$10,033.450 & $-$9,595.873 & $-$7,426.032 & $-$0.229$^{***}$ & $-$0.175$^{***}$ & $-$0.175$^{***}$ & $-$0.176$^{***}$ \\  
+
+   & (8,087.750) & (8,927.360) & (8,922.925) & (6,151.340) & (0.035) & (0.035) & (0.035) & (0.033) \\  
+
+   & & & & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No & No & No & Yes \\  
+
+ Observations & 2,336,343 & 2,114,697 & 2,114,631 & 2,113,721 & 2,336,343 & 2,114,697 & 2,114,631 & 2,113,721 \\  
+
+ R$^{2}$ & 0.113 & 0.117 & 0.119 & 0.124 & 0.397 & 0.439 & 0.439 & 0.444 \\  
+
+ Adjusted R$^{2}$ & 0.112 & 0.115 & 0.117 & 0.121 & 0.396 & 0.438 & 0.438 & 0.442 \\  
+
+ Residual Std. Error & 180,389.600 (df = 2332676) & 179,929.200 (df = 2111120) & 179,722.800 (df = 2111053) & 179,266.900 (df = 2107529) & 0.914 (df = 2332676) & 0.875 (df = 2111120) & 0.875 (df = 2111053) & 0.871 (df = 2107529) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\  
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 20970.98. Sample average log rent: 7.45. Sample average HHI: 37.25. Sample SD HHI: 187.75}} \\ 
 
  \end{tabular}}  
 
@@ -1082,7 +936,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Mon, Dec 21, 2020 - 04:47:52 AM 
+ % Date and time: Fri, Dec 25, 2020 - 01:02:21 AM 
 
  \begin{table}[H] \centering  
 
@@ -1090,81 +944,65 @@
 
    \label{}  
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccc}  
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
 
  \\[-1.8ex]\hline  
 
  \hline \\[-1.8ex]  
 
-  & \multicolumn{4}{c}{\textit{Dependent variable:}} \\  
+  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
 
- \cline{2-5}  
+ \cline{2-9}  
 
- \\[-1.8ex] & \multicolumn{2}{c}{RentPrice} & \multicolumn{2}{c}{log\_rent} \\  
+ \\[-1.8ex] & \multicolumn{4}{c}{RentPrice} & \multicolumn{4}{c}{log\_rent} \\  
 
-  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} \\  
+  & \multicolumn{4}{c}{Rent} & \multicolumn{4}{c}{Log Rent} \\  
 
- \\[-1.8ex] & (1) & (2) & (3) & (4)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & $-$19,116.640$^{***}$ & $-$16,251.630$^{***}$ & $-$0.709$^{***}$ & $-$0.670$^{***}$ \\  
-
-   & (6,101.527) & (6,058.697) & (0.039) & (0.037) \\  
-
-   & & & & \\  
-
-  post & $-$19,501.870$^{*}$ & $-$18,487.600 & $-$0.193$^{***}$ & $-$0.128$^{*}$ \\  
-
-   & (11,837.710) & (11,999.740) & (0.075) & (0.074) \\  
-
-   & & & & \\  
-
-  sqft &  & $-$0.003$^{*}$ &  &  \\  
-
-   &  & (0.002) &  &  \\  
-
-   & & & & \\  
-
-  log\_sqft &  &  &  & 0.404$^{***}$ \\  
-
-   &  &  &  & (0.002) \\  
-
-   & & & & \\  
-
-  tot\_unit\_val &  & 0.018$^{***}$ &  & 0.00000$^{***}$ \\  
-
-   &  & (0.0002) &  & (0.000) \\  
-
-   & & & & \\  
-
-  treated:post & 18,439.320 & 17,414.820 & 0.156 & 0.109 \\  
-
-   & (33,357.430) & (33,210.240) & (0.211) & (0.205) \\  
-
-   & & & & \\  
-
-  Constant & 21,009.870$^{***}$ & 16,811.220$^{***}$ & 7.453$^{***}$ & 4.445$^{***}$ \\  
-
-   & (121.933) & (131.962) & (0.001) & (0.012) \\  
-
-   & & & & \\  
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
 
  \hline \\[-1.8ex]  
 
- Observations & 2,329,019 & 2,107,863 & 2,329,019 & 2,107,863 \\  
+  sqft &  & 0.006 & 0.0001 & 0.0001 &  &  &  &  \\  
 
- R$^{2}$ & 0.00001 & 0.006 & 0.0002 & 0.045 \\  
+   &  & (0.007) & (0.001) & (0.001) &  &  &  &  \\  
 
- Adjusted R$^{2}$ & 0.00000 & 0.006 & 0.0002 & 0.045 \\  
+   & & & & & & & & \\  
 
- Residual Std. Error & 186,034.400 (df = 2329015) & 184,723.300 (df = 2107857) & 1.177 (df = 2329015) & 1.141 (df = 2107857) \\  
+  tot\_unit\_val &  &  & 0.011$^{***}$ & 0.011$^{***}$ &  &  & $-$0.000 & $-$0.000 \\  
+
+   &  &  & (0.002) & (0.002) &  &  & (0.000) & (0.000) \\  
+
+   & & & & & & & & \\  
+
+  log\_sqft &  &  &  &  &  & 0.439$^{***}$ & 0.444$^{***}$ & 0.444$^{***}$ \\  
+
+   &  &  &  &  &  & (0.013) & (0.013) & (0.013) \\  
+
+   & & & & & & & & \\  
+
+  treated:post & 3,080.282$^{***}$ & 2,952.530$^{***}$ & 3,358.074$^{***}$ & 2,823.100$^{***}$ & $-$0.135$^{***}$ & $-$0.088$^{**}$ & $-$0.088$^{**}$ & $-$0.048 \\  
+
+   & (687.742) & (707.359) & (712.867) & (869.701) & (0.043) & (0.041) & (0.041) & (0.038) \\  
+
+   & & & & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No & No & No & Yes \\  
+
+ Observations & 2,329,019 & 2,107,929 & 2,107,863 & 2,106,958 & 2,329,019 & 2,107,929 & 2,107,863 & 2,106,958 \\  
+
+ R$^{2}$ & 0.120 & 0.125 & 0.127 & 0.132 & 0.397 & 0.439 & 0.439 & 0.444 \\  
+
+ Adjusted R$^{2}$ & 0.119 & 0.123 & 0.125 & 0.129 & 0.396 & 0.438 & 0.438 & 0.442 \\  
+
+ Residual Std. Error & 174,643.900 (df = 2325352) & 173,526.200 (df = 2104352) & 173,311.200 (df = 2104285) & 172,834.400 (df = 2100763) & 0.915 (df = 2325352) & 0.876 (df = 2104352) & 0.876 (df = 2104285) & 0.872 (df = 2100763) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\  
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 20999.85. Sample average log rent: 7.45. Sample average HHI: 37.24. Sample average delta HHI: 0.53. Sample SD HHI: 187.72. Sample SD delta HHI: 1.49}} \\ 
 
  \end{tabular}}  
 
@@ -1174,7 +1012,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Mon, Dec 21, 2020 - 04:48:01 AM 
+ % Date and time: Fri, Dec 25, 2020 - 01:04:04 AM 
 
  \begin{table}[H] \centering  
 
@@ -1182,81 +1020,65 @@
 
    \label{}  
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccc}  
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
 
  \\[-1.8ex]\hline  
 
  \hline \\[-1.8ex]  
 
-  & \multicolumn{4}{c}{\textit{Dependent variable:}} \\  
+  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
 
- \cline{2-5}  
+ \cline{2-9}  
 
- \\[-1.8ex] & \multicolumn{2}{c}{RentPrice} & \multicolumn{2}{c}{log\_rent} \\  
+ \\[-1.8ex] & \multicolumn{4}{c}{RentPrice} & \multicolumn{4}{c}{log\_rent} \\  
 
-  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} \\  
+  & \multicolumn{2}{c}{Rent} & \multicolumn{2}{c}{Log Rent} &  &  &  &  \\  
 
- \\[-1.8ex] & (1) & (2) & (3) & (4)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & $-$19,116.640$^{***}$ & $-$16,516.740$^{***}$ & $-$0.709$^{***}$ & $-$0.673$^{***}$ \\  
-
-   & (6,011.156) & (5,943.371) & (0.038) & (0.037) \\  
-
-   & & & & \\  
-
-  post & $-$8,084.445$^{***}$ & $-$8,943.899$^{***}$ & $-$0.025$^{***}$ & $-$0.019$^{***}$ \\  
-
-   & (417.738) & (438.014) & (0.003) & (0.003) \\  
-
-   & & & & \\  
-
-  sqft &  & $-$0.004$^{**}$ &  &  \\  
-
-   &  & (0.002) &  &  \\  
-
-   & & & & \\  
-
-  log\_sqft &  &  &  & 0.396$^{***}$ \\  
-
-   &  &  &  & (0.002) \\  
-
-   & & & & \\  
-
-  tot\_unit\_val &  & 0.016$^{***}$ &  & 0.00000$^{***}$ \\  
-
-   &  & (0.0001) &  & (0.000) \\  
-
-   & & & & \\  
-
-  treated:post & 7,021.893 & 7,872.014 & $-$0.012 & $-$0.001 \\  
-
-   & (30,727.260) & (30,380.280) & (0.195) & (0.189) \\  
-
-   & & & & \\  
-
-  Constant & 21,009.870$^{***}$ & 17,207.150$^{***}$ & 7.453$^{***}$ & 4.509$^{***}$ \\  
-
-   & (120.127) & (128.779) & (0.001) & (0.011) \\  
-
-   & & & & \\  
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
 
  \hline \\[-1.8ex]  
 
- Observations & 2,538,619 & 2,293,914 & 2,538,619 & 2,293,914 \\  
+  sqft &  & 0.007 & $-$0.0005 & $-$0.0004 &  &  &  &  \\  
 
- R$^{2}$ & 0.0002 & 0.006 & 0.0002 & 0.043 \\  
+   &  & (0.007) & (0.001) & (0.001) &  &  &  &  \\  
 
- Adjusted R$^{2}$ & 0.0002 & 0.006 & 0.0002 & 0.043 \\  
+   & & & & & & & & \\  
 
- Residual Std. Error & 183,279.000 (df = 2538615) & 181,207.300 (df = 2293908) & 1.162 (df = 2538615) & 1.127 (df = 2293908) \\  
+  tot\_unit\_val &  &  & 0.010$^{***}$ & 0.010$^{***}$ &  &  & $-$0.000$^{**}$ & $-$0.000$^{**}$ \\  
+
+   &  &  & (0.002) & (0.002) &  &  & (0.000) & (0.000) \\  
+
+   & & & & & & & & \\  
+
+  log\_sqft &  &  &  &  &  & 0.430$^{***}$ & 0.437$^{***}$ & 0.436$^{***}$ \\  
+
+   &  &  &  &  &  & (0.013) & (0.013) & (0.013) \\  
+
+   & & & & & & & & \\  
+
+  treated:post & $-$3,422.580$^{***}$ & $-$2,932.580$^{***}$ & $-$2,343.651$^{**}$ & 286.432 & $-$0.177$^{***}$ & $-$0.126$^{***}$ & $-$0.126$^{***}$ & $-$0.069$^{**}$ \\  
+
+   & (931.777) & (877.966) & (909.412) & (998.138) & (0.036) & (0.035) & (0.035) & (0.034) \\  
+
+   & & & & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No & No & No & Yes \\  
+
+ Observations & 2,538,619 & 2,293,992 & 2,293,914 & 2,292,967 & 2,538,619 & 2,293,992 & 2,293,914 & 2,292,967 \\  
+
+ R$^{2}$ & 0.115 & 0.121 & 0.123 & 0.128 & 0.383 & 0.426 & 0.426 & 0.430 \\  
+
+ Adjusted R$^{2}$ & 0.114 & 0.119 & 0.121 & 0.125 & 0.382 & 0.425 & 0.425 & 0.429 \\  
+
+ Residual Std. Error & 172,547.900 (df = 2534934) & 170,570.700 (df = 2290397) & 170,374.300 (df = 2290318) & 169,913.900 (df = 2286747) & 0.913 (df = 2534934) & 0.874 (df = 2290397) & 0.874 (df = 2290318) & 0.871 (df = 2286747) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\  
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 20334.3. Sample average log rent: 7.45. Sample average HHI: 37.14. Sample average delta HHI: 0.53. Sample SD HHI: 187.63. Sample SD delta HHI: 1.49}} \\ 
 
  \end{tabular}}  
 
