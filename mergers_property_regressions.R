@@ -75,6 +75,12 @@ bad_zips <- dt_n[,.(N = mean_na(N)), .(Zip5)][N < 10, Zip5]
 print(paste0("Dropping ", nrow(dt[Zip5 %in% bad_zips]), " rows of zips with under 10 average property observations per year out of ", 
              nrow(dt), " total rows."))
 dt <- dt[!(Zip5 %in% bad_zips)]
+
+# Drop outlier rents 
+n_bad_rents <- nrow(dt[RentPrice >= 1e5])
+print(paste0("Dropping ", n_bad_rents, " rows with rent higher than 100k."))
+dt <- dt[RentPrice < 1e5]
+
 # ============= Property Level Regressions ===================================================
 estimate_path <- paste0(mergers_path, "estimates/")
 library(lfe)

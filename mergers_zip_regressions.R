@@ -53,6 +53,12 @@ mergers$colors <- colors
 # Year between 2000 and 2020
 dt <- dt[year >= 2000 & year <= 2020]
 
+# Drop low property count zips 
+bad_zips <- dt[,.(N = mean_na(N)), .(Zip5)][N < 10, Zip5]
+print(paste0("Dropping ", nrow(dt[Zip5 %in% bad_zips]), " rows of zips with under 10 average property observations per year out of ", 
+             nrow(dt), " total rows."))
+dt <- dt[!(Zip5 %in% bad_zips)]
+
 # Define new vars 
 dt[,log_zori := log(ZORI)]
 dt[!is.na(month) & !is.na(year),monthyear := parse_date_time(paste0(year, "-", month), "ym")]
@@ -97,6 +103,68 @@ acs_zip[is.na(shift_year), shift_year := year-2]
 acs_zip <- rbindlist(list(acs_zip, copy(acs_zip)[year %in% c(2011, 2012, 2017, 2018)][, shift_year := shift_year + 1]))
 
 dt <- merge(dt, acs_zip, by.x = c("Zip5", "year"), by.y = c("zip", "shift_year"), all.x = T)
+
+# ============= (0.5) Summary Statistics Table ===================================================
+# Define percentile vars for delta HHI
+hhi_names <- grep("^delta_hhi_", names(dt), value = T)
+for (col in hhi_names){
+  name_10 <- paste0(col, "_10pctl")
+  name_50 <- paste0(col, "_50pctl")
+  name_99 <- paste0(col, "_99pctl")
+  dt[get(col) > 0, (name_10) := quantile(get(col), 0.1, na.rm=T)]
+  dt[get(col) > 0, (name_50) := quantile(get(col), 0.5, na.rm=T)]
+  dt[get(col) > 0, (name_99) := quantile(get(col), 0.99, na.rm=T)]
+}
+
+# Get means for each merger
+for (id in c(1,2,4,5)){
+  treated_col <- paste0("treated_", id)
+  post_col <- paste0("post_", id)
+  
+  # Prepost merger rents
+  pre_col <- paste0("premerge_rent_", id)
+  post_merge_col <- paste0("postmerge_rent_", id)
+  merge_eff_date <- max(mergers[MergeID_1 == id, DateEffective])
+  start_date <- merge_eff_date - years(5)
+  dt[, (pre_col) := mean_na(.SD[get(treated_col) == 1 & get(post_col) == 0 & monthyear >= start_date, ZORI])]
+  dt[, (post_merge_col) := mean_na(.SD[get(treated_col) == 1 & get(post_col) == 1, ZORI])]
+  
+  # Acquiror/target shares
+  acq_col <- paste0("acquiror_share_", id)
+  target_col <- paste0("target_share_", id)
+  acq_mean_col <- paste0("acquiror_mean_share_", id)
+  target_mean_col <- paste0("target_mean_share_", id)
+  
+  dt[, (acq_mean_col) := mean_na(.SD[get(treated_col) == 1 & !is.na(get(acq_col)), get(acq_col)])]
+  dt[, (target_mean_col) := mean_na(.SD[get(treated_col) == 1 & !is.na(get(target_col)), get(target_col)])]
+}
+
+acq_cols <- c("acquiror_mean_share_1", "acquiror_mean_share_2", "acquiror_mean_share_4", "acquiror_mean_share_5")
+target_cols <- c("target_mean_share_1", "target_mean_share_2", "target_mean_share_4", "target_mean_share_5")
+hhi_10_cols <- c("delta_hhi_1_10pctl", "delta_hhi_2_10pctl", "delta_hhi_4_10pctl", "delta_hhi_5_10pctl")
+hhi_50_cols <- c("delta_hhi_1_50pctl", "delta_hhi_2_50pctl", "delta_hhi_4_50pctl", "delta_hhi_5_50pctl")
+hhi_99_cols <- c("delta_hhi_1_99pctl", "delta_hhi_2_99pctl", "delta_hhi_4_99pctl", "delta_hhi_5_99pctl")
+pre_cols <- c("premerge_rent_1", "premerge_rent_2", "premerge_rent_4", "premerge_rent_5")
+post_cols <- c("postmerge_rent_1", "postmerge_rent_2", "postmerge_rent_4", "postmerge_rent_5")
+treated_cols <- c("treated_1", "treated_2", "treated_4", "treated_5")
+merge_label_cols <- c("merge_label_1", "merge_label_2", "merge_label_4", "merge_label_5")
+
+measure_vars <- list("Acquiror Share" = acq_cols, "Target Share" = target_cols, 
+                     "DHHI 10Pctl" = hhi_10_cols, "DHHI 50Pctl" = hhi_50_cols, "DHHI 99Pctl" = hhi_99_cols,
+                     "Pre-Merger Rent" = pre_cols, "Post-Merger Rent" = post_cols,
+                     "Merger" = merge_label_cols)
+all_cols <- c(acq_cols, target_cols, hhi_10_cols, hhi_50_cols, hhi_99_cols, pre_cols, post_cols, merge_label_cols)
+
+dt_stats <- unique(melt(dt[treated_overlap >= 1,..all_cols], id.vars = c(), measure.vars = measure_vars, variable.name="merge_id"))
+dt_stats <- (dt_stats[Merger != "" & !is.na(Merger) & !is.na(`DHHI 10Pctl`)])
+dt_stats <- dt_stats[,.SD,.SDcols = c("Merger", "Acquiror Share", "Target Share","DHHI 10Pctl", "DHHI 50Pctl", "DHHI 99Pctl",
+                                      "Pre-Merger Rent", "Post-Merger Rent")]
+num_vars <- names(dt_stats)[2:length(dt_stats)]
+dt_stats[, (num_vars) := lapply(.SD, function(x) round(x, 3)), .SDcols=num_vars]
+
+library(xtable)
+print(xtable(dt_stats, type = "latex", caption="Summary Statistics"), file = paste0(estimate_path, "summary_table.tex"))
+
 # ============= (1) Zip Level Regressions ===================================================
 # 2-way FE + delta HHI, all mergers ---------
 # Restrict to 5 years before first merger
