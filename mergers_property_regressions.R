@@ -39,6 +39,24 @@ print("Available memory after reading and binding")
 getAvailMem() 
 
 # ============= (0) Preprocessing ===================================================
+# Zip code characteristics 
+acs_zip <- fread("/project/humphries/jeh232/rent_project/data/census/acs_zip_demographics.csv", colClasses = c(zip = "integer", year="integer"))
+
+# Drop 3-digit ZCTAs from 2000
+acs_zip[, zip := as.integer(zip)] 
+acs_zip <- acs_zip[!is.na(zip)]
+
+acs_zip[,shift_year := fcase(year == 2011, 2007,
+                             year == 2012, 2009,
+                             year == 2018, 2017,
+                             year == 2000, 2000,
+                             default = NA)
+        ] # Re-code data to so ACS5 covers start-yr to midpoints (e.g. 2007-2009 for 2007-2011 ACS)
+acs_zip[is.na(shift_year), shift_year := year-2]
+acs_zip <- rbindlist(list(acs_zip, copy(acs_zip)[year %in% c(2011, 2012, 2017, 2018)][, shift_year := shift_year + 1]))
+
+dt <- merge(dt, acs_zip, by.x = c("Zip5", "year"), by.y = c("zip", "shift_year"), all.x = T)
+
 # Zip is factor
 dt[,Zip5 := factor(Zip5)]
 
@@ -51,6 +69,12 @@ dt_multi_check <- dt[year >= 2007 & Zip5 %in% treated_zips,.(median_rent = media
 ggplot(dt_multi_check, aes(x = year, y = median_rent, color = factor(multi_merge))) + geom_line() + 
   labs(title = "Median Rent for Treated Zips") + ggsave(paste0(mergers_path, "figs/diagnostics/multi_merge_property_rent.png"))
 
+# Drop low-property count zips 
+dt_n <- dt[,.N,.(Zip5,year)]
+bad_zips <- dt_n[,.(N = mean_na(N)), .(Zip5)][N < 10, Zip5]
+print(paste0("Dropping ", nrow(dt[Zip5 %in% bad_zips]), " rows of zips with under 10 average property observations per year out of ", 
+             nrow(dt), " total rows."))
+dt <- dt[!(Zip5 %in% bad_zips)]
 # ============= Property Level Regressions ===================================================
 estimate_path <- paste0(mergers_path, "estimates/")
 library(lfe)
@@ -96,7 +120,7 @@ for (i in 1:length(post_names)){
 # Save averages
 avg_rent <- round(mean_na(dt_tmp$RentPrice), digits=2)
 avg_log_rent <- round(mean_na(dt_tmp$log_rent), digits=2)
-avg_delta_hhi <- round(mean_na0(dt_tmp[,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi]), digits=2)
+avg_delta_hhi <- round(mean_na0(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi]), digits=2)
 avg_hhi <- round(mean_na0(dt_tmp[,.(hhi = median_na(hhi)), .(Zip5)][,hhi]), digits=2)
 sd_delta_hhi <- round(sd(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi], na.rm=T), digits=2)
 sd_hhi <- round(sd(dt_tmp[hhi != 0,.(hhi = median_na(hhi)), .(Zip5)][,hhi], na.rm=T), digits=2)
@@ -114,14 +138,15 @@ reg2 <- felm(RentPrice ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_f
 reg3 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned|factor(year) + Zip5|0|Zip5, data = dt_tmp)
 reg4 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft|factor(year) + Zip5|0|Zip5, data = dt_tmp)
 reg5 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg6 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
-reg7 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + delta_hhi:time_trend|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg6 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg7 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+reg8 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|factor(year) + Zip5|0|Zip5, data = dt_tmp)
 
-zip_trend_line <- c("Zip*Linear Trend", "No", "Yes", "No", "No", "No", "No", "Yes", "No")
-hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "Yes", "No", "No", "No", "No", "Yes")
+zip_trend_line <- c("Zip*Linear Trend", "No", "Yes", "No", "No", "No", "No","No", "Yes", "No")
+hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "Yes", "No", "No", "No", "No","No", "Yes")
 lines <- list(zip_trend_line, hhi_trend_line)
-out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7,
-                                column.labels = c("Rent", "Log Rent"), column.separate = c(3,5), omit = c("time_trend"),
+out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7,reg8,
+                                column.labels = c("Rent", "Log Rent"), column.separate = c(3,6), omit = c("time_trend"),
                                 add.lines = lines,
                                 title = "2-Way FE with delta HHI and firm owned indicator, All Treated Zips, All Controls"))
 
@@ -150,7 +175,7 @@ dt_tmp <- dt_tmp[sample_1_and_2 >= 1]
 # Save averages
 avg_rent <- round(mean_na(dt_tmp$RentPrice), digits=2)
 avg_log_rent <- round(mean_na(dt_tmp$log_rent), digits=2)
-avg_delta_hhi <- round(mean_na0(dt_tmp[,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi]), digits=2)
+avg_delta_hhi <- round(mean_na0(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi]), digits=2)
 avg_hhi <- round(mean_na0(dt_tmp[,.(hhi = median_na(hhi)), .(Zip5)][,hhi]), digits=2)
 sd_delta_hhi <- round(sd(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi], na.rm=T), digits=2)
 sd_hhi <- round(sd(dt_tmp[hhi != 0,.(hhi = median_na(hhi)), .(Zip5)][,hhi], na.rm=T), digits=2)
@@ -168,17 +193,18 @@ reg2 <- felm(RentPrice ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_f
 reg3 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned|factor(year) + Zip5|0|Zip5, data = dt_tmp)
 reg4 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft|factor(year) + Zip5|0|Zip5, data = dt_tmp)
 reg5 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg6 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
-reg7 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + delta_hhi:time_trend|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg6 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg7 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+reg8 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|factor(year) + Zip5|0|Zip5, data = dt_tmp)
 
 # reg4 <- felm(rent_sqft ~ delta_hhi:post + delta_hhi:post:merge_firm_owned|factor(year) + Zip5|0|Zip5, data = dt_tmp)
 # reg5 <- felm(rent_sqft ~ delta_hhi:post + delta_hhi:post:merge_firm_owned + tot_unit_val|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-zip_trend_line <- c("Zip*Linear Trend", "No", "Yes", "No", "No", "No", "No", "Yes", "No")
-hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "Yes", "No", "No", "No", "No", "Yes")
+zip_trend_line <- c("Zip*Linear Trend", "No", "Yes", "No", "No", "No", "No","No", "Yes", "No")
+hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "Yes", "No", "No", "No", "No","No", "Yes")
 lines <- list(zip_trend_line, hhi_trend_line)
 
-out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5, reg6, reg7,
-                                column.labels = c("Rent", "Log Rent"), column.separate = c(3,5), 
+out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5, reg6, reg7,reg8,
+                                column.labels = c("Rent", "Log Rent"), column.separate = c(3,6), 
                                 add.lines = lines,
                                 title = "2-Way FE with delta HHI and firm owned indicator, All Treated Zips, Control Groups 1 and 2"))
 
@@ -235,8 +261,10 @@ for (merge_id in unique(mergers$MergeID_1)){
   # Relevant column names based on merge id
   treated_var <- paste0("treated_", merge_id)
   post_var <- paste0("post_", merge_id)
+  delta_hhi_var <- paste0("delta_hhi_", merge_id)
   dt[, treated := get(treated_var)]
   dt[, post := get(post_var)]
+  dt[,delta_hhi := get(delta_hhi_var)]
   
   # 1) Control = merging-zip non-affected 
   sample_var <- paste0("sample_", merge_id, "_c1")
@@ -254,26 +282,33 @@ for (merge_id in unique(mergers$MergeID_1)){
   avg_log_rent <- round(mean_na(dt_tmp$log_rent), digits=2)
   avg_hhi <- round(mean_na0(dt_tmp[,.(hhi = median_na(hhi)), .(Zip5)][,hhi]), digits=2)
   sd_hhi <- round(sd(dt_tmp[hhi != 0,.(hhi = median_na(hhi)), .(Zip5)][,hhi], na.rm=T), digits=2)
+  avg_delta_hhi <- round(mean_na0(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi]), digits=2)
+  sd_delta_hhi <- round(sd(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi], na.rm=T), digits=2)
   
-  reg0 <- felm(RentPrice ~ treated:post|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg1 <- felm(RentPrice ~ treated:post + sqft|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg2 <- felm(RentPrice ~ treated:post + sqft + tot_unit_val|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg3 <- felm(RentPrice ~ treated:post + sqft + tot_unit_val|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
-  
-  reg4 <- felm(log_rent ~ treated:post|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg5 <- felm(log_rent ~ treated:post + log_sqft|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg6 <- felm(log_rent ~ treated:post + log_sqft + tot_unit_val|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg7 <- felm(log_rent ~ treated:post + log_sqft + tot_unit_val|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+  reg0 <- felm(log_rent ~ delta_hhi:treated:post|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg1 <- felm(log_rent ~ delta_hhi:treated:post + log_sqft|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg2 <- felm(log_rent ~ delta_hhi:treated:post + log_sqft + tot_unit_val|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg3 <- felm(log_rent ~ delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg4 <- felm(log_rent ~ delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+  reg5 <- felm(log_rent ~ delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
   
   # reg4 <- felm(rent_sqft ~  treated:post, data = dt_tmp)
   # reg5 <- felm(rent_sqft ~  treated:post + tot_unit_val, data = dt_tmp)
-  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "Yes", "No", "No", "No", "Yes")
-  lines <- list(zip_trend_line)
+  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "No", "Yes", "No")
+  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "No", "Yes")
+  lines <- list(zip_trend_line, hhi_trend_line)
   
-  out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5, reg6, reg7,
-                                  column.labels = c("Rent", "Log Rent"), column.separate = c(4,4), 
-                                  add.lines = lines,
-                                  title = paste0("Prepost Basic, Merger: ", merge_label,", Control: Within-Zip Non-Firm")))
+  # Notes
+  # Notes
+  note.latex <- paste0("Sample is property level, with year and zip FE. Sample average rent: ", avg_rent, 
+                       ". Sample average log rent: ", avg_log_rent, 
+                       ". Sample average HHI: ", avg_hhi, ". Sample average delta HHI: ", avg_delta_hhi, 
+                       ". Sample SD HHI: ", sd_hhi, ". Sample SD delta HHI: ", sd_delta_hhi)
+  
+  out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5,
+                                  column.labels = c("Log Rent"), 
+                                  add.lines = lines, notes = note.latex, notes.align = "l",
+                                  title = paste0("2-Way FE, Merger: ", merge_label,", Control: Within-Zip Non-Firm")))
   
   # Wrap tabular environment in resizebox
   out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
@@ -283,13 +318,13 @@ for (merge_id in unique(mergers$MergeID_1)){
   out <- gsub("!htbp", "H", out, fixed = T)
   
   # Replace notes
-  note.latex <- paste0("\\multicolumn{9}{l} {\\parbox[t]{\\textwidth}{ \\textit{Notes:} Sample is property level, with year and zip FE. 
-                     Sample average rent: ", avg_rent, ". Sample average log rent: ", avg_log_rent, 
-                       ". Sample average HHI: ", avg_hhi,  
-                       ". Sample SD HHI: ", sd_hhi, 
-                       "}} \\\\")
-  note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
-  out[grepl("Note",out)] <- note.latex
+  # note.latex <- paste0("\\multicolumn{6}{l} {\\parbox[t]{\\textwidth}{ \\textit{Notes:} Sample is property level, with year and zip FE. 
+  #                    Sample average rent: ", avg_rent, ". Sample average log rent: ", avg_log_rent, 
+  #                      ". Sample average HHI: ", avg_hhi,  
+  #                      ". Sample SD HHI: ", sd_hhi, 
+  #                      "}} \\\\")
+  # note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
+  # out[grepl("Note",out)] <- note.latex
   
   cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
   
@@ -309,26 +344,33 @@ for (merge_id in unique(mergers$MergeID_1)){
   avg_log_rent <- round(mean_na(dt_tmp$log_rent), digits=2)
   avg_hhi <- round(mean_na0(dt_tmp[,.(hhi = median_na(hhi)), .(Zip5)][,hhi]), digits=2)
   sd_hhi <- round(sd(dt_tmp[hhi != 0,.(hhi = median_na(hhi)), .(Zip5)][,hhi], na.rm=T), digits=2)
+  avg_delta_hhi <- round(mean_na0(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi]), digits=2)
+  sd_delta_hhi <- round(sd(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi], na.rm=T), digits=2)
   
-  reg0 <- felm(RentPrice ~  treated:post|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg1 <- felm(RentPrice ~  treated:post + sqft|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg2 <- felm(RentPrice ~  treated:post + sqft + tot_unit_val|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg3 <- felm(RentPrice ~  treated:post + sqft + tot_unit_val|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
-  
-  reg4 <- felm(log_rent ~  treated:post|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg5 <- felm(log_rent ~  treated:post + log_sqft|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg6 <- felm(log_rent ~  treated:post + log_sqft + tot_unit_val|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg7 <- felm(log_rent ~  treated:post + log_sqft + tot_unit_val|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+  reg0 <- felm(log_rent ~  delta_hhi:treated:post|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg1 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg2 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft + tot_unit_val|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg3 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg4 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+  reg5 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
   
   # reg4 <- felm(rent_sqft ~  treated:post, data = dt_tmp)
   # reg5 <- felm(rent_sqft ~  treated:post + tot_unit_val, data = dt_tmp)
-  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "Yes", "No", "No", "No", "Yes")
-  lines <- list(zip_trend_line)
+  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "No", "Yes", "No")
+  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No","No", "Yes")
   
-  out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5, reg6, reg7,
-                                  column.labels = c("Rent", "Log Rent"), column.separate = c(4,4), 
-                                  add.lines=lines,
-                                  title = paste0("Prepost Basic, Merger: ", merge_label,", Control: Outside-Zip Firm")))
+  lines <- list(zip_trend_line, hhi_trend_line)
+  
+  # Notes
+  note.latex <- paste0("Sample is property level, with year and zip FE. Sample average rent: ", avg_rent, 
+                       ". Sample average log rent: ", avg_log_rent, 
+                       ". Sample average HHI: ", avg_hhi, ". Sample average delta HHI: ", avg_delta_hhi, 
+                       ". Sample SD HHI: ", sd_hhi, ". Sample SD delta HHI: ", sd_delta_hhi)
+  
+  out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5,
+                                  column.labels = c("Log Rent"), 
+                                  add.lines=lines, notes = note.latex, notes.align = "l",
+                                  title = paste0("2-Way, Merger: ", merge_label,", Control: Outside-Zip Firm")))
   
   # Wrap tabular environment in resizebox
   out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
@@ -338,13 +380,13 @@ for (merge_id in unique(mergers$MergeID_1)){
   out <- gsub("!htbp", "H", out, fixed = T)
   
   # Replace notes
-  note.latex <- paste0("\\multicolumn{9}{l} {\\parbox[t]{\\textwidth}{ \\textit{Notes:} Sample is property level, with year and zip FE. 
-                     Sample average rent: ", avg_rent, ". Sample average log rent: ", avg_log_rent, 
-                       ". Sample average HHI: ", avg_hhi, ". Sample average delta HHI: ", avg_delta_hhi, 
-                       ". Sample SD HHI: ", sd_hhi, ". Sample SD delta HHI: ", sd_delta_hhi, 
-                       "}} \\\\")
-  note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
-  out[grepl("Note",out)] <- note.latex
+  # note.latex <- paste0("\\multicolumn{9}{l} {\\parbox[t]{\\textwidth}{ \\textit{Notes:} Sample is property level, with year and zip FE. 
+  #                    Sample average rent: ", avg_rent, ". Sample average log rent: ", avg_log_rent, 
+  #                      ". Sample average HHI: ", avg_hhi, ". Sample average delta HHI: ", avg_delta_hhi, 
+  #                      ". Sample SD HHI: ", sd_hhi, ". Sample SD delta HHI: ", sd_delta_hhi, 
+  #                      "}} \\\\")
+  # note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
+  # out[grepl("Note",out)] <- note.latex
   
   cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
   
@@ -364,26 +406,31 @@ for (merge_id in unique(mergers$MergeID_1)){
   avg_log_rent <- round(mean_na(dt_tmp$log_rent), digits=2)
   avg_hhi <- round(mean_na0(dt_tmp[,.(hhi = median_na(hhi)), .(Zip5)][,hhi]), digits=2)
   sd_hhi <- round(sd(dt_tmp[hhi != 0,.(hhi = median_na(hhi)), .(Zip5)][,hhi], na.rm=T), digits=2)
-  
-  reg0 <- felm(RentPrice ~  treated:post|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg1 <- felm(RentPrice ~  treated:post + sqft|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg2 <- felm(RentPrice ~  treated:post + sqft + tot_unit_val|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg3 <- felm(RentPrice ~  treated:post + sqft + tot_unit_val|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
-  
-  reg4 <- felm(log_rent ~  treated:post|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg5 <- felm(log_rent ~  treated:post + log_sqft|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg6 <- felm(log_rent ~  treated:post + log_sqft + tot_unit_val|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg7 <- felm(log_rent ~  treated:post + log_sqft + tot_unit_val|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+
+  reg0 <- felm(log_rent ~  delta_hhi:treated:post|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg1 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg2 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft + tot_unit_val|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg3 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg4 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+  reg5 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
   
   # reg4 <- felm(rent_sqft ~  treated:post, data = dt_tmp)
   # reg5 <- felm(rent_sqft ~  treated:post + tot_unit_val, data = dt_tmp)
-  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "Yes", "No", "No", "No", "Yes")
-  lines <- list(zip_trend_line)
+  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "No", "Yes", "No")
+  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "No", "Yes")
   
-  out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5, reg6, reg7,
-                                  column.labels = c("Rent", "Log Rent"), column.separate = c(2,2), 
-                                  add.lines=lines,
-                                  title = paste0("Prepost Basic, Merger: ", merge_label,", Control: Single Firm Zips")))
+  lines <- list(zip_trend_line, hhi_trend_line)
+  
+  # Notes
+  note.latex <- paste0("Sample is property level, with year and zip FE. Sample average rent: ", avg_rent, 
+                       ". Sample average log rent: ", avg_log_rent, 
+                       ". Sample average HHI: ", avg_hhi, ". Sample average delta HHI: ", avg_delta_hhi, 
+                       ". Sample SD HHI: ", sd_hhi, ". Sample SD delta HHI: ", sd_delta_hhi)
+  
+  out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5,
+                                  column.labels = c("Log Rent"), 
+                                  add.lines=lines, notes = note.latex, notes.align="l",
+                                  title = paste0("2-Way FE, Merger: ", merge_label,", Control: Single Firm Zips")))
   
   # Wrap tabular environment in resizebox
   out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
@@ -393,13 +440,13 @@ for (merge_id in unique(mergers$MergeID_1)){
   out <- gsub("!htbp", "H", out, fixed = T)
   
   # Replace notes
-  note.latex <- paste0("\\multicolumn{9}{l} {\\parbox[t]{\\textwidth}{ \\textit{Notes:} Sample is property level, with year and zip FE. 
-                     Sample average rent: ", avg_rent, ". Sample average log rent: ", avg_log_rent, 
-                       ". Sample average HHI: ", avg_hhi, ". Sample average delta HHI: ", avg_delta_hhi, 
-                       ". Sample SD HHI: ", sd_hhi, ". Sample SD delta HHI: ", sd_delta_hhi, 
-                       "}} \\\\")
-  note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
-  out[grepl("Note",out)] <- note.latex
+  # note.latex <- paste0("\\multicolumn{9}{l} {\\parbox[t]{\\textwidth}{ \\textit{Notes:} Sample is property level, with year and zip FE. 
+  #                    Sample average rent: ", avg_rent, ". Sample average log rent: ", avg_log_rent, 
+  #                      ". Sample average HHI: ", avg_hhi, ". Sample average delta HHI: ", avg_delta_hhi, 
+  #                      ". Sample SD HHI: ", sd_hhi, ". Sample SD delta HHI: ", sd_delta_hhi, 
+  #                      "}} \\\\")
+  # note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
+  # out[grepl("Note",out)] <- note.latex
   
   cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
   

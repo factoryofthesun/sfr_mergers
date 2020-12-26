@@ -73,6 +73,13 @@ dt[is.infinite(log_sqft), log_sqft := NA]
 # Redefine ids 
 dt[,id := .GRP, .(fips, apn_unformatted, apn_num)]
 
+# Clean Beazer properties
+# print(paste0("Cleaning Beazer property identifiation. Pre-counts: ", nrow(dt[Merger_Owner_Name == "Beazer Pre-Owned Rental Homes"])))
+# dt[Merger_Owner_Name == "Beazer Pre-Owned Rental Homes" & grepl("rental", owner_name_clean, ignore.case = T), good_beazer := 1]
+# dt[Merger_Owner_Name == "Beazer Pre-Owned Rental Homes", Merger_Owner_Name := NA]
+# dt[good_beazer == 1, Merger_Owner_Name := "Beazer Pre-Owned Rental Homes"]
+# print(paste0("Post-counts: ", nrow(dt[good_beazer == 1])))
+
 # ============= (0.5) Diagnostics ===================================================
 # Read in cleaned mergers file
 mergers <- fread(paste0(mergers_path, "mergers_final_cleaned.csv"))
@@ -240,7 +247,7 @@ dt_zip <- dt[,.(median_rent = median_na0(RentPrice), mean_rent = mean_na0(RentPr
                 median_tot_unit_val = median_na0(tot_unit_val), mean_tot_unit_val = mean_na0(tot_unit_val), 
                 median_sale = median_na0(SalePrice), mean_sale = mean_na0(SalePrice), 
                 median_sqft = median_na0(sqft), mean_sqft = mean_na0(sqft), 
-                median_log_sqft = median_na0(log_sqft)),.(Zip5, year)]
+                median_log_sqft = median_na0(log_sqft), N = .N),.(Zip5, year)]
 dt_zip_month <- merge(dt_zip, zillow_long[,.(Zip5, year, month, ZORI)], by=c("Zip5", "year"), all.x=T, allow.cartesian=T)
 dt_zip <- merge(dt_zip, zillow_yr, by=c("Zip5", "year"), all.x=T)
 
@@ -251,7 +258,7 @@ print(paste0(n_bad_zori, " month-zips with no ZORI out of ", nrow(dt_zip_month),
 
 # Compute HHI (assume filled owner strings are representative sample)
 dt_owner <- dt[!is.na(owner_hhi) & owner_hhi != "",.N, .(owner_hhi, Zip5, year)]
-dt_owner[,share := N/sum(N) * 100, .(Zip5, year)]
+dt_owner[,share := N/sum_na(N) * 100, .(Zip5, year)]
 dt_owner[is.infinite(share), share := NA]
 dt_hhi <- dt_owner[,.(hhi = sum_na(share^2)), .(Zip5, year)]
 dt_zip <- merge(dt_zip, dt_hhi, by = c("Zip5", "year"), all.x = T)
@@ -357,16 +364,22 @@ for (merge_id in unique(mergers$MergeID_1)){
       dt[Zip5 %in% treated_zips & Merger_Owner_Name %in% target_name, merge_group := "Target"]
       dt[Zip5 %in% treated_zips & Merger_Owner_Name %in% acquiror_name, merge_group := "Acquiror"]
       dt[,event_yr := as.integer(year - norm_year)]
-      dt_delta_hhi <- dt[event_yr == -1 & !is.na(owner_hhi) & owner_hhi != "", .(delta_hhi = 2 * sum_na(merge_group == "Target") * sum_na(merge_group == "Acquiror")/(.N^2)*100^2), .(Zip5)]
+      dt_delta_hhi <- dt[event_yr == -1 & !is.na(owner_hhi) & owner_hhi != "", .(delta_hhi = 2 * sum_na(merge_group == "Target") * sum_na(merge_group == "Acquiror")/(.N^2)*100^2,
+                                                                                 acquiror_share = sum_na(merge_group == "Acquiror")/.N*100, 
+                                                                                 target_share = sum_na(merge_group == "Target")/.N*100), .(Zip5)]
       dt_delta_hhi[is.na(delta_hhi), delta_hhi := 0]
+      dt_delta_hhi[is.na(acquiror_share), acquiror_share := 0]
+      dt_delta_hhi[is.na(target_share), target_share := 0]
       dt_zip_tmp <- merge(dt_zip, dt_delta_hhi, by = "Zip5", all.x = T)
       dt_zip_tmp[,merge_label := merge_label]
       dt_zip_tmp[,merge_id := merge_id]
-      dt_hhi_tmp <- dcast(dt_zip_tmp[event_yr >= -5 & group == "Treated"], Zip5 + delta_hhi + merge_label + merge_id ~ event_yr, value.var = "hhi")
+      dt_hhi_tmp <- dcast(dt_zip_tmp[event_yr >= -5 & group == "Treated"], 
+                          Zip5 + delta_hhi + acquiror_share + target_share + merge_label + merge_id ~ event_yr, value.var = "hhi")
       setcolorder(dt_hhi_tmp, "merge_label")
       
       hhi_wide_list[[merge_id]] <- dt_hhi_tmp
-      hhi_long_list[[merge_id]] <- dt_zip_tmp[event_yr >= -5 & group == "Treated", .(merge_id, merge_label, Zip5, event_yr, delta_hhi, hhi)]
+      hhi_long_list[[merge_id]] <- dt_zip_tmp[event_yr >= -5 & group == "Treated", .(merge_id, merge_label, Zip5, event_yr, delta_hhi, hhi, 
+                                                                                     acquiror_share, target_share)]
       
       } else{
       dt_tmp <- melt(dt_zip, id.vars = c("Zip5", "event_yr","year", "group"), measure.vars = paste0(c("median_", "mean_"), var), 
@@ -417,7 +430,7 @@ dt_zip_month[,multi_merge := 0]
 dt_zip_month[Zip5 %in% multi_zips, multi_merge := 1]
 
 # Delta HHI long to wide for each merger
-hhi_merge_wide <- dcast(hhi_wide, Zip5 ~ merge_id, value.var = c("delta_hhi", "merge_label"))
+hhi_merge_wide <- dcast(hhi_wide, Zip5 ~ merge_id, value.var = c("delta_hhi", "merge_label", "acquiror_share", "target_share"))
 
 # Save zip panel with HHI and Zillow 
 dt_zip_month <- merge(dt_zip_month, dt_hhi, by = c("Zip5", "year"), all.x = T)
