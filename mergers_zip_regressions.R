@@ -199,15 +199,17 @@ for (i in 1:length(post_names)){
 
 # Remove all monthyears between announcement and effective 
 dt_fe <- copy(dt_tmp)
-for (merge_id in unique(mergers$MergeID_1)){
-  # Skip American Residential Ppty (no props found)
-  if (merge_id == 3){
-    next 
-  }
-  merge_announce_date <- min(mergers[MergeID_1 == merge_id, DateAnnounced])
-  merge_eff_date <- max(mergers[MergeID_1 == merge_id, DateEffective])
-  dt_fe <- dt_fe[monthyear <= merge_announce_date | monthyear >= merge_eff_date]
-}
+# for (merge_id in unique(mergers$MergeID_1)){
+#   # Skip American Residential Ppty (no props found)
+#   if (merge_id == 3){
+#     next 
+#   }
+#   sample_var <- paste0("sample_", merge_id)
+#   merge_announce_date <- min(mergers[MergeID_1 == merge_id, DateAnnounced])
+#   merge_eff_date <- max(mergers[MergeID_1 == merge_id, DateEffective])
+#   dt_fe[(monthyear <= merge_announce_date | monthyear >= merge_eff_date) & get(sample_var) == 1, keep := 1]
+# }
+# dt_fe <- dt_fe[keep == 1]
 
 avg_zori <- round(mean_na0(dt_fe$ZORI), 2)
 avg_log_zori <- round(mean_na0(dt_fe$log_zori), 2)
@@ -393,7 +395,8 @@ for (merge_id in unique(mergers$MergeID_1)){
   sample_var <- paste0("sample_", merge_id)
   hhi_var <- paste0("delta_hhi_", merge_id)
   
-  dt_tmp <- dt[((monthyear >= sample_start & monthyear < merge_announce_date) | monthyear >= merge_eff_date) & get(sample_var) == 1]
+  #dt_tmp <- dt[((monthyear >= sample_start & monthyear < merge_announce_date) | monthyear >= merge_eff_date) & get(sample_var) == 1]
+  dt_tmp <- dt[monthyear >= sample_start & get(sample_var) == 1]
   dt_tmp[, treated := get(treated_var)]
   dt_tmp[, post := get(post_var)]
   dt_tmp[,delta_hhi := get(hhi_var)]
@@ -417,8 +420,7 @@ for (merge_id in unique(mergers$MergeID_1)){
   reg1 <- felm(log_zori ~ delta_hhi:post:treated + median_log_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_tmp)
   reg2 <- felm(log_zori ~ delta_hhi:post:treated + median_log_sqft + median_tot_unit_val + prop_unemp + median_household_income|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_tmp)
   reg3 <- felm(log_zori ~ delta_hhi:post:treated + median_log_sqft + median_tot_unit_val + prop_unemp + median_household_income|factor(monthyear) + factor(Zip5) + factor(Zip5):month_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
-  reg4 <- felm(log_zori ~ delta_hhi:post:treated + median_log_sqft + median_tot_unit_val + prop_unemp + median_household_income|
-                 factor(monthyear) + factor(Zip5) + factor(delta_hhi):month_trend|0|Zip5, data = dt_tmp)
+  reg4 <- felm(log_zori ~ delta_hhi:post:treated + median_log_sqft + median_tot_unit_val + prop_unemp + median_household_income|factor(monthyear) + factor(Zip5) + factor(delta_hhi):month_trend|0|Zip5, data = dt_tmp)
   
   # reg4 <- felm(median_log_rent ~ delta_hhi:post:treated|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_tmp)
   # reg5 <- felm(median_log_rent ~ delta_hhi:post:treated + median_log_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_tmp)
