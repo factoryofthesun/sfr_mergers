@@ -65,6 +65,28 @@ dt[!is.na(month) & !is.na(year),monthyear := parse_date_time(paste0(year, "-", m
 treated_names <- grep("^treated_", names(dt), value=T)
 dt[,treated_overlap := rowSums(.SD, na.rm = T), .SDcols = treated_names]
 
+# Aggregate vars
+label_names <- grep("^merge_label_", names(dt), value = T)
+dt[,merge_label := as.character(NA)]
+for (label in label_names){
+  dt[is.na(merge_label)|merge_label == "", merge_label := get(label)]
+}
+
+hhi_names <- grep("^delta_hhi_", names(dt), value = T)
+post_names <- grep("^post_", names(dt), value = T)
+dt[,delta_hhi := 0]
+dt[,treated := 0]
+
+# Delta HHI for multi-merged zips will be discontinuous jumps (add new delta HHI after every additional post period)
+for (i in 1:length(post_names)){
+  post_var <- post_names[i]
+  hhi_var <- hhi_names[i]
+  treated_var <- treated_names[i]
+  dt[get(post_var) == 1 & get(treated_var) == 1 & delta_hhi > 0, delta_hhi := delta_hhi + get(hhi_var)]
+  dt[get(treated_var) == 1 & delta_hhi == 0, delta_hhi := get(hhi_var)]
+  dt[get(post_var) == 1 & get(treated_var) == 1, treated := 1]
+}
+
 # Document multi-merge zips 
 dt[treated_overlap > 1, multi_merge := 1] # Why is multi-merge not being recorded properly?
 n_multi_zips <- uniqueN(dt[multi_merge == 1, Zip5])
@@ -79,12 +101,6 @@ ggplot(dt_multi_check, aes(x = monthyear, y = median_zori, color = factor(multi_
 dt_yr <- dt[,.(hhi = median_na(hhi)), .(Zip5, year)]
 ggplot(dt_yr, aes(x = log(hhi))) + geom_histogram() + labs(x = "Log HHI", title = "Log HHI Frequency") + 
   ggsave(paste0(mergers_path, "hhi_hist.png"))
-
-# for (hhi_var in hhi_names){
-#   print(hhi_var)
-#   print(min(dt[,get(hhi_var)]))
-#   print(max(dt[,get(hhi_var)]))
-# }
 
 # Zip code characteristics 
 acs_zip <- fread("/project/humphries/jeh232/rent_project/data/census/acs_zip_demographics.csv", colClasses = c(zip = "integer", year="integer"))
@@ -166,37 +182,82 @@ library(xtable)
 print(xtable(dt_stats, type = "latex", caption="Summary Statistics"), file = paste0(estimate_path, "summary_table.tex"))
 
 # ============= (1) Zip Level Regressions ===================================================
-# 2-way FE + delta HHI, all mergers ---------
 # Restrict to 5 years before first merger
 start_date <- min(mergers$DateAnnounced) - years(5)
 dt_tmp <- dt[monthyear >= start_date] 
 
-label_names <- grep("^merge_label_", names(dt), value = T)
-dt_tmp[,merge_label := as.character(NA)]
-for (label in label_names){
-  dt_tmp[is.na(merge_label)|merge_label == "", merge_label := get(label)]
-}
+# HHI on Delta HHI ------------
+dt_hhi <- unique(dt[delta_hhi != 0, .(Zip5, year, hhi, delta_hhi, treated, prop_unemp, median_household_income)])
+max_na(dt_hhi[,.N,.(Zip5, year)])
 
-hhi_names <- grep("^delta_hhi_", names(dt), value = T)
-post_names <- grep("^post_", names(dt), value = T)
-dt_tmp[,delta_hhi := 0]
-dt_tmp[,treated := 0]
-# Delta HHI for multi-merged zips will be discontinuous jumps (add new delta HHI after every additional post period)
-for (i in 1:length(post_names)){
-  post_var <- post_names[i]
-  hhi_var <- hhi_names[i]
-  treated_var <- treated_names[i]
-  dt_tmp[get(post_var) == 1 & get(treated_var) == 1 & delta_hhi > 0, delta_hhi := delta_hhi + get(hhi_var)]
-  dt_tmp[get(treated_var) == 1 & delta_hhi == 0, delta_hhi := get(hhi_var)]
-  dt_tmp[get(post_var) == 1 & get(treated_var) == 1, treated := 1]
-}
+# Include zip time trend
+dt_hhi[, year_trend := year - min_na(year)]
 
-# for (i in 1:length(treated_names)){
-#   hhi_var <- hhi_names[i]
-#   treated_var <- treated_names[i]
-#   dt_zip[get(treated_var) == 1, delta_hhi := delta_hhi + get(hhi_var)]
-# }
+reg0 <- felm(hhi ~ delta_hhi:treated|factor(year) + factor(Zip5)|0|Zip5, data = dt_hhi)
+reg1 <- felm(hhi ~ delta_hhi:treated + prop_unemp|factor(year) + factor(Zip5)|0|Zip5, data = dt_hhi)
+reg2 <- felm(hhi ~ delta_hhi:treated + prop_unemp + median_household_income|factor(year) + factor(Zip5)|0|Zip5, data = dt_hhi)
+reg3 <- felm(hhi ~ delta_hhi:treated + prop_unemp + median_household_income|factor(year) + factor(Zip5) + factor(Zip5):year_trend|0|Zip5, data = dt_hhi)
+reg4 <- felm(hhi ~ delta_hhi:treated + prop_unemp + median_household_income + delta_hhi:year_trend|factor(year) + factor(Zip5)|0|Zip5, data = dt_hhi)
 
+zip_trend_line <- c("Zip*Linear Trend", "No", "No","No", "Yes", "No")
+hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No","No", "Yes")
+n_acs_zips <- uniqueN(dt_hhi[!is.na(prop_unemp) & !is.na(median_household_income), Zip5])
+n_zips <- c("# Zips Codes", uniqueN(dt_hhi$Zip5), n_acs_zips, n_acs_zips, n_acs_zips, n_acs_zips)
+hhi_labels <- c("HHI Statistics", "Mean", "SD", "10 Pctl", "50 Pctl", "99 Pctl")
+hhi <- c("HHI", mean_na(dt_hhi$hhi), sd(dt_hhi$hhi, na.rm=T), quantile(dt_hhi$hhi, 0.1), quantile(dt_hhi$hhi, 0.5), quantile(dt_hhi$hhi, 0.99))
+delta_hhi <- c("Delta HHI", mean_na(dt_hhi$delta_hhi), sd(dt_hhi$delta_hhi, na.rm=T), quantile(dt_hhi$delta_hhi, 0.1), quantile(dt_hhi$delta_hhi, 0.5), quantile(dt_hhi$delta_hhi, 0.99))
+
+lines <- list(zip_trend_line, hhi_trend_line, n_zips, hhi_labels, hhi, delta_hhi)
+
+out <- capture.output(stargazer(reg0,reg1, reg2, reg3,reg4,
+                                add.lines=lines,
+                                title = paste0("2-Way FE HHI")))
+
+# Wrap tabular environment in resizebox
+out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
+out <- gsub("\\end{tabular}", "\\end{tabular}}", out, fixed = T)
+
+# Set position
+out <- gsub("!htbp", "H", out, fixed = T)
+
+cat(paste(out, "\n\n"), file = paste0(estimate_path, "zip_did.tex"), append=F)
+
+# Same thing but excluding multi-merge zips ----------------------------------
+dt_hhi <- unique(dt_tmp[delta_hhi != 0 & multi_merge == 0, .(Zip5, year, hhi, delta_hhi, treated, prop_unemp, median_household_income)])
+
+# Include zip time trend
+dt_hhi[, year_trend := year - min_na(year)]
+
+reg0 <- felm(hhi ~ delta_hhi:treated|factor(year) + factor(Zip5)|0|Zip5, data = dt_hhi)
+reg1 <- felm(hhi ~ delta_hhi:treated + prop_unemp|factor(year) + factor(Zip5)|0|Zip5, data = dt_hhi)
+reg2 <- felm(hhi ~ delta_hhi:treated + prop_unemp + median_household_income|factor(year) + factor(Zip5)|0|Zip5, data = dt_hhi)
+reg3 <- felm(hhi ~ delta_hhi:treated + prop_unemp + median_household_income|factor(year) + factor(Zip5) + factor(Zip5):year_trend|0|Zip5, data = dt_hhi)
+reg4 <- felm(hhi ~ delta_hhi:treated + prop_unemp + median_household_income + delta_hhi:year_trend|factor(year) + factor(Zip5)|0|Zip5, data = dt_hhi)
+
+zip_trend_line <- c("Zip*Linear Trend", "No", "No","No", "Yes", "No")
+hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No","No", "Yes")
+n_acs_zips <- uniqueN(dt_hhi[!is.na(prop_unemp) & !is.na(median_household_income), Zip5])
+n_zips <- c("# Zips Codes", uniqueN(dt_hhi$Zip5), n_acs_zips, n_acs_zips, n_acs_zips, n_acs_zips)
+hhi_labels <- c("HHI Statistics", "Mean", "SD", "10 Pctl", "50 Pctl", "99 Pctl")
+hhi <- c("HHI", mean_na(dt_hhi$hhi), sd(dt_hhi$hhi, na.rm=T), quantile(dt_hhi$hhi, 0.1), quantile(dt_hhi$hhi, 0.5), quantile(dt_hhi$hhi, 0.99))
+delta_hhi <- c("Delta HHI", mean_na(dt_hhi$delta_hhi), sd(dt_hhi$delta_hhi, na.rm=T), quantile(dt_hhi$delta_hhi, 0.1), quantile(dt_hhi$delta_hhi, 0.5), quantile(dt_hhi$delta_hhi, 0.99))
+
+lines <- list(zip_trend_line, hhi_trend_line, n_zips, hhi_labels, hhi, delta_hhi)
+
+out <- capture.output(stargazer(reg0,reg1, reg2, reg3,reg4,
+                                add.lines=lines,
+                                title = paste0("2-Way FE HHI, No Multi-Merge")))
+
+# Wrap tabular environment in resizebox
+out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
+out <- gsub("\\end{tabular}", "\\end{tabular}}", out, fixed = T)
+
+# Set position
+out <- gsub("!htbp", "H", out, fixed = T)
+
+cat(paste(out, "\n\n"), file = paste0(estimate_path, "zip_did.tex"), append=T)
+
+# 2-way FE + delta HHI, all mergers ---------
 # Remove all monthyears between announcement and effective 
 dt_fe <- copy(dt_tmp)
 # for (merge_id in unique(mergers$MergeID_1)){
@@ -269,33 +330,57 @@ note.latex <- paste0("\\multicolumn{10}{l} {\\parbox[t]{\\textwidth}{ \\textit{N
 note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
 out[grepl("Note",out)] <- note.latex
 
-cat(paste(out, "\n\n"), file = paste0(estimate_path, "zip_did.tex"), append=F)
+cat(paste(out, "\n\n"), file = paste0(estimate_path, "zip_did.tex"), append=T)
 
-# HHI on Delta HHI ------------
-dt_hhi <- unique(dt_tmp[delta_hhi != 0, .(Zip5, year, hhi, delta_hhi, treated, prop_unemp, median_household_income)])
+# 2-way FE + delta HHI, exclude multi-merge zips ---------
+# Remove all monthyears between announcement and effective 
+dt_fe <- dt_fe[multi_merge == 0]
+# for (merge_id in unique(mergers$MergeID_1)){
+#   # Skip American Residential Ppty (no props found)
+#   if (merge_id == 3){
+#     next 
+#   }
+#   sample_var <- paste0("sample_", merge_id)
+#   merge_announce_date <- min(mergers[MergeID_1 == merge_id, DateAnnounced])
+#   merge_eff_date <- max(mergers[MergeID_1 == merge_id, DateEffective])
+#   dt_fe[(monthyear <= merge_announce_date | monthyear >= merge_eff_date) & get(sample_var) == 1, keep := 1]
+# }
+# dt_fe <- dt_fe[keep == 1]
+
+avg_zori <- round(mean_na0(dt_fe$ZORI), 2)
+avg_log_zori <- round(mean_na0(dt_fe$log_zori), 2)
+avg_log_rent <- round(mean_na0(dt_fe$median_log_rent), 2)
+avg_hhi <- round(mean_na0(dt_fe$hhi), 2)
+avg_delta_hhi <- round(mean_na0(dt_fe$delta_hhi), 2)
+sd_hhi <- round(sd(dt_fe[hhi!=0, hhi]), 2)
+sd_delta_hhi <- round(sd(dt_fe[delta_hhi!=0, hhi]), 2)
 
 # Include zip time trend
-dt_hhi[, year_trend := year - min_na(year)]
+dt_fe[,min_monthyear := min_na(monthyear)]
+dt_fe[, month_trend := round(12 * (as.yearmon(monthyear) - as.yearmon(min_monthyear)))]
 
-reg0 <- felm(hhi ~ delta_hhi:treated|factor(year) + factor(Zip5)|0|Zip5, data = dt_hhi)
-reg1 <- felm(hhi ~ delta_hhi:treated + prop_unemp|factor(year) + factor(Zip5)|0|Zip5, data = dt_hhi)
-reg2 <- felm(hhi ~ delta_hhi:treated + prop_unemp + median_household_income|factor(year) + factor(Zip5)|0|Zip5, data = dt_hhi)
-reg3 <- felm(hhi ~ delta_hhi:treated + prop_unemp + median_household_income|factor(year) + factor(Zip5) + factor(Zip5):year_trend|0|Zip5, data = dt_hhi)
-reg4 <- felm(hhi ~ delta_hhi:treated + prop_unemp + median_household_income + delta_hhi:year_trend|factor(year) + factor(Zip5)|0|Zip5, data = dt_hhi)
+# We will need to remove the zips that we only observe for 1 period
+dt_fe[!is.na(ZORI) & !is.na(median_log_sqft) & !is.na(median_tot_unit_val),n_zip_trend := uniqueN(month_trend), Zip5]
 
-zip_trend_line <- c("Zip*Linear Trend", "No", "No","No", "Yes", "No")
-hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No","No", "Yes")
-n_acs_zips <- uniqueN(dt_hhi[!is.na(prop_unemp) & !is.na(median_household_income), Zip5])
-n_zips <- c("# Zips Codes", uniqueN(dt_hhi$Zip5), n_acs_zips, n_acs_zips, n_acs_zips, n_acs_zips)
-hhi_labels <- c("HHI Statistics", "Mean", "SD", "10 Pctl", "50 Pctl", "99 Pctl")
-hhi <- c("HHI", mean_na(dt_hhi$hhi), sd(dt_hhi$hhi, na.rm=T), quantile(dt_hhi$hhi, 0.1), quantile(dt_hhi$hhi, 0.5), quantile(dt_hhi$hhi, 0.99))
-delta_hhi <- c("Delta HHI", mean_na(dt_hhi$delta_hhi), sd(dt_hhi$delta_hhi, na.rm=T), quantile(dt_hhi$delta_hhi, 0.1), quantile(dt_hhi$delta_hhi, 0.5), quantile(dt_hhi$delta_hhi, 0.99))
+reg0 <- felm(ZORI ~ delta_hhi:treated + median_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_fe)
+reg1 <- felm(ZORI ~ delta_hhi:treated + median_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5) + factor(Zip5):month_trend|0|Zip5, data = dt_fe[n_zip_trend >= 3])
+reg2 <- felm(ZORI ~ delta_hhi:treated + median_sqft + median_tot_unit_val + delta_hhi:month_trend|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_fe)
 
-lines <- list(zip_trend_line, hhi_trend_line, n_zips, hhi_labels, hhi, delta_hhi)
+reg3 <- felm(log_zori ~ delta_hhi:treated|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_fe)
+reg4 <- felm(log_zori ~ delta_hhi:treated + median_log_sqft|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_fe)
+reg5 <- felm(log_zori ~ delta_hhi:treated + median_log_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_fe)
+reg6 <- felm(log_zori ~ delta_hhi:treated + median_log_sqft + median_tot_unit_val + prop_unemp + median_household_income|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_fe)
+reg7 <- felm(log_zori ~ delta_hhi:treated + median_log_sqft + median_tot_unit_val + prop_unemp + median_household_income|factor(monthyear) + factor(Zip5) + factor(Zip5):month_trend|0|Zip5, data = dt_fe[n_zip_trend >= 3])
+reg8 <- felm(log_zori ~ delta_hhi:treated + median_log_sqft + median_tot_unit_val + prop_unemp + median_household_income + delta_hhi:month_trend|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_fe)
 
-out <- capture.output(stargazer(reg0,reg1, reg2, reg3,reg4,
+zip_trend_line <- c("Zip*Linear Trend", "No", "Yes", "No", "No", "No", "No","No", "Yes", "No")
+hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "Yes", "No", "No", "No", "No","No", "Yes")
+lines <- list(zip_trend_line, hhi_trend_line)
+
+out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4,reg5,reg6,reg7,reg8,
+                                column.labels = c("ZORI", "Log ZORI"), column.separate = c(3,6), 
                                 add.lines=lines,
-                                title = paste0("2-Way FE HHI")))
+                                title = paste0("2-Way FE Zip, All Mergers, No Multi-Merge")))
 
 # Wrap tabular environment in resizebox
 out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
@@ -304,8 +389,16 @@ out <- gsub("\\end{tabular}", "\\end{tabular}}", out, fixed = T)
 # Set position
 out <- gsub("!htbp", "H", out, fixed = T)
 
-cat(paste(out, "\n\n"), file = paste0(estimate_path, "zip_did.tex"), append=T)
+# Replace notes
+note.latex <- paste0("\\multicolumn{10}{l} {\\parbox[t]{\\textwidth}{ \\textit{Notes:} Sample is zip level, with month-year and zip FE.
+                     Sample average ZORI: ", avg_zori, ". Sample average log ZORI: ", avg_log_zori,
+                     ". Sample average HHI: ", avg_hhi, ". Sample average delta HHI: ", avg_delta_hhi,
+                     ". Sample SD HHI: ", sd_hhi, ". Sample SD delta HHI: ", sd_delta_hhi,
+                     ". ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\\\")
+note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
+out[grepl("Note",out)] <- note.latex
 
+cat(paste(out, "\n\n"), file = paste0(estimate_path, "zip_did.tex"), append=T)
 
 # 2-way FE + treatment: event-time dummy (-60 to end of period), all mergers ----
 # Multi-merged zips: event-time will be from first shock... 
@@ -421,20 +514,10 @@ for (merge_id in unique(mergers$MergeID_1)){
   reg3 <- felm(log_zori ~ delta_hhi:post:treated + median_log_sqft + median_tot_unit_val + prop_unemp + median_household_income|factor(monthyear) + factor(Zip5) + factor(Zip5):month_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
   reg4 <- felm(log_zori ~ delta_hhi:post:treated + median_log_sqft + median_tot_unit_val + prop_unemp + median_household_income + delta_hhi:month_trend|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_tmp)
   
-  # reg4 <- felm(median_log_rent ~ delta_hhi:post:treated|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_tmp)
-  # reg5 <- felm(median_log_rent ~ delta_hhi:post:treated + median_log_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_tmp)
-  # 
   zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "Yes", "No")
   hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "Yes")
   lines <- list(zip_trend_line, hhi_trend_line)
-  
-  # Notes
-  # note.latex <- paste0("Sample is zip level, with month-year and zip FE. Sample average log ZORI: ", avg_log_zori, 
-  #                      ". Sample average ZORI: ", avg_zori,
-  #                      ". Sample average HHI: ", avg_hhi, ". Sample average delta HHI: ", avg_delta_hhi, 
-  #                      ". Sample SD HHI: ", sd_hhi, ". Sample SD delta HHI: ", sd_delta_hhi, 
-  #                      "ZORI sample covers years 2014-2020.")
-  
+
   out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4,
                                   column.labels = c("Log Zori"),
                                   add.lines=lines,
@@ -496,3 +579,111 @@ for (merge_id in unique(mergers$MergeID_1)){
     ggsave(paste0(mergers_path, "figs/regs/month_coefs_", merge_id, ".png"), width = 20)
 }
 
+# Same thing but remove multi-merge
+for (merge_id in unique(mergers$MergeID_1)){
+  # Skip American Residential Ppty (no props found)
+  if (merge_id == 3){
+    next 
+  }
+  merge_label <- unique(mergers[MergeID_1 == merge_id, label])
+  merge_announce_date <- min(mergers[MergeID_1 == merge_id, DateAnnounced])
+  merge_eff_date <- max(mergers[MergeID_1 == merge_id, DateEffective])
+  sample_start <- merge_announce_date - years(5)
+  
+  # Relevant column names based on merge id
+  treated_var <- paste0("treated_", merge_id)
+  post_var <- paste0("post_", merge_id)
+  sample_var <- paste0("sample_", merge_id)
+  hhi_var <- paste0("delta_hhi_", merge_id)
+  
+  dt_tmp <- dt[monthyear >= sample_start & get(sample_var) == 1 & multi_merge == 0]
+  dt_tmp[, treated := get(treated_var)]
+  dt_tmp[, post := get(post_var)]
+  dt_tmp[,delta_hhi := get(hhi_var)]
+  
+  avg_zori <- mean_na0(dt_tmp$ZORI)
+  avg_log_zori <- mean_na0(dt_tmp$log_zori)
+  avg_log_rent <- mean_na0(dt_tmp$median_log_rent)
+  avg_hhi <- round(mean_na0(dt_tmp$hhi), 2)
+  avg_delta_hhi <- round(mean_na0(dt_tmp$delta_hhi), 2)
+  sd_hhi <- round(sd(dt_tmp[hhi!=0, hhi]), 2)
+  sd_delta_hhi <- round(sd(dt_tmp[delta_hhi!=0, hhi]), 2)
+  
+  # Add linear time trend 
+  setorder(dt_tmp, monthyear)
+  dt_tmp[, min_monthyear := first_na(monthyear)]
+  dt_tmp[, month_trend := round(12 * (as.yearmon(monthyear) - as.yearmon(min_monthyear)))]
+  
+  # We will need to remove the zips that we only observe for 1 period
+  dt_tmp[!is.na(ZORI) & !is.na(median_log_sqft) & !is.na(median_tot_unit_val),n_zip_trend := uniqueN(month_trend), Zip5]
+  
+  reg0 <- felm(log_zori ~ delta_hhi:post:treated|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_tmp)
+  reg1 <- felm(log_zori ~ delta_hhi:post:treated + median_log_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_tmp)
+  reg2 <- felm(log_zori ~ delta_hhi:post:treated + median_log_sqft + median_tot_unit_val + prop_unemp + median_household_income|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_tmp)
+  reg3 <- felm(log_zori ~ delta_hhi:post:treated + median_log_sqft + median_tot_unit_val + prop_unemp + median_household_income|factor(monthyear) + factor(Zip5) + factor(Zip5):month_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+  reg4 <- felm(log_zori ~ delta_hhi:post:treated + median_log_sqft + median_tot_unit_val + prop_unemp + median_household_income + delta_hhi:month_trend|factor(monthyear) + factor(Zip5)|0|Zip5, data = dt_tmp)
+  
+  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "Yes", "No")
+  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "Yes")
+  lines <- list(zip_trend_line, hhi_trend_line)
+  
+  out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4,
+                                  column.labels = c("Log Zori"),
+                                  add.lines=lines,
+                                  title = paste0("2-Way FE Zip, No Multi-Merge, Merger: ", merge_label)))
+  
+  # Wrap tabular environment in resizebox
+  out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
+  out <- gsub("\\end{tabular}", "\\end{tabular}}", out, fixed = T)
+  
+  # Set position
+  out <- gsub("!htbp", "H", out, fixed = T)
+  
+  # Replace notes
+  note.latex <- paste0("\\multicolumn{6}{l} {\\parbox[t]{\\textwidth}{ \\textit{Notes:} Sample is zip level, with month-year and zip FE.
+                       Sample average log ZORI: ", avg_log_zori, ". Sample average ZORI: ", avg_zori,
+                       ". Sample average HHI: ", avg_hhi, ". Sample average delta HHI: ", avg_delta_hhi,
+                       ". Sample SD HHI: ", sd_hhi, ". Sample SD delta HHI: ", sd_delta_hhi,
+                       "ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\\\")
+  note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
+  out[grepl("Note",out)] <- note.latex
+  
+  cat(paste(out, "\n\n"), file = paste0(estimate_path, "zip_did.tex"), append=T)
+  
+  # Event time coefficient plots -- keep ALL dates
+  dt_tmp <- dt[get(sample_var) == 1]
+  dt_tmp[, treated := get(treated_var)]
+  dt_tmp[, post := get(post_var)]
+  dt_tmp[,delta_hhi := get(hhi_var)]
+  
+  post_date <- last(dt_tmp[post == 0 & !is.na(monthyear), monthyear])
+  dt_tmp[, event_month := NA]
+  dt_tmp[, event_month := round(12 * (as.yearmon(monthyear) - as.yearmon(merge_announce_date)))]
+  dt_tmp <- dt_tmp[event_month >= -60]
+  dt_tmp[, event_month := factor(event_month)]
+  
+  event_reg <- felm(log_zori ~ delta_hhi:event_month + median_log_sqft + median_tot_unit_val|factor(monthyear) + factor(Zip5)|0|Zip5, 
+                    data = dt_tmp)
+  
+  # Plot event time coefficients with 1 SE shading 
+  varnames <- rownames(event_reg$coefficients)[-1:-2]
+  event_months <- as.integer(gsub("delta_hhi:event_month", "", varnames, fixed = T))
+  months <- sort(unique(dt_tmp$monthyear))
+  
+  # Enforce reference level at event month 0
+  coefs <- event_reg$coefficients[-1:-2] 
+  coefs[is.na(coefs)] <- 0
+  ref_coef <- coefs[which(event_months == 0)]
+  coefs <- coefs - ref_coef
+  
+  coefs <- coefs * avg_delta_hhi
+  se <- event_reg$se[-1:-2] * 1.96
+  se[is.na(se)] <- se[which(event_months == 0)]
+  event_month_dt <- data.table(coefs = coefs, event_months = event_months, se_ub = coefs + se, se_lb = coefs - se, date = months)
+  ggplot(event_month_dt[event_months >= -30 & event_months <= 40], aes(x = date, y = coefs)) + geom_line() + geom_point(shape=16, size=1) + 
+    geom_ribbon(aes(ymin = se_lb, ymax = se_ub), color="grey", alpha=0.5) + geom_vline(aes(linetype = "Merge Effective", xintercept = merge_eff_date)) + 
+    geom_vline(aes(linetype="Merge Announced", xintercept = merge_announce_date)) + 
+    scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 
+    labs(x = "Date", y = "Estimate Scaled by Average Delta HHI", title = merge_label) + 
+    ggsave(paste0(mergers_path, "figs/regs/month_coefs_", merge_id, "_nomulti.png"), width = 20)
+}
