@@ -86,12 +86,15 @@ dt <- dt[year <= 2018]
 
 # Owner indicators
 # Flags for whether target or acquiror
-acquirors <- c("American Homes 4 Rent", "Invitation Homes Inc", "Tricon Capital Group Inc")
+acquirors <- c("American Homes 4 Rent", "Invitation Homes Inc", "Starwood Waypoint Residential", "Tricon Capital Group Inc")
 targets <- c("Beazer Pre-Owned Rental Homes", "Ellington Housing", "Colony American Homes Inc", "American Residential Ppty Inc",
-             "Silver Bay Realty Trust Corp", "Starwood Waypoint Residential")
+             "Silver Bay Realty Trust Corp")
 dt[Merger_Owner_Name %in% acquirors, merge_position := "acquiror"]
 dt[Merger_Owner_Name %in% targets, merge_position := "target"]
 dt[is.na(merge_position), merge_position := ""]
+
+# Starwood Waypoint is a special case: it will be target post merger 4 in treated group 4 
+dt[Merger_Owner_Name == "Starwood Waypoint Residential" & post_4 == 1 & treated_4 == 1, merge_position := "target"]
 
 # Define aggregate variables
 dt[, zip_firm := paste0(Zip5, Merger_Owner_Name)]
@@ -287,7 +290,7 @@ lines <- list(zip_trend_line, hhi_trend_line)
 out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7,
                                 #column.labels = c("Log Rent"),
                                 add.lines = lines,
-                                title = "2-Way FE with delta HHI and firm owned indicator, All Treated Zips, All Controls"))
+                                title = "2-Way FE with delta HHI and firm owned indicator, All Treated Zips, Control Groups 1 and 2"))
 
 # Wrap tabular environment in resizebox
 out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)

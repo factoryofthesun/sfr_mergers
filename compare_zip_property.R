@@ -158,7 +158,7 @@ quantile(dt_zip[!is.na(ZORI) & delta_hhi > 0, delta_hhi])
 
 # Plot trends against quartiles of DHHI 
 dt_prop[,monthyear := as.POSIXct(ymd(year, truncated = 2))]
-setnames(dt_zip, "ZORI", "RentPrice")
+setnames(dt_zip, "log_zori", "log_rent")
 dt_prop[,rent_type := "MLS"]
 dt_zip[,rent_type := "ZORI"]
 dt_prop[delta_hhi > 0,dhhi_quart := cut(delta_hhi, breaks=c(quantile(delta_hhi,probs=seq(0,1,by=0.5),na.rm=T)),
@@ -167,11 +167,19 @@ dt_zip[delta_hhi > 0,dhhi_quart := cut(delta_hhi, breaks=c(quantile(delta_hhi,pr
                            labels=c("Upper 50%", "Lower 50%"), include.lowest = T)]
 
 dt_tot <- rbindlist(list(dt_prop[!is.na(dhhi_quart)], dt_zip[!is.na(dhhi_quart)]), fill = T)
-dt_tot <- dt_tot[,.(med_rent = median_na(RentPrice)), .(monthyear, dhhi_quart, rent_type)]
+dt_tot <- dt_tot[,.(med_rent = median_na(log_rent)), .(monthyear, dhhi_quart, rent_type)]
 ggplot(dt_tot[!is.na(dhhi_quart)], aes(x = monthyear, y = med_rent, color = dhhi_quart, linetype = rent_type)) + 
   geom_line() + geom_line(stat="smooth", method="lm", alpha=0.7) +
-  labs(x = "date", y = "median rent", title = "DHHI Rent Trends: All", color = "DHHI Quantile", 
+  labs(x = "date", y = "median log rent", title = "DHHI Rent Trends: All", color = "DHHI Quantile", 
                      linetype = "Rent Source") + ggsave(paste0(mergers_path, "figs/diagnostics/", "dhhi_trends.png"))
+
+# Plot differences in trends 
+dt_tot_wide <- dcast(dt_tot, rent_type + monthyear ~ dhhi_quart, value.var="med_rent")
+dt_tot_wide[, trend_diff := `Upper 50%` - `Lower 50%`]
+ggplot(dt_tot_wide, aes(x = monthyear, y = trend_diff, linetype = rent_type)) + geom_line() + 
+  geom_smooth(method = "lm", color = "grey", alpha = 0.7, se = F) + 
+  labs(x = "date", y = "Upper-Lower 50% Log DHHI Trend Difference", title = "DHHI Rent Trends: All",
+       linetype = "Rent Source") + ggsave(paste0(mergers_path, "figs/diagnostics/", "dhhi_delta_trends.png"))
 
 # Is the discontinuity at 2018 caused by multi-merge zips?
 setorder(dt_zip, Zip5, monthyear)
@@ -190,9 +198,16 @@ for (i in c(1,2,4,5)){
                                          labels=c("Upper 50%", "Lower 50%"), include.lowest = T)]
   
   dt_tot <- rbindlist(list(dt_prop[!is.na(dhhi_quart)], dt_zip[!is.na(dhhi_quart)]), fill = T)
-  dt_tot <- dt_tot[,.(med_rent = median_na(RentPrice)), .(monthyear, dhhi_quart, rent_type)]
+  dt_tot <- dt_tot[,.(med_rent = median_na(log_rent)), .(monthyear, dhhi_quart, rent_type)]
   ggplot(dt_tot[!is.na(dhhi_quart)], aes(x = monthyear, y = med_rent, color = dhhi_quart, linetype = rent_type)) + 
     geom_line() + geom_line(stat="smooth", method="lm", alpha=0.7) +
-    labs(x = "date", y = "median rent", title = paste0("DHHI Rent Trends: ", merge_label), color = "DHHI Quantile", 
+    labs(x = "date", y = "median log rent", title = paste0("DHHI Rent Trends: ", merge_label), color = "DHHI Quantile", 
          linetype = "Rent Source") + ggsave(paste0(mergers_path, "figs/diagnostics/", "dhhi_trends_", i, ".png"))
+  
+  dt_tot_wide <- dcast(dt_tot, rent_type + monthyear ~ dhhi_quart, value.var="med_rent")
+  dt_tot_wide[, trend_diff := `Upper 50%` - `Lower 50%`]
+  ggplot(dt_tot_wide, aes(x = monthyear, y = trend_diff, linetype = rent_type)) + geom_line() + 
+    geom_smooth(method = "lm", color = "grey", alpha = 0.7, se = F) + 
+    labs(x = "date", y = "Upper-Lower 50% Log DHHI Trend Difference", title = paste0("DHHI Rent Trends: ", merge_label),
+         linetype = "Rent Source") + ggsave(paste0(mergers_path, "figs/diagnostics/", "dhhi_", i, "_delta_trends.png"))
 }
