@@ -92,6 +92,7 @@ targets <- c("Beazer Pre-Owned Rental Homes", "Ellington Housing", "Colony Ameri
 dt[Merger_Owner_Name %in% acquirors, merge_position := "acquiror"]
 dt[Merger_Owner_Name %in% targets, merge_position := "target"]
 dt[is.na(merge_position), merge_position := ""]
+dt[,merge_position := factor(merge_position, levels = c("", "target", "acquiror"))]
 
 # Starwood Waypoint is a special case: it will be target post merger 4 in treated group 4 
 dt[Merger_Owner_Name == "Starwood Waypoint Residential" & post_4 == 1 & treated_4 == 1, merge_position := "target"]
@@ -346,8 +347,9 @@ for (merge_id in unique(mergers$MergeID_1)){
   dt[,delta_hhi := get(delta_hhi_var)]
   
   # 1) Control = merging-zip non-affected 
-  sample_var <- paste0("sample_", merge_id, "_c1")
-  dt_tmp <- dt[(year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year & get(sample_var) == 1]
+  sample1_var <- paste0("sample_", merge_id, "_c1")
+  dt_tmp <- dt[((year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year )
+               & get(sample1_var) == 1]
   
   # Add linear time trend to regressions 
   dt_tmp[, min_year := min_na(year)]
@@ -403,9 +405,10 @@ for (merge_id in unique(mergers$MergeID_1)){
   cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
   
   # 2) Control = merging firms in unmerged zips; include all c1 properties as treated now
-  dt[get(post_var) == 1, treated := get(sample_var)]
+  dt[get(post_var) == 1, treated := get(sample1_var)]
   sample_var <- paste0("sample_", merge_id, "_c2")
-  dt_tmp <- dt[(year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year & get(sample_var) == 1]
+  dt_tmp <- dt[((year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year) & 
+                 (get(sample_var) == 1 | get(sample1_var) == 1)]
   
   # Add linear time trend to regressions 
   dt_tmp[, min_year := min_na(year)]
@@ -461,7 +464,8 @@ for (merge_id in unique(mergers$MergeID_1)){
   
   # 3) Control = all properties unmerged zips with 1 firm
   sample_var <- paste0("sample_", merge_id, "_c3")
-  dt_tmp <- dt[(year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year & get(sample_var) == 1]
+  dt_tmp <- dt[((year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year) & 
+                 (get(sample_var) == 1 | get(sample1_var) == 1)]
   
   # Add linear time trend to regressions 
   dt_tmp[, min_year := min_na(year)]
