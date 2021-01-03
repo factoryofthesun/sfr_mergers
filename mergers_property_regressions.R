@@ -102,14 +102,7 @@ dt[, treated := as.integer(treated)]
 dt[,merge_firm_owned := as.integer(!is.na(Merger_Owner_Name) & Merger_Owner_Name != "")]
 
 treated_names <- setdiff(grep("^treated_", names(dt), value = T), "treated_overlap")
-dt[,treated := 0]
-treated_zips <- unique(dt[treated_overlap >= 1, Zip5])
-dt[Zip5 %in% treated_zips,treated := 1]
-
 post_names <- grep("^post_", names(dt), value = T)
-dt[,post := 0]
-dt[,post := as.integer(rowSums(.SD) >= 1), .SDcols = post_names]
-
 label_names <- grep("^merge_label_", names(dt), value = T)
 dt[,merge_label := as.character(NA)]
 for (label in label_names){
@@ -117,15 +110,33 @@ for (label in label_names){
 }
 
 hhi_names <- grep("^delta_hhi_", names(dt), value = T)
+dt[,delta_hhi_alt := 0]
 dt[,delta_hhi := 0]
+dt[,treated := 0]
 # Delta HHI for multi-merged zips will be discontinuous jumps (add new delta HHI after every additional post period)
 for (i in 1:length(post_names)){
   post_var <- post_names[i]
   treated_var <- treated_names[i]
   hhi_var <- hhi_names[i]
   treated_zips <- unique(dt[get(treated_var) == 1, Zip5])
+  
+  #TODO: Check if multi-merge zips should be constant DHHI with last post var! 
+  dt[Zip5 %in% treated_zips & get(post_var) == 1, treated := 1]
+  
   dt[get(post_var) == 1 & Zip5 %in% treated_zips & delta_hhi > 0, delta_hhi := delta_hhi + get(hhi_var)]
   dt[Zip5 %in% treated_zips & delta_hhi == 0, delta_hhi := get(hhi_var)]
+  
+  # Define alternative DHHI
+  dt[Zip5 %in% treated_zips, delta_hhi_alt := delta_hhi_alt + get(hhi_var)]
+}
+
+# Define alternative treated var 
+dt[, treated_alt := treated]
+for (i in 1:length(post_names)){
+  post_var <- post_names[i]
+  treated_var <- treated_names[i]
+  treated_zips <- unique(dt[get(treated_var) == 1, Zip5])
+  dt[post_var == 0 & Zip5 %in% treated_zips, treated_alt := 0]
 }
 
 # ============= Diagnostics ===================================================
@@ -170,17 +181,17 @@ dt_tmp[,time_trend := year - min_na(year)]
 # We will need to remove the zips that we only observe for 1 period
 dt_tmp[,n_zip_trend := uniqueN(.SD[!is.na(log_sqft) & !is.na(tot_unit_val), time_trend]), Zip5]
 
-reg0 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg1 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg2 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg3 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg4 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
-reg5 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + factor(delta_hhi):time_trend|0|Zip5, data = dt_tmp)
-reg6 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg7 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+reg0 <- felm(log_rent ~ delta_hhi:treated + delta_hhi:treated:merge_firm_owned|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg1 <- felm(log_rent ~ delta_hhi:treated + delta_hhi:treated:merge_firm_owned + log_sqft|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg2 <- felm(log_rent ~ delta_hhi:treated + delta_hhi:treated:merge_firm_owned + log_sqft + tot_unit_val|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg3 <- felm(log_rent ~ delta_hhi:treated + delta_hhi:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg4 <- felm(log_rent ~ delta_hhi:treated + delta_hhi:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+reg5 <- felm(log_rent ~ delta_hhi:treated + delta_hhi:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg6 <- felm(log_rent ~ delta_hhi:treated + delta_hhi:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+reg7 <- felm(log_rent ~ delta_hhi:treated + delta_hhi:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|factor(year) + Zip5|0|Zip5, data = dt_tmp)
 
-zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No","No", "Yes","No", "No", "Yes")
-hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "No", "Yes", "No", "No")
+zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No","No", "Yes","No", "Yes", "No")
+hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "No", "Yes", "No", "Yes")
 lines <- list(zip_trend_line, hhi_trend_line)
 out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7,
                                 #column.labels = c("Log Rent"),
@@ -204,39 +215,23 @@ note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
 out[grepl("Note",out)] <- note.latex
 cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=F)
 
-# Robustness check -- remove multi-merge zips ---------
-dt_nomulti <- dt_tmp[multi_merge == 0]
+# Robustness check -- use alt spec for multi-merge ---------
+reg0 <- felm(log_rent ~ delta_hhi_alt:treated_alt + delta_hhi_alt:treated_alt:merge_firm_owned|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg1 <- felm(log_rent ~ delta_hhi_alt:treated_alt + delta_hhi_alt:treated_alt:merge_firm_owned + log_sqft|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg2 <- felm(log_rent ~ delta_hhi_alt:treated_alt + delta_hhi_alt:treated_alt:merge_firm_owned + log_sqft + tot_unit_val|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg3 <- felm(log_rent ~ delta_hhi_alt:treated_alt + delta_hhi_alt:treated_alt:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg4 <- felm(log_rent ~ delta_hhi_alt:treated_alt + delta_hhi_alt:treated_alt:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+reg5 <- felm(log_rent ~ delta_hhi_alt:treated_alt + delta_hhi_alt:treated_alt:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi_alt:time_trend|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg6 <- felm(log_rent ~ delta_hhi_alt:treated_alt + delta_hhi_alt:treated_alt:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+reg7 <- felm(log_rent ~ delta_hhi_alt:treated_alt + delta_hhi_alt:treated_alt:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi_alt:time_trend|factor(year) + Zip5|0|Zip5, data = dt_tmp)
 
-# Save averages
-avg_rent <- round(mean_na(dt_nomulti$RentPrice), digits=2)
-avg_log_rent <- round(mean_na(dt_nomulti$log_rent), digits=2)
-avg_delta_hhi <- round(mean_na0(dt_nomulti[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi]), digits=2)
-avg_hhi <- round(mean_na0(dt_nomulti[,.(hhi = median_na(hhi)), .(Zip5)][,hhi]), digits=2)
-sd_delta_hhi <- round(sd(dt_nomulti[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi], na.rm=T), digits=2)
-sd_hhi <- round(sd(dt_nomulti[hhi != 0,.(hhi = median_na(hhi)), .(Zip5)][,hhi], na.rm=T), digits=2)
-
-# Time trend
-dt_nomulti[,time_trend := year - min_na(year)]
-
-# We will need to remove the zips that we only observe for 1 period
-dt_nomulti[,n_zip_trend := uniqueN(.SD[!is.na(log_sqft) & !is.na(tot_unit_val), time_trend]), Zip5]
-
-reg0 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned|factor(year) + Zip5|0|Zip5, data = dt_nomulti)
-reg1 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft|factor(year) + Zip5|0|Zip5, data = dt_nomulti)
-reg2 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val|factor(year) + Zip5|0|Zip5, data = dt_nomulti)
-reg3 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5|0|Zip5, data = dt_nomulti)
-reg4 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_nomulti[n_zip_trend >= 3])
-reg5 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + factor(delta_hhi):time_trend|0|Zip5, data = dt_nomulti)
-reg6 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5|0|Zip5, data = dt_nomulti)
-reg7 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_nomulti[n_zip_trend >= 3])
-
-zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No","No", "Yes","No", "No", "Yes")
-hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "No", "Yes", "No", "No")
+zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No","No", "Yes","No", "Yes", "No")
+hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "No", "Yes", "No", "Yes")
 lines <- list(zip_trend_line, hhi_trend_line)
 out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7,
                                 #column.labels = c("Log Rent"),
                                 add.lines = lines,
-                                title = "2-Way FE with delta HHI and firm owned indicator, All Treated Zips, No Multi-Merge"))
+                                title = "2-Way FE with delta HHI and firm owned indicator, All Treated Zips, Constant Multi-Merge DHHI"))
 
 # Wrap tabular environment in resizebox
 out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
@@ -273,19 +268,20 @@ sd_hhi <- round(sd(dt_tmp[hhi != 0,.(hhi = median_na(hhi)), .(Zip5)][,hhi], na.r
 dt_tmp[,time_trend := year - min_na(year)]
 
 # We will need to remove the zips that we only observe for 1 period
-dt_tmp[,n_zip_trend := uniqueN(.SD[!is.na(log_sqft) & !is.na(tot_unit_val), time_trend]), Zip5]
+dt_tmp[,n_zip_trend := uniqueN(.SD[!is.na(log_sqft) & !is.na(tot_unit_val) & 
+                                     !is.na(prop_unemp) & !is.na(median_household_income), time_trend]), Zip5]
 
-reg0 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg1 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg2 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg3 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg4 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
-reg5 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + factor(delta_hhi):time_trend|0|Zip5, data = dt_tmp)
-reg6 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg7 <- felm(log_rent ~ delta_hhi:post:treated + delta_hhi:post:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+reg0 <- felm(log_rent ~ delta_hhi:treated + delta_hhi:treated:merge_firm_owned|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg1 <- felm(log_rent ~ delta_hhi:treated + delta_hhi:treated:merge_firm_owned + log_sqft|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg2 <- felm(log_rent ~ delta_hhi:treated + delta_hhi:treated:merge_firm_owned + log_sqft + tot_unit_val|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg3 <- felm(log_rent ~ delta_hhi:treated + delta_hhi:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg4 <- felm(log_rent ~ delta_hhi:treated + delta_hhi:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+reg5 <- felm(log_rent ~ delta_hhi:treated + delta_hhi:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg6 <- felm(log_rent ~ delta_hhi:treated + delta_hhi:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+reg7 <- felm(log_rent ~ delta_hhi:treated + delta_hhi:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|factor(year) + Zip5|0|Zip5, data = dt_tmp)
 
-zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No","No", "Yes","No", "No", "Yes")
-hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "No", "Yes", "No", "No")
+zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No","No", "Yes","No", "Yes", "No")
+hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "No", "Yes", "No", "Yes")
 lines <- list(zip_trend_line, hhi_trend_line)
 out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7,
                                 #column.labels = c("Log Rent"),
@@ -345,8 +341,8 @@ for (merge_id in unique(mergers$MergeID_1)){
   treated_var <- paste0("treated_", merge_id)
   post_var <- paste0("post_", merge_id)
   delta_hhi_var <- paste0("delta_hhi_", merge_id)
-  dt[, treated := get(treated_var)]
-  dt[, post := get(post_var)]
+  dt[, treated := 0]
+  dt[get(treated_var) == 1 & get(post_var) == 1, treated := 1]
   dt[,delta_hhi := get(delta_hhi_var)]
   
   # 1) Control = merging-zip non-affected 
@@ -368,19 +364,19 @@ for (merge_id in unique(mergers$MergeID_1)){
   avg_delta_hhi <- round(mean_na0(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi]), digits=2)
   sd_delta_hhi <- round(sd(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi], na.rm=T), digits=2)
   
-  reg0 <- felm(log_rent ~ delta_hhi:treated:post|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg1 <- felm(log_rent ~ delta_hhi:treated:post + log_sqft|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg2 <- felm(log_rent ~ delta_hhi:treated:post + log_sqft + tot_unit_val|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg3 <- felm(log_rent ~ delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg4 <- felm(log_rent ~ delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
-  reg5 <- felm(log_rent ~ delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + factor(delta_hhi):time_trend|0|Zip5, data = dt_tmp)
-  reg6 <- felm(log_rent ~ delta_hhi:treated:post:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
-  reg7 <- felm(log_rent ~ delta_hhi:treated:post:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + factor(delta_hhi):time_trend|0|Zip5, data = dt_tmp)
+  reg0 <- felm(log_rent ~ delta_hhi:treated|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg1 <- felm(log_rent ~ delta_hhi:treated + log_sqft|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg2 <- felm(log_rent ~ delta_hhi:treated + log_sqft + tot_unit_val|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg3 <- felm(log_rent ~ delta_hhi:treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg4 <- felm(log_rent ~ delta_hhi:treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+  reg5 <- felm(log_rent ~ delta_hhi:treated + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg6 <- felm(log_rent ~ delta_hhi:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+  reg7 <- felm(log_rent ~ delta_hhi:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
   
-  # reg4 <- felm(rent_sqft ~  treated:post, data = dt_tmp)
-  # reg5 <- felm(rent_sqft ~  treated:post + tot_unit_val, data = dt_tmp)
-  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "No", "Yes", "No", "No", "Yes")
-  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "No", "Yes", "No", "No")
+  # reg4 <- felm(rent_sqft ~  treated, data = dt_tmp)
+  # reg5 <- felm(rent_sqft ~  treated + tot_unit_val, data = dt_tmp)
+  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "No", "Yes", "No", "Yes", "No")
+  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "No", "Yes", "No", "Yes")
   lines <- list(zip_trend_line, hhi_trend_line)
 
   out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7,
@@ -406,7 +402,8 @@ for (merge_id in unique(mergers$MergeID_1)){
   
   cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
   
-  # 2) Control = merging firms in unmerged zips
+  # 2) Control = merging firms in unmerged zips; include all c1 properties as treated now
+  dt[get(post_var) == 1, treated := get(sample_var)]
   sample_var <- paste0("sample_", merge_id, "_c2")
   dt_tmp <- dt[(year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year & get(sample_var) == 1]
   
@@ -425,25 +422,25 @@ for (merge_id in unique(mergers$MergeID_1)){
   avg_delta_hhi <- round(mean_na0(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi]), digits=2)
   sd_delta_hhi <- round(sd(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi], na.rm=T), digits=2)
   
-  reg0 <- felm(log_rent ~  delta_hhi:treated:post|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg1 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg2 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft + tot_unit_val|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg3 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg4 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
-  reg5 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + factor(delta_hhi):time_trend|0|Zip5, data = dt_tmp)
-  reg6 <- felm(log_rent ~ delta_hhi:treated:post:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
-  reg7 <- felm(log_rent ~ delta_hhi:treated:post:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + factor(delta_hhi):time_trend|0|Zip5, data = dt_tmp)
+  reg0 <- felm(log_rent ~  delta_hhi:treated|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg1 <- felm(log_rent ~  delta_hhi:treated + log_sqft|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg2 <- felm(log_rent ~  delta_hhi:treated + log_sqft + tot_unit_val|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg3 <- felm(log_rent ~  delta_hhi:treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg4 <- felm(log_rent ~  delta_hhi:treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+  reg5 <- felm(log_rent ~  delta_hhi:treated + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg6 <- felm(log_rent ~ delta_hhi:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+  reg7 <- felm(log_rent ~ delta_hhi:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
   
-  # reg4 <- felm(rent_sqft ~  treated:post, data = dt_tmp)
-  # reg5 <- felm(rent_sqft ~  treated:post + tot_unit_val, data = dt_tmp)
-  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "No", "Yes", "No", "No", "Yes")
-  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "No", "Yes", "No", "No")
+  # reg4 <- felm(rent_sqft ~  treated, data = dt_tmp)
+  # reg5 <- felm(rent_sqft ~  treated + tot_unit_val, data = dt_tmp)
+  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "No", "Yes", "No", "Yes", "No")
+  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "No", "Yes", "No", "Yes")
   lines <- list(zip_trend_line, hhi_trend_line)
   
   out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7,
                                   #column.labels = c("Log Rent"), 
                                   add.lines = lines,
-                                  title = paste0("2-Way FE, Merger: ", merge_label,", Control: Within-Zip Non-Firm")))
+                                  title = paste0("2-Way FE, Merger: ", merge_label,", Control: Outside-Zip Merging Firm")))
   
   # Wrap tabular environment in resizebox
   out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
@@ -479,25 +476,25 @@ for (merge_id in unique(mergers$MergeID_1)){
   avg_hhi <- round(mean_na0(dt_tmp[,.(hhi = median_na(hhi)), .(Zip5)][,hhi]), digits=2)
   sd_hhi <- round(sd(dt_tmp[hhi != 0,.(hhi = median_na(hhi)), .(Zip5)][,hhi], na.rm=T), digits=2)
 
-  reg0 <- felm(log_rent ~  delta_hhi:treated:post|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg1 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg2 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft + tot_unit_val|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg3 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
-  reg4 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
-  reg5 <- felm(log_rent ~  delta_hhi:treated:post + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + factor(delta_hhi):time_trend|0|Zip5, data = dt_tmp)
-  reg6 <- felm(log_rent ~ delta_hhi:treated:post:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
-  reg7 <- felm(log_rent ~ delta_hhi:treated:post:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + factor(delta_hhi):time_trend|0|Zip5, data = dt_tmp)
+  reg0 <- felm(log_rent ~  delta_hhi:treated|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg1 <- felm(log_rent ~  delta_hhi:treated + log_sqft|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg2 <- felm(log_rent ~  delta_hhi:treated + log_sqft + tot_unit_val|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg3 <- felm(log_rent ~  delta_hhi:treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg4 <- felm(log_rent ~  delta_hhi:treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+  reg5 <- felm(log_rent ~  delta_hhi:treated + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
+  reg6 <- felm(log_rent ~ delta_hhi:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+  reg7 <- felm(log_rent ~ delta_hhi:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|Zip5 + factor(year)|0|Zip5, data = dt_tmp)
   
-  # reg4 <- felm(rent_sqft ~  treated:post, data = dt_tmp)
-  # reg5 <- felm(rent_sqft ~  treated:post + tot_unit_val, data = dt_tmp)
-  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "No", "Yes", "No", "No", "Yes")
-  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "No", "Yes", "No", "No")
+  # reg4 <- felm(rent_sqft ~  treated, data = dt_tmp)
+  # reg5 <- felm(rent_sqft ~  treated + tot_unit_val, data = dt_tmp)
+  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "No", "Yes", "No", "Yes", "No")
+  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "No", "Yes", "No", "Yes")
   lines <- list(zip_trend_line, hhi_trend_line)
   
   out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7,
                                   #column.labels = c("Log Rent"), 
                                   add.lines = lines,
-                                  title = paste0("2-Way FE, Merger: ", merge_label,", Control: Within-Zip Non-Firm")))
+                                  title = paste0("2-Way FE, Merger: ", merge_label,", Control: Single Firm Zips")))
   
   # Wrap tabular environment in resizebox
   out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)

@@ -64,9 +64,9 @@ print(paste0("Dropping ", nrow(dt[Zip5 %in% bad_zips]), " rows of zips with unde
 dt <- dt[!(Zip5 %in% bad_zips)]
 
 # Drop outlier rents 
-n_bad_rents <- nrow(dt[RentPrice >= 1e5])
-print(paste0("Dropping ", n_bad_rents, " rows with rent higher than 100k."))
-dt <- dt[RentPrice < 1e5]
+n_bad_rents <- nrow(dt[RentPrice >= 1e5 & RentPrice <= 100])
+print(paste0("Dropping ", n_bad_rents, " rows with rent higher than 100k and lower than 100."))
+dt <- dt[RentPrice < 1e5 & RentPrice > 100]
 
 # Define delta hhi 
 dt[, zip_firm := paste0(Zip5, Merger_Owner_Name)]
@@ -156,6 +156,13 @@ length(setdiff(zip_zips, prop_zips))
 quantile(dt_prop[delta_hhi > 0, delta_hhi])
 quantile(dt_zip[!is.na(ZORI) & delta_hhi > 0, delta_hhi])
 
+# Plot DHHI distribution for each merger
+unique_hhi <- unique(dt_zip[,.(Zip5, delta_hhi_1, delta_hhi_2, delta_hhi_4, delta_hhi_5)])
+unique_hhi_long <- melt(unique_hhi, id.vars = c("Zip5"))
+ggplot(unique_hhi_long, aes(x = variable, y = value)) + geom_point() + 
+  labs(x = "Merger", y = "Delta HHI", title = "DHHI Distribution by Merger") + 
+  ggsave(paste0(mergers_path, "figs/diagnostics/dhhi_distr.png"))
+
 # Plot trends against quartiles of DHHI 
 dt_prop[,monthyear := as.POSIXct(ymd(year, truncated = 2))]
 setnames(dt_zip, "log_zori", "log_rent")
@@ -191,10 +198,11 @@ for (i in c(1,2,4,5)){
   sample_var <- paste0("sample_", i)
   sample_prop_var <- paste0("sample_", i, "_c1")
   merge_label_var <- paste0("merge_label_", i)
+  dhhi_var <- paste0("delta_hhi_", i)
   merge_label <- unique(dt_prop[get(sample_prop_var) == 1 & get(merge_label_var) != "", get(merge_label_var)])
-  dt_prop[delta_hhi > 0 & get(sample_prop_var) == 1,dhhi_quart := cut(delta_hhi, breaks=c(quantile(delta_hhi,probs=seq(0,1,by=0.5),na.rm=T)),
+  dt_prop[get(dhhi_var) > 0 & get(sample_prop_var) == 1,dhhi_quart := cut(get(dhhi_var), breaks=c(quantile(get(dhhi_var),probs=seq(0,1,by=0.5),na.rm=T)),
                                           labels=c("Upper 50%", "Lower 50%"), include.lowest = T)]
-  dt_zip[delta_hhi > 0 & get(sample_var) == 1,dhhi_quart := cut(delta_hhi, breaks=c(quantile(delta_hhi,probs=seq(0,1,by=0.5),na.rm=T)),
+  dt_zip[get(dhhi_var) > 0 & get(sample_var) == 1,dhhi_quart := cut(get(dhhi_var), breaks=c(quantile(get(dhhi_var),probs=seq(0,1,by=0.5),na.rm=T)),
                                          labels=c("Upper 50%", "Lower 50%"), include.lowest = T)]
   
   dt_tot <- rbindlist(list(dt_prop[!is.na(dhhi_quart)], dt_zip[!is.na(dhhi_quart)]), fill = T)
