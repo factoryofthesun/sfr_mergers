@@ -337,6 +337,8 @@ for (merge_id in unique(mergers$MergeID_1)){
   merge_label <- unique(mergers[MergeID_1 == merge_id, label])
   merge_announce_year <- unique(mergers[MergeID_1 == merge_id, year_announced])
   merge_eff_year <- unique(mergers[MergeID_1 == merge_id, year_effective])
+  merge_target <- unique(mergers[MergeID_1 == merge_id, TargetName])
+  merge_acquiror <- unique(mergers[MergeID_1 == merge_id, AcquirorName])
   
   # Relevant column names based on merge id
   treated_var <- paste0("treated_", merge_id)
@@ -345,6 +347,11 @@ for (merge_id in unique(mergers$MergeID_1)){
   dt[, treated := 0]
   dt[get(treated_var) == 1 & get(post_var) == 1, treated := 1]
   dt[,delta_hhi := get(delta_hhi_var)]
+  
+  # Fix target and acquiror labels
+  dt[,merge_position := ""]
+  dt[Merger_Owner_Name %in% merge_target, merge_position := "target"]
+  dt[Merger_Owner_Name %in% merge_acquiror, merge_position := "acquiror"]
   
   # 1) Control = merging-zip non-affected 
   sample1_var <- paste0("sample_", merge_id, "_c1")

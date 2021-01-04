@@ -187,11 +187,11 @@ for (merge_id in unique(mergers$MergeID_1)){
   dt[Zip5 %in% treated_zips, (sample_1_var) := 1]
   
   sample_2_var <- paste0("sample_", merge_id, "_c2")
-  dt[, (sample_2_var) := get(treated_var)]
-  dt[!(Zip5 %in% treated_zips) & (Merger_Owner_Name %in% target_name | Merger_Owner_Name == acquiror_name), (sample_2_var) := 1]
+  dt[, (sample_2_var) := get(sample_1_var)]
+  dt[(Merger_Owner_Name %in% target_name | Merger_Owner_Name == acquiror_name), (sample_2_var) := 1]
   
   sample_3_var <- paste0("sample_", merge_id, "_c3")
-  dt[, (sample_3_var) := get(treated_var)]
+  dt[, (sample_3_var) := get(sample_1_var)]
   dt[Zip5 %in% single_firm_zips, (sample_3_var) := 1]
   
   for (var in vars){
