@@ -328,7 +328,7 @@ avg_log_rent <- round(mean_na0(dt_fe$median_log_rent), 2)
 avg_hhi <- round(mean_na0(dt_fe$hhi), 2)
 avg_delta_hhi <- round(mean_na0(dt_fe$delta_hhi), 2)
 sd_hhi <- round(sd(dt_fe[hhi!=0, hhi]), 2)
-sd_delta_hhi <- round(sd(dt_fe[delta_hhi!=0, hhi]), 2)
+sd_delta_hhi <- round(sd(dt_fe[delta_hhi!=0, delta_hhi]), 2)
 
 # Include zip time trend
 dt_fe[,min_monthyear := min_na(monthyear)]
@@ -403,7 +403,7 @@ avg_log_rent <- round(mean_na0(dt_fe$median_log_rent), 2)
 avg_hhi <- round(mean_na0(dt_fe$hhi), 2)
 avg_delta_hhi <- round(mean_na0(dt_fe$delta_hhi), 2)
 sd_hhi <- round(sd(dt_fe[hhi!=0, hhi]), 2)
-sd_delta_hhi <- round(sd(dt_fe[delta_hhi!=0, hhi]), 2)
+sd_delta_hhi <- round(sd(dt_fe[delta_hhi!=0, delta_hhi]), 2)
 
 # Include zip time trend
 dt_fe[,min_monthyear := min_na(monthyear)]
@@ -549,7 +549,7 @@ for (merge_id in unique(mergers$MergeID_1)){
   avg_hhi <- round(mean_na0(dt_tmp$hhi), 2)
   avg_delta_hhi <- round(mean_na0(dt_tmp$delta_hhi), 2)
   sd_hhi <- round(sd(dt_tmp[hhi!=0, hhi]), 2)
-  sd_delta_hhi <- round(sd(dt_tmp[delta_hhi!=0, hhi]), 2)
+  sd_delta_hhi <- round(sd(dt_tmp[delta_hhi!=0, delta_hhi]), 2)
   
   # Add linear time trend 
   dt_tmp[, min_monthyear := min_na(monthyear)]
@@ -658,7 +658,7 @@ for (merge_id in unique(mergers$MergeID_1)){
   avg_hhi <- round(mean_na0(dt_tmp$hhi), 2)
   avg_delta_hhi <- round(mean_na0(dt_tmp$delta_hhi), 2)
   sd_hhi <- round(sd(dt_tmp[hhi!=0, hhi]), 2)
-  sd_delta_hhi <- round(sd(dt_tmp[delta_hhi!=0, hhi]), 2)
+  sd_delta_hhi <- round(sd(dt_tmp[delta_hhi!=0, delta_hhi]), 2)
   
   # Add linear time trend 
   setorder(dt_tmp, monthyear)

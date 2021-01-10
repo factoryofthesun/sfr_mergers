@@ -60,11 +60,18 @@ dt <- merge(dt, acs_zip, by.x = c("Zip5", "year"), by.y = c("zip", "shift_year")
 # Zip is factor
 dt[,Zip5 := factor(Zip5)]
 
+# Merger owned zips will always be owned by same firm after first appearance
+dt[,merge_own_cum := cumsum(Merger_Owner_Name != ""), id]
+dt[merge_own_cum > 0, Merger_Owner_Name := argmax_na(.SD[Merger_Owner_Name != "", Merger_Owner_Name]), id]
+
 # Document and remove multi-merge zips
 n_multi_drop <- nrow(dt[multi_merge == 1])
-print(paste0("There are ", n_multi_drop, " observations that are multi-merge affected out of ", nrow(dt), " rows..."))
+treated_zips <- unique(dt[treated_overlap >= 1, Zip5])
+n_affected <- nrow(dt[Zip5 %in% treated_zips])
+print(paste0("There are ", n_multi_drop, " observations that are multi-merge affected out of ", 
+             n_affected, " rows..."))
 
-treated_zips <- unique(dt[treated == 1, Zip5])
+treated_zips <- unique(dt[treated_overlap >= 1, Zip5])
 dt_multi_check <- dt[year >= 2007 & Zip5 %in% treated_zips,.(median_rent = median_na0(RentPrice)), .(multi_merge, year)]
 ggplot(dt_multi_check, aes(x = year, y = median_rent, color = factor(multi_merge))) + geom_line() + 
   labs(title = "Median Rent for Treated Zips") + ggsave(paste0(mergers_path, "figs/diagnostics/multi_merge_property_rent.png"))
@@ -252,7 +259,7 @@ out[grepl("Note",out)] <- note.latex
 
 cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
 
-# Robustness check -- all values in control groups 1 and 2
+# Robustness check -- all values in control groups 1 and 2 --------------------
 sample_cols <- grep("_c1|_c2", names(dt), value=T)
 dt_tmp[, sample_1_and_2 := rowSums(.SD), .SDcols=sample_cols]
 dt_tmp <- dt_tmp[sample_1_and_2 >= 1]
