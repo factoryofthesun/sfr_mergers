@@ -31,7 +31,7 @@ mergers_path <- "/gpfs/loomis/project/humphries/rl874/mergers_project/"
 prepost_figs <- "/gpfs/loomis/project/humphries/rl874/mergers_project/figs/prepost/"
 
 # Read and concat merger identified panel data
-files <- paste0(data_path, grep("_mergers_mls\\.csv$", list.files(data_path), value = T))
+files <- paste0(data_path, grep("_mergers\\.csv$", list.files(data_path), value = T))
 size <- sum_na(file.info(files)$size)/1e9
 print(paste("Total size of merger state files:", size, "GB"))
 
@@ -231,7 +231,11 @@ for (merge_id in unique(mergers$MergeID_1)){
 
 # Fill rest of owner hhi variable
 dt[is.na(owner_hhi) | owner_hhi == "", owner_hhi := Merger_Owner_Impute]
-dt[(is.na(owner_hhi) | owner_hhi == "") & owner_smty_addr != "", owner_hhi := as.character(.GRP), .(owner_smty_addr)]
+dt[(is.na(owner_hhi) | owner_hhi == "") & owner_smty_addr != "" & !is.na(owner_smty_addr), owner_hhi := as.character(.GRP), .(owner_smty_addr)]
+
+# Different address but same name will also be considered same owner 
+dt[(is.na(owner_hhi) | owner_hhi == "") & owner_name_clean != "" & !is.na(owner_name_clean), 
+   owner_hhi := argmax_na(.SD[!is.na(owner_hhi) & owner_hhi != "", owner_hhi]), .(owner_name_clean)]
 dt[owner_hhi == "", owner_hhi := NA]
 
 # Zip level event-time charts --------------------------------------------------------------

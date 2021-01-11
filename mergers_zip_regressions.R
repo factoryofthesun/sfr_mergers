@@ -621,6 +621,9 @@ for (merge_id in unique(mergers$MergeID_1)){
   coefs <- coefs * avg_delta_hhi
   se <- event_reg$se[-1:-2] * 1.96
   se[is.na(se)] <- se[which(event_months == 0)]
+  
+  # TODO: WHY IS REGRESSION RANK DEFICIENT + DROPPING SOME MONTHS????
+  months <- months[1:length(coefs)]
   event_month_dt <- data.table(coefs = coefs, event_months = event_months, se_ub = coefs + se, se_lb = coefs - se, date = months)
   ggplot(event_month_dt[event_months >= -30 & event_months <= 40], aes(x = date, y = coefs)) + geom_line() + geom_point(shape=16, size=1) + 
     geom_ribbon(aes(ymin = se_lb, ymax = se_ub), color="grey", alpha=0.5) + geom_vline(aes(linetype = "Merge Effective", xintercept = merge_eff_date)) + 
@@ -702,7 +705,7 @@ for (merge_id in unique(mergers$MergeID_1)){
   cat(paste(out, "\n\n"), file = paste0(estimate_path, "zip_did.tex"), append=T)
   
   # Event time coefficient plots -- keep ALL dates
-  dt_tmp <- dt[get(sample_var) == 1]
+  dt_tmp <- dt[get(sample_var) == 1 & multi_merge == 0]
   dt_tmp[, treated := get(treated_var)]
   dt_tmp[, post := get(post_var)]
   dt_tmp[,delta_hhi := get(hhi_var)]
@@ -718,7 +721,7 @@ for (merge_id in unique(mergers$MergeID_1)){
                     data = dt_tmp)
   
   # Plot event time coefficients with 1 SE shading 
-  varnames <- rownames(event_reg$coefficients)[-1:-2]
+  varnames <- rownames(event_reg$coefficients)[-1:-4]
   event_months <- as.integer(gsub("delta_hhi:event_month", "", varnames, fixed = T))
   months <- sort(unique(dt_tmp$monthyear))
   
@@ -731,6 +734,10 @@ for (merge_id in unique(mergers$MergeID_1)){
   coefs <- coefs * avg_delta_hhi
   se <- event_reg$se[-1:-2] * 1.96
   se[is.na(se)] <- se[which(event_months == 0)]
+  
+  # TODO: WHY IS REGRESSION RANK DEFICIENT + DROPPING SOME MONTHS????
+  months <- months[1:length(coefs)]
+  
   event_month_dt <- data.table(coefs = coefs, event_months = event_months, se_ub = coefs + se, se_lb = coefs - se, date = months)
   ggplot(event_month_dt[event_months >= -30 & event_months <= 40], aes(x = date, y = coefs)) + geom_line() + geom_point(shape=16, size=1) + 
     geom_ribbon(aes(ymin = se_lb, ymax = se_ub), color="grey", alpha=0.5) + geom_vline(aes(linetype = "Merge Effective", xintercept = merge_eff_date)) + 
