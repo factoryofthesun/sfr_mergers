@@ -608,18 +608,18 @@ for (merge_id in unique(mergers$MergeID_1)){
                     data = dt_tmp)
   
   # Plot event time coefficients with 1 SE shading 
-  varnames <- rownames(event_reg$coefficients)[-1:-2]
+  varnames <- rownames(event_reg$coefficients)[-1:-4]
   event_months <- as.integer(gsub("delta_hhi:event_month", "", varnames, fixed = T))
   months <- sort(unique(dt_tmp$monthyear))
   
   # Enforce reference level at event month 0
-  coefs <- event_reg$coefficients[-1:-2] 
+  coefs <- event_reg$coefficients[-1:-4] 
   coefs[is.na(coefs)] <- 0
   ref_coef <- coefs[which(event_months == 0)]
   coefs <- coefs - ref_coef
   
   coefs <- coefs * avg_delta_hhi
-  se <- event_reg$se[-1:-2] * 1.96
+  se <- event_reg$se[-1:-4] * 1.96
   se[is.na(se)] <- se[which(event_months == 0)]
   
   # TODO: WHY IS REGRESSION RANK DEFICIENT + DROPPING SOME MONTHS????
@@ -726,13 +726,13 @@ for (merge_id in unique(mergers$MergeID_1)){
   months <- sort(unique(dt_tmp$monthyear))
   
   # Enforce reference level at event month 0
-  coefs <- event_reg$coefficients[-1:-2] 
+  coefs <- event_reg$coefficients[-1:-4] 
   coefs[is.na(coefs)] <- 0
   ref_coef <- coefs[which(event_months == 0)]
   coefs <- coefs - ref_coef
   
   coefs <- coefs * avg_delta_hhi
-  se <- event_reg$se[-1:-2] * 1.96
+  se <- event_reg$se[-1:-4] * 1.96
   se[is.na(se)] <- se[which(event_months == 0)]
   
   # TODO: WHY IS REGRESSION RANK DEFICIENT + DROPPING SOME MONTHS????

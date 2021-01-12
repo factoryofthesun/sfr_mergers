@@ -455,15 +455,16 @@ fwrite(dt_zip_month, paste0(data_path, "panel_zip_hhi.csv"))
 # Save sample panel with HHI
 sample_names <- grep("^sample_", names(dt), value = T)
 dt[,sample_overlap := rowSums(.SD, na.rm=T), .SDcols = sample_names]
-dt_tot <- merge(dt[sample_overlap >= 1], dt_hhi, by = c("Zip5", "year"), all.x = T)
-dt_tot <- merge(dt_tot, hhi_merge_wide, by = c("Zip5"), all.x = T)
+dt <- dt[sample_overlap >= 1]
+dt <- merge(dt, dt_hhi, by = c("Zip5", "year"), all.x = T)
+dt <- merge(dt, hhi_merge_wide, by = c("Zip5"), all.x = T)
 
 # NA delta HHI is 0 by definition
 hhi_names <- grep("^delta_hhi_", names(hhi_merge_wide), value = T)
 for (hhi_col in hhi_names){
-  dt_tot[is.na(get(hhi_col)), (hhi_col) := 0]
+  dt[is.na(get(hhi_col)), (hhi_col) := 0]
 }
-fwrite(dt_tot, paste0(data_path, "panel_hhi.csv"))
+fwrite(dt, paste0(data_path, "panel_hhi.csv"))
 
 # Save rent-restricted panel 
-fwrite(dt_tot[!is.na(RentPrice) & RentPrice != 0], paste0(data_path, "panel_hhi_rent.csv"))
+fwrite(dt[!is.na(RentPrice) & RentPrice != 0], paste0(data_path, "panel_hhi_rent.csv"))
