@@ -28,11 +28,11 @@ figs_path <- "/gpfs/loomis/project/humphries/rl874/mergers_project/figs/map/"
 
 # Read mergers data and restrict to merge-owned properties
 mergers <- fread(paste0(mergers_path, "panel_hhi.csv"), 
-                 select=c("fips", "apn_unformatted", "Merger_Owner_Name", "st_lat", "st_long","st_state"))
-# mergers <- fread(paste0(mergers_path, "panel_hhi.csv"),select=c("fips", "apn_unformatted", "Merger_Owner_Name", "st_lat", "st_long","st_state"), nrows = 1e5)
+                 select=c("fips", "apn_unformatted", "Merger_Owner_Fill", "RentPrice", "st_lat", "st_long","st_state"))
+# mergers <- fread(paste0(mergers_path, "panel_hhi.csv"),select=c("fips", "apn_unformatted", "Merger_Owner_Fill", "st_lat", "st_long","st_state"), nrows = 1e5)
 # library(vroom)
-# mergers <- as.data.table(vroom(paste0(mergers_path, "panel_hhi.csv"), col_select=c("fips", "apn_unformatted", "Merger_Owner_Name", "st_lat", "st_long","st_state"), n_max = 1e5))
-mergers <- mergers[!is.na(Merger_Owner_Name) & Merger_Owner_Name != ""]
+# mergers <- as.data.table(vroom(paste0(mergers_path, "panel_hhi.csv"), col_select=c("fips", "apn_unformatted", "Merger_Owner_Fill", "st_lat", "st_long","st_state"), n_max = 1e5))
+mergers <- mergers[!is.na(Merger_Owner_Fill) & Merger_Owner_Fill != ""]
 
 # Read and merge geocoded addresses
 states <- c("AZ", "CA", "FL", "IL", "GA", "MI", "NC", "TX", "WA", "CT")
@@ -69,10 +69,18 @@ colors <- c("coral1", "dodgerblue", "darkorange", "forestgreen", "violet", "brow
 states <- map_data("state")
 ggplot() + geom_polygon(data = states, aes(x = long, y = lat, group=group), color = "black", fill = "white") + 
   coord_fixed(1.3) + 
-  geom_point(data=mergers[!is.na(Merger_Owner_Name)], aes(x = X, y = Y, color = Merger_Owner_Name),size = 0.1,shape=16) + 
+  geom_point(data=mergers[!is.na(Merger_Owner_Fill)], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
   scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size = 3))) + 
   labs(title = "SFR Owners", color="Firm") + 
   ggsave(paste0(figs_path, "US.png"))
+
+# Plot separate on just properties with rent price
+ggplot() + geom_polygon(data = states, aes(x = long, y = lat, group=group), color = "black", fill = "white") + 
+  coord_fixed(1.3) + 
+  geom_point(data=mergers[!is.na(Merger_Owner_Fill) & !is.na(RentPrice) & RentPrice != ""], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
+  scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size = 3))) + 
+  labs(title = "SFR Owners", color="Firm") + 
+  ggsave(paste0(figs_path, "US_rent.png"))
 
 # Plot each state individually 
 for (state in unique(mergers$st_state)){
@@ -87,10 +95,18 @@ for (state in unique(mergers$st_state)){
   
   ggplot() + geom_polygon(data = tmp_state, aes(x = long, y = lat, group=group), color = "black", fill = "white") + 
     coord_fixed(1.3) + 
-    geom_point(data=tmp[!is.na(Merger_Owner_Name)], aes(x = X, y = Y, color = Merger_Owner_Name),size = 0.1,shape=16) + 
+    geom_point(data=tmp[!is.na(Merger_Owner_Fill)], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
     scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size = 3))) + 
     labs(title = paste0("SFR Owners in ", state), color="Firm") + 
     ggsave(paste0(figs_path, state, ".png"))
+  
+  # Plot separate on just properties with rent price
+  ggplot() + geom_polygon(data = tmp_state, aes(x = long, y = lat, group=group), color = "black", fill = "white") + 
+    coord_fixed(1.3) + 
+    geom_point(data=tmp[!is.na(Merger_Owner_Fill) & !is.na(RentPrice) & RentPrice != ""], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
+    scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size = 3))) + 
+    labs(title = paste0("SFR Owners in ", state), color="Firm") + 
+    ggsave(paste0(figs_path, state, "_rent.png"))
 }
 
 

@@ -19,6 +19,7 @@ library(readxl)
 library(rlist)
 library(bit64)
 library(argparse)
+library(stringi)
 setwd("~/project")
 
 source("/gpfs/loomis/project/humphries/rl874/rent_project/code/cleaning/fn_dedup_rent.R")
@@ -47,17 +48,97 @@ print("Available memory after reading and binding")
 getAvailMem() 
 
 # ============= (0) Preprocessing ===================================================
+# Impute zips (not sure if necessary)
+# dt[, Zip5 := median_na(Zip5), id]
+# dt[, Zip5 := as.integer(Zip5)]
+paste0("# rows with NA zips: ", nrow(dt[is.na(Zip5)]))
+
 # Drop missing Zip5 and out of bounds years
-dt <- dt[!is.na(Zip5) & year <= 2020]
+dt <- dt[!is.na(Zip5) & year <= 2020 & year >= 2000]
+
+# Redefine id
+dt[, id := .GRP, .(fips, apn_unformatted, apn_num)]
+
+# Restrict to only SFR properties
+sfr_ids <- unique(dt[prop_type_clean %in% c(10, 11), id])
+dt <- dt[id %in% sfr_ids]
+
+# Drop low property count zips 
+bad_zips <- dt[,.(N = uniqueN(id)), .(Zip5)][N < 50, Zip5]
+print(paste0("Dropping ", nrow(dt[Zip5 %in% bad_zips]), " rows of zips with under 50 residential properties out of ", 
+             nrow(dt), " total rows."))
+dt <- dt[!(Zip5 %in% bad_zips)]
+
+# Frontfill owner names
+setorder(dt, id, year)
+dt[,deed_event_cum := cumsum(!is.na(deed_event))] # This works bc data is sorted by id, year
+id_deed_change <- dt[,c(TRUE, (id[-1] != id[-.N]) | (deed_event_cum[-1] != deed_event_cum[-.N]))]
+dt[, owner_name_clean := owner_name_clean[cummax(((!is.na(owner_name_clean) & owner_name_clean != "") | id_deed_change) * .I)]] 
 
 # Clean variables -------------------------------------------
 # Data types
 dt[,year := as.integer(year)]
 dt[,Zip5 := as.integer(Zip5)]
 
+# Check and clean Beazer properties
+beazer_search <- c("rental", "pre owned", "preowned")
+print(paste0("Cleaning Beazer property identifiation. Pre-counts: ", uniqueN(dt[Merger_Owner_Impute == "Beazer Pre-Owned Rental Homes", id])))
+dt[Merger_Owner_Impute == "Beazer Pre-Owned Rental Homes" & 
+     grepl(paste0(beazer_search, collapse = "|"), owner_name_clean, ignore.case = T), good_beazer := 1]
+dt[Merger_Owner_Name == "Beazer Pre-Owned Rental Homes", Merger_Owner_Name := NA]
+dt[good_beazer == 1, Merger_Owner_Name := "Beazer Pre-Owned Rental Homes"]
+print(paste0("Post-counts: ", uniqueN(dt[good_beazer == 1, id])))
+
+# Impute owner names using smty addresses 
+dt[is.na(Merger_Owner_Name), Merger_Owner_Name := ""]
+for (name in unique(dt[Merger_Owner_Name != "", Merger_Owner_Name])){
+  print(paste0("Pre-Impute Top owners for: ", name))
+  print(dt[Merger_Owner_Name == name,.N, owner_name_clean][order(-N)][1:10])
+}
+
+# Impute on single owner addresses only 
+dt[Merger_Owner_Name != "" & owner_smty_addr != "", n_merge_owned := uniqueN(Merger_Owner_Name), owner_smty_addr]
+single_owner_addr <- unique(dt[n_merge_owned == 1, owner_smty_addr])
+print(paste0("% merger properties associated with multi-address: ", 
+             nrow(dt[Merger_Owner_Name != "" & !(owner_smty_addr %in% single_owner_addr)])/nrow(dt[Merger_Owner_Name != ""])))
+
+# Don't allow address imputation on bank/gov names 
+gov_addr <- unique(dt[(owner_name_clean_bank == 1 | owner_name_clean_gov == 1 | owner_builder == 1 | owner_law == 1),
+                                         owner_smty_addr])
+good_addr <- setdiff(single_owner_addr, gov_addr)
+print(paste0("# bank/gov addr: ", length(gov_addr)))
+print(paste0("# single firm addr: ", length(single_owner_addr)))
+print(paste0("# unique good addr: ", length(good_addr)))
+print(paste0("# rows with law/builder name: ", nrow(dt[owner_builder == 1 | owner_law == 1])))
+
+# Remove bad owners from sample
+n_gov_rows <- nrow(dt[(owner_name_clean_bank == 1 | owner_name_clean_gov == 1 | owner_builder == 1 | owner_law == 1)])
+print(paste0("Dropping ", n_gov_rows, " bank/gov rows out of ", nrow(dt), " from sample."))
+dt <- dt[!(owner_name_clean_bank == 1 | owner_name_clean_gov == 1 | owner_builder == 1 | owner_law == 1)]
+
+dt[,Merger_Owner_Impute := Merger_Owner_Name]
+dt[owner_smty_addr != "" & (owner_smty_addr %in% good_addr), 
+   Merger_Owner_Impute := Merger_Owner_Name[Merger_Owner_Name != ""][1], owner_smty_addr]
+
+print("Post-Impute Properties with Rent")
+print(dt[!is.na(RentPrice) & RentPrice != "",.(N = uniqueN(id)), Merger_Owner_Impute])
+
 # Merger owner name shouldn't change after first appearance
+setorder(dt, id, year)
+id_change <- dt[,c(TRUE, id[-1] != id[-.N])]
+dt[, Merger_Owner_Fill := Merger_Owner_Impute]
 dt[,merge_own_cum := cumsum(Merger_Owner_Impute != ""), id]
-dt[merge_own_cum > 0, Merger_Owner_Impute := argmax_na(.SD[Merger_Owner_Impute != "", Merger_Owner_Impute]), id]
+dt[merge_own_cum > 0, 
+   Merger_Owner_Fill := Merger_Owner_Fill[1], id] 
+
+dt[is.na(Merger_Owner_Impute), Merger_Owner_Impute := ""]
+for (name in unique(dt[Merger_Owner_Impute != "", Merger_Owner_Impute])){
+  print(paste0("Post-Impute Top owners for: ", name))
+  print(dt[Merger_Owner_Impute == name,.N, owner_name_clean][order(-N)][1:10])
+}
+
+print("Post-Fill Properties with Rent")
+print(dt[!is.na(RentPrice) & RentPrice != "",.(N = uniqueN(id)), Merger_Owner_Fill])
 
 # Clean prices
 p_vars_all <- str_subset(names(dt), "price|Price")
@@ -74,16 +155,6 @@ dt[is.infinite(rent_sqft), rent_sqft := NA]
 dt[,log_sqft := log(sqft)]
 dt[is.infinite(log_sqft), log_sqft := NA]
 
-# Redefine ids 
-dt[,id := .GRP, .(fips, apn_unformatted, apn_num)]
-
-# Clean Beazer properties
-# print(paste0("Cleaning Beazer property identifiation. Pre-counts: ", nrow(dt[Merger_Owner_Name == "Beazer Pre-Owned Rental Homes"])))
-# dt[Merger_Owner_Name == "Beazer Pre-Owned Rental Homes" & grepl("rental", owner_name_clean, ignore.case = T), good_beazer := 1]
-# dt[Merger_Owner_Name == "Beazer Pre-Owned Rental Homes", Merger_Owner_Name := NA]
-# dt[good_beazer == 1, Merger_Owner_Name := "Beazer Pre-Owned Rental Homes"]
-# print(paste0("Post-counts: ", nrow(dt[good_beazer == 1])))
-
 # ============= (0.5) Diagnostics ===================================================
 # Read in cleaned mergers file
 mergers <- fread(paste0(mergers_path, "mergers_final_cleaned.csv"))
@@ -92,13 +163,11 @@ mergers <- fread(paste0(mergers_path, "mergers_final_cleaned.csv"))
 # SFRs should be residential with prop type 10 
 companies <- unique(c(mergers$TargetName, mergers$AcquirorName))
 for (company in companies){
-  n_tot <- uniqueN(dt[Merger_Owner_Impute == company, id])
-  n_year_counts <- dt[Merger_Owner_Impute == company & year >= 2000, .N, year][order(year)]
-  n_good_counts <- dt[Merger_Owner_Impute == company & year >= 2000 & !is.na(RentPrice) & RentPrice != 0, .N, year][order(year)]
-  print(paste("Total properties found for", company, ":", n_tot))
-  print(dt[Merger_Owner_Impute == company, .N, .(prop_type_clean)])
-  print(paste("Annual counts for", company))
-  print(n_year_counts)
+  n_tot <- uniqueN(dt[Merger_Owner_Fill == company,  id])
+  n_tot_rent <- uniqueN(dt[Merger_Owner_Fill == company & !is.na(RentPrice) & RentPrice != 0,  id])
+  n_good_counts <- dt[Merger_Owner_Fill == company & year >= 2000 & !is.na(RentPrice) & RentPrice != 0, .N, year][order(year)]
+  print(paste("Total properties with rent found for", company, ":", n_tot))
+  print(paste("Total properties with rent found for", company, ":", n_tot_rent))
   print(paste("Annual counts with rent for", company))
   print(n_good_counts)
 }
@@ -148,9 +217,9 @@ ggplot(data = dup_dt[year >= 2010], aes(x = year, y = Mean_Rent, color = merger)
 vars <- c("RentPrice", "log_rent", "rent_sqft", "tot_unit_val", "SalePrice", "sqft")
 for (merge_id in unique(mergers$MergeID_1)){
   # Skip American Residential Ppty (no props found)
-  if (merge_id == 3){
-    next 
-  }
+  # if (merge_id == 3){
+  #   next 
+  # }
   dt[, group := as.character(NA)]
   
   # Merger vars 
@@ -162,15 +231,15 @@ for (merge_id in unique(mergers$MergeID_1)){
   norm_year_announced <- unique(mergers[MergeID_1 == merge_id, year_announced]) - norm_year
     
   # Set treated variables
-  target_zips <- unique(dt[year==norm_year & Merger_Owner_Impute %in% target_name, Zip5])
-  acquiror_zips <- unique(dt[year==norm_year & Merger_Owner_Impute == acquiror_name, Zip5])
+  target_zips <- unique(dt[year==norm_year & Merger_Owner_Fill %in% target_name, Zip5])
+  acquiror_zips <- unique(dt[year==norm_year & Merger_Owner_Fill %in% acquiror_name, Zip5])
   treated_zips <- intersect(target_zips, acquiror_zips)
-  dt[Zip5 %in% treated_zips & (Merger_Owner_Impute %in% target_name | Merger_Owner_Impute == acquiror_name), group := "Treated"]
+  dt[Zip5 %in% treated_zips & (Merger_Owner_Fill %in% target_name | Merger_Owner_Fill %in% acquiror_name), group := "Treated"]
   dt[,event_yr := as.integer(year - norm_year)]
 
   # Define different control groups 
   dt[is.na(group) & Zip5 %in% treated_zips, group := "Within-Zip Non-Merge"]
-  dt[!(Zip5 %in% treated_zips) & (Merger_Owner_Impute %in% target_name | Merger_Owner_Impute == acquiror_name), group := "Outside-Zip Merge"]
+  dt[!(Zip5 %in% treated_zips) & (Merger_Owner_Fill %in% target_name | Merger_Owner_Fill %in% acquiror_name), group := "Outside-Zip Merge"]
   single_firm_zips <- setdiff(c(target_zips, acquiror_zips), treated_zips)
   dt[Zip5 %in% single_firm_zips & is.na(group), group := "Outside-Zip Non-Merge"]
   
@@ -184,7 +253,7 @@ for (merge_id in unique(mergers$MergeID_1)){
   
   treated_var <- paste0("treated_", merge_id)
   dt[, (treated_var) := 0]
-  dt[Zip5 %in% treated_zips & (Merger_Owner_Impute %in% target_name | Merger_Owner_Impute == acquiror_name), (treated_var) := 1]
+  dt[Zip5 %in% treated_zips & (Merger_Owner_Fill %in% target_name | Merger_Owner_Fill %in% acquiror_name), (treated_var) := 1]
   
   sample_1_var <- paste0("sample_", merge_id, "_c1")
   dt[, (sample_1_var) := get(treated_var)]
@@ -192,7 +261,7 @@ for (merge_id in unique(mergers$MergeID_1)){
   
   sample_2_var <- paste0("sample_", merge_id, "_c2")
   dt[, (sample_2_var) := get(sample_1_var)]
-  dt[(Merger_Owner_Impute %in% target_name | Merger_Owner_Impute == acquiror_name), (sample_2_var) := 1]
+  dt[(Merger_Owner_Fill %in% target_name | Merger_Owner_Fill %in% acquiror_name), (sample_2_var) := 1]
   
   sample_3_var <- paste0("sample_", merge_id, "_c3")
   dt[, (sample_3_var) := get(sample_1_var)]
@@ -226,16 +295,19 @@ for (merge_id in unique(mergers$MergeID_1)){
     #   ggsave(paste0(prepost_figs, "prepost_mean_", var,"_",merge_id, ".png"), width = 15, height = 6)
   }
   # Target firms become assigned to acquiror firms in post-merger
-  dt[Merger_Owner_Impute == acquiror_name | (Merger_Owner_Impute %in% target_name & get(post_var) == 1), owner_hhi := acquiror_name]
+  dt[Merger_Owner_Fill %in% acquiror_name | (Merger_Owner_Fill %in% target_name & get(post_var) == 1), owner_hhi := acquiror_name]
 }
 
-# Fill rest of owner hhi variable
-dt[is.na(owner_hhi) | owner_hhi == "", owner_hhi := Merger_Owner_Impute]
-dt[(is.na(owner_hhi) | owner_hhi == "") & owner_smty_addr != "" & !is.na(owner_smty_addr), owner_hhi := as.character(.GRP), .(owner_smty_addr)]
+# Fill rest of owner hhi variable using owner address
+dt[is.na(owner_hhi) | owner_hhi == "", owner_hhi := Merger_Owner_Fill]
+dt[(is.na(owner_hhi) | owner_hhi == "") & owner_smty_addr != "" & !is.na(owner_smty_addr) & !(owner_smty_addr %in% gov_addr), 
+   owner_hhi := as.character(.GRP), .(owner_smty_addr)]
 
-# Different address but same name will also be considered same owner 
+# Fill rest with owner name
 dt[(is.na(owner_hhi) | owner_hhi == "") & owner_name_clean != "" & !is.na(owner_name_clean), 
-   owner_hhi := argmax_na(.SD[!is.na(owner_hhi) & owner_hhi != "", owner_hhi]), .(owner_name_clean)]
+   owner_hhi := owner_name_clean]
+
+# Remove non-rental owners
 dt[owner_hhi == "", owner_hhi := NA]
 
 # Zip level event-time charts --------------------------------------------------------------
@@ -280,9 +352,9 @@ hhi_wide_list <- list() # Save hhi tables
 hhi_long_list <- list()
 for (merge_id in unique(mergers$MergeID_1)){
   # Skip American Residential Ppty (no props found)
-  if (merge_id == 3){
-    next 
-  }
+  # if (merge_id == 3){
+  #   next 
+  # }
   dt_zip[,group := as.character(NA)]
   
   # Merger vars 
@@ -296,14 +368,14 @@ for (merge_id in unique(mergers$MergeID_1)){
   norm_month_announced <- max(unique(mergers[MergeID_1 == merge_id, month_announced]))
   
   # Set treated variables
-  target_zips <- unique(dt[year==norm_year & Merger_Owner_Impute %in% target_name, Zip5])
-  acquiror_zips <- unique(dt[year==norm_year & Merger_Owner_Impute == acquiror_name, Zip5])
+  target_zips <- unique(dt[year==norm_year & Merger_Owner_Fill %in% target_name, Zip5])
+  acquiror_zips <- unique(dt[year==norm_year & Merger_Owner_Fill %in% acquiror_name, Zip5])
   treated_zips <- intersect(target_zips, acquiror_zips)
   dt_zip[Zip5 %in% treated_zips, group := "Treated"]
   dt_zip[,event_yr := as.integer(year - norm_year)]
   
   # Define control group: single-firm zips
-  single_firm_zips <- unique(dt[!(Zip5 %in% treated_zips) & (Merger_Owner_Impute %in% target_name | Merger_Owner_Impute == acquiror_name), Zip5])
+  single_firm_zips <- unique(dt[!(Zip5 %in% treated_zips) & (Merger_Owner_Fill %in% target_name | Merger_Owner_Fill %in% acquiror_name), Zip5])
   dt_zip[Zip5 %in% single_firm_zips, group := "Control"]
   
   # Save variables
@@ -370,15 +442,16 @@ for (merge_id in unique(mergers$MergeID_1)){
         ggsave(paste0(prepost_figs, "zip/prepost_mean_hhi_",merge_id, ".png"), width = 15, height = 6)
       
       # Save delta HHI tables
-      dt[Zip5 %in% treated_zips & Merger_Owner_Impute %in% target_name, merge_group := "Target"]
-      dt[Zip5 %in% treated_zips & Merger_Owner_Impute %in% acquiror_name, merge_group := "Acquiror"]
+      dt[, merge_group := as.character(NA)]
+      dt[Zip5 %in% treated_zips & Merger_Owner_Fill %in% target_name, merge_group := "Target"]
+      dt[Zip5 %in% treated_zips & Merger_Owner_Fill %in% acquiror_name, merge_group := "Acquiror"]
       dt[,event_yr := as.integer(year - norm_year)]
       dt_delta_hhi <- dt[event_yr == -1 & !is.na(owner_hhi) & owner_hhi != "", .(delta_hhi = 2 * sum_na(merge_group == "Target") * sum_na(merge_group == "Acquiror")/(.N^2)*100^2,
                                                                                  acquiror_share = sum_na(merge_group == "Acquiror")/.N*100, 
                                                                                  target_share = sum_na(merge_group == "Target")/.N*100), .(Zip5)]
-      dt_delta_hhi[is.na(delta_hhi), delta_hhi := 0]
-      dt_delta_hhi[is.na(acquiror_share), acquiror_share := 0]
-      dt_delta_hhi[is.na(target_share), target_share := 0]
+      # dt_delta_hhi[is.na(delta_hhi), delta_hhi := 0]
+      # dt_delta_hhi[is.na(acquiror_share), acquiror_share := 0]
+      # dt_delta_hhi[is.na(target_share), target_share := 0]
       dt_zip_tmp <- merge(dt_zip, dt_delta_hhi, by = "Zip5", all.x = T)
       dt_zip_tmp[,merge_label := merge_label]
       dt_zip_tmp[,merge_id := merge_id]
@@ -422,6 +495,9 @@ for (merge_id in unique(mergers$MergeID_1)){
   }
 }
 hhi_wide <- rbindlist(hhi_wide_list, fill = T)
+hhi_wide[is.na(delta_hhi), delta_hhi := 0]
+hhi_wide[is.na(acquiror_share), acquiror_share := 0]
+hhi_wide[is.na(target_share), target_share := 0]
 setorder(hhi_wide, merge_label, -delta_hhi)
 fwrite(hhi_wide, paste0(mergers_path, "hhi_wide.csv"))
 

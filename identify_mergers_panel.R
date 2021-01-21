@@ -59,17 +59,24 @@ getAvailMem()
 
 # Owner name matching ------------------------------------------------
 # Merge in owner matched names
-matched_names <- fread(paste0(match_path, state, "_matched_owners.csv"))
-n_matched_names <- uniqueN(matched_names$owner_name_clean)
-n_owner_names <- uniqueN(panel$owner_name_clean)
-print(paste("There are", n_matched_names, "unique names in matched owners data and", n_owner_names, "unique owner names."))
-panel <- merge(panel, matched_names, by = "owner_name_clean", all.x = T)
-n_bad <- nrow(panel[(is.na(owner_matched) | owner_matched == "") & !(is.na(owner_name_clean) | owner_name_clean == "")])
-if (n_bad > 0){
-   print(paste("Warning: there are", n_bad,"names that have not been matched. Imputing with original name..."))
-   panel[is.na(owner_matched) | owner_matched == "", owner_matched := owner_name_clean]
-}
-rm(matched_names)
+# matched_names <- fread(paste0(match_path, state, "_matched_owners.csv"))
+# n_matched_names <- uniqueN(matched_names$owner_name_clean)
+# n_owner_names <- uniqueN(panel$owner_name_clean)
+# print(paste("There are", n_matched_names, "unique names in matched owners data and", n_owner_names, "unique owner names."))
+# panel <- merge(panel, matched_names, by = "owner_name_clean", all.x = T)
+# n_bad <- nrow(panel[(is.na(owner_matched) | owner_matched == "") & !(is.na(owner_name_clean) | owner_name_clean == "")])
+# if (n_bad > 0){
+#    print(paste("Warning: there are", n_bad,"names that have not been matched. Imputing with original name..."))
+#    panel[is.na(owner_matched) | owner_matched == "", owner_matched := owner_name_clean]
+# }
+# rm(matched_names)
+
+# Frontfill owner names
+setorder(panel, id, year)
+panel[is.na(owner_name_clean), owner_name_clean := ""]
+panel[,deed_event_cum := cumsum(!is.na(deed_event))] # This works bc data is sorted by id, year
+id_deed_change <- panel[,c(TRUE, (id[-1] != id[-.N]) | (deed_event_cum[-1] != deed_event_cum[-.N]))]
+final_panel[, owner_name_clean := owner_name_clean[cummax(((!is.na(owner_name_clean) & owner_name_clean != "") | id_deed_change) * .I)]] 
 
 # Check owner names in panel
 n_good <- nrow(panel[!is.na(owner_name_clean) & owner_name_clean != ""])
@@ -110,9 +117,9 @@ for (i in 1:length(base_company_names)){
 # Clean up all the names
 company_suffixes <- c("inc", "llc")
 
-panel[,owner_matched := trimws(gsub("[[:punct:]]", " ", owner_matched))]
-panel[,owner_matched := trimws(gsub(paste0(company_suffixes, collapse = "|"), "", owner_matched, ignore.case = T))]
-panel[,owner_matched := toupper(gsub("\\s\\s+", " ", owner_matched))]
+# panel[,owner_matched := trimws(gsub("[[:punct:]]", " ", owner_matched))]
+# panel[,owner_matched := trimws(gsub(paste0(company_suffixes, collapse = "|"), "", owner_matched, ignore.case = T))]
+# panel[,owner_matched := toupper(gsub("\\s\\s+", " ", owner_matched))]
 
 mergers[,Target_Entities_Clean := list(c("placeholder"))]
 mergers[,Target_Entities_Clean := as.list(Target_Entities_Clean)]

@@ -54,7 +54,7 @@ for (c in smty_fields){
 }
 dt[, bad_smty := 0]
 dt[smty_owner_street1 == ""|smty_owner_zip4 == ""|smty_owner_city=="", bad_smty := 1]
-dt[,owner_smty_addr := paste(smty_owner_street1, smty_owner_street2, smty_owner_zip4, smty_owner_city)]
+dt[,owner_smty_addr := paste(smty_owner_street1, smty_owner_street2, smty_owner_city, smty_owner_zip4)]
 dt[bad_smty == 1, owner_smty_addr := ""]
 
 print(paste0("Rows with smarty address pre-impute: ", nrow(dt[owner_smty_addr != ""]), " out of ", nrow(dt), " rows."))
@@ -92,10 +92,23 @@ dt[Merger_Owner_Name != "" & owner_smty_addr != "", n_merge_owned := uniqueN(Mer
 print("Addresses associated with multiple merge owned")
 print(dt[n_merge_owned > 1, .N, .(owner_smty_addr, n_merge_owned)][order(-N)])
 
+# Print top 10 owner names for each merger
+for (name in unique(dt$Merger_Owner_Impute)){
+  print(paste0("Pre-Impute Top owners for: ", name))
+  print(dt[Merger_Owner_Name == name,.N, owner_name_clean][order(-N)][1:10])
+}
+
+# TODO: Need to remove properties where owner name associated with banks, gov, builders, and law offices! 
 dt[owner_smty_addr != "", Merger_Owner_Impute := argmax_na(.SD[Merger_Owner_Name != "", Merger_Owner_Name]), owner_smty_addr]
 dt[is.na(Merger_Owner_Impute), Merger_Owner_Impute := Merger_Owner_Name]
 print("Post-impute merger owner counts")
 print(dt[,.N,Merger_Owner_Impute])
+
+# Print top 10 owner names for each merger
+for (name in unique(dt$Merger_Owner_Impute)){
+  print(paste0("Post-Impute Top owners for: ", name))
+  print(dt[Merger_Owner_Impute == name,.N, owner_name_clean][order(-N)][1:10])
+}
 
 # Overwrite mergers restricted panels 
 dt[Merger_Owner_Impute != "", merge_affected := 1]
