@@ -29,7 +29,7 @@ Sys.umask(000)
 
 data_path <- "/gpfs/loomis/scratch60/humphries/rl874/mergers/"
 mergers_path <- "/gpfs/loomis/project/humphries/rl874/mergers_project/"
-prepost_figs <- "/gpfs/loomis/project/humphries/rl874/mergers_project/figs/prepost/"
+prepost_figs <- "/gpfs/loomis/project/humphries/rl874/mergers_project/figs/ct/prepost/"
 
 # Read and concat merger identified panel data
 files <- paste0(data_path, grep("_mergers\\.csv$", list.files(data_path), value = T))
@@ -198,14 +198,14 @@ ggplot(data = dup_dt[year >= 2010], aes(x = year, y = Median_Rent, color = merge
   geom_vline(xintercept = mergers$year_effective, color=mergers$colors) +
   geom_vline(xintercept = mergers$year_announced, color=mergers$colors, linetype="dashed") +
   scale_x_continuous(breaks = unique(dup_dt$year)) + 
-  ggsave(paste0(mergers_path, "mergers_median_trends.png"), width = 15, height = 6)
+  ggsave(paste0(mergers_path, "ct_mergers_median_trends.png"), width = 15, height = 6)
 
 ggplot(data = dup_dt[year >= 2010], aes(x = year, y = Mean_Rent, color = merger)) + geom_line() + 
   scale_color_manual(values = unique(colors), breaks = unique(merge_labels), labels = unique(merge_labels)) + 
   geom_vline(xintercept = mergers$year_effective, color=mergers$colors) +
   geom_vline(xintercept = mergers$year_announced, color=mergers$colors, linetype="dashed") +
   scale_x_continuous(breaks = unique(dup_dt$year)) + 
-  ggsave(paste0(mergers_path, "mergers_mean_trends.png"), width = 15, height = 6)
+  ggsave(paste0(mergers_path, "ct_mergers_mean_trends.png"), width = 15, height = 6)
 
 # Property level event-time charts --------------------------------------------------------------
 # For each merger: multiple scatterplots for each possible control group + plot multiple features
@@ -264,34 +264,7 @@ for (merge_id in unique(mergers$MergeID_1)){
   sample_3_var <- paste0("sample_", merge_id, "_c3")
   dt[, (sample_3_var) := get(sample_1_var)]
   dt[st_tract %in% single_firm_tracts, (sample_3_var) := 1]
-  
-  for (var in vars){
-    dt[,tmp := get(var)]
-    
-    # Annual counts 
-    n_dt <- dt[!is.na(group) & !is.na(tmp) & event_yr >= -5 & event_yr <= 5, .N, .(group, event_yr)]
-    n_dt[,log_N := log(N)]
-    ggplot(n_dt, aes(x = event_yr, y = log_N, fill = group, group = group)) + geom_bar(stat="identity", position="dodge") +
-      labs(y = "log N", title = paste0("Counts with ", var, " , Merger:",merge_label)) + 
-      ggsave(paste0(prepost_figs, "n_", var, "_", merge_id, ".png"), dpi = "screen", width = 6, height = 6)
-    
-    # Median per year 
-    dt_tmp <- dt[!is.na(group) & event_yr >= -5 & event_yr <= 5,.(tmp = as.numeric(median_na0(tmp))), .(group, year)]
-    ggplot(data = dt_tmp, aes(x = year, y = tmp, color = group)) + geom_point(shape = 16, size = 3, alpha = 0.5) +
-      geom_line(aes(linetype = group)) + scale_linetype_manual(values = c("solid", "dashed", "dashed", "dashed")) +
-      geom_vline(xintercept=norm_year) + geom_vline(xintercept=year_announced, linetype="dashed") + 
-      scale_x_continuous(breaks = unique(dt_tmp$year)) + 
-      labs(x = "Normalized Year", y = var, title = paste("Median", var, "by Year, Merger:",merge_label)) + 
-      ggsave(paste0(prepost_figs, "prepost_median_", var,"_",merge_id, ".png"), width = 15, height = 6)
-    
-    # Mean per year 
-    # dt_tmp <- dt[!is.na(group) & event_yr >= -5 & event_yr <= 5,.(tmp = as.numeric(mean_na0(tmp))), .(group, year)]
-    # ggplot(data = dt_tmp, aes(x = year, y = tmp, color = group)) + geom_point(shape = 16, size = 3, alpha = 0.5) +
-    #   geom_line(linetype = "dashed") + geom_vline(xintercept=0) + geom_vline(xintercept=norm_year_announced, linetype="dashed") +
-    #   scale_x_continuous(breaks = unique(dt_tmp$year)) + 
-    #   labs(x = "Normalized Year", y = var, title = paste("Mean", var, "by Year,Merger:",merge_label)) + 
-    #   ggsave(paste0(prepost_figs, "prepost_mean_", var,"_",merge_id, ".png"), width = 15, height = 6)
-  }
+
   # Target firms become assigned to acquiror firms in post-merger
   dt[Merger_Owner_Fill %in% acquiror_name | (Merger_Owner_Fill %in% target_name & get(post_var) == 1), owner_hhi := acquiror_name]
 }
@@ -365,7 +338,7 @@ for (merge_id in unique(mergers$MergeID_1)){
       n_dt_tract[,log_N := log(N)]
       ggplot(n_dt_tract, aes(x = event_yr, y = log_N, fill = group, group = group)) + geom_bar(stat="identity", position="dodge") +
         labs(y = "log N", title = paste0("Tract HHI Counts, Merger:",merge_label)) + 
-        ggsave(paste0(prepost_figs, "zip/n_hhi_", merge_id, ".png"), dpi = "screen")
+        ggsave(paste0(prepost_figs, "n_hhi_", merge_id, ".png"), dpi = "screen")
       
       # Median HHI per year 
       dt_med_tmp <- dt_tract[!is.na(group) & event_yr >= -5 & event_yr <= 5,.(median_hhi = median_na0(hhi)), .(year, group)]
@@ -373,7 +346,7 @@ for (merge_id in unique(mergers$MergeID_1)){
         geom_line(linetype = "dashed") + geom_vline(xintercept=norm_year) + geom_vline(xintercept=year_announced, linetype="dashed") +
         scale_x_continuous(breaks = unique(dt_med_tmp$year)) +
         labs(x = "Normalized Year", y = var, title = paste("Median Tract HHI by Year, Merger:",merge_label)) + 
-        ggsave(paste0(prepost_figs, "zip/prepost_med_hhi_",merge_id, ".png"), width = 15, height = 6)
+        ggsave(paste0(prepost_figs, "prepost_med_hhi_",merge_id, ".png"), width = 15, height = 6)
       
       # Mean HHI per year 
       dt_mean_tmp <- dt_tract[!is.na(group) & event_yr >= -5 & event_yr <= 5,.(mean_hhi = mean_na0(hhi)), .(year, group)]
@@ -381,7 +354,7 @@ for (merge_id in unique(mergers$MergeID_1)){
         geom_line(linetype = "dashed") + geom_vline(xintercept=norm_year) + geom_vline(xintercept=year_announced, linetype="dashed") +
         scale_x_continuous(breaks = unique(dt_mean_tmp$year)) +
         labs(x = "Normalized Year", y = var, title = paste("Mean Tract HHI by Year, Merger:",merge_label)) + 
-        ggsave(paste0(prepost_figs, "zip/prepost_mean_hhi_",merge_id, ".png"), width = 15, height = 6)
+        ggsave(paste0(prepost_figs, "prepost_mean_hhi_",merge_id, ".png"), width = 15, height = 6)
       
       # Save delta HHI tables
       dt[, merge_group := NA]
@@ -415,7 +388,7 @@ for (merge_id in unique(mergers$MergeID_1)){
       ggplot(n_dt_tract, aes(x = agg_var, y = log_N, fill = group, group = group)) + geom_bar(stat="identity", position="dodge") +
         labs(y = "log N", title = paste0("Tract ", var, " Counts, Merger:",merge_label)) + facet_wrap(~ event_yr) +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
-        ggsave(paste0(prepost_figs, "zip/n_", var, "_", merge_id, ".png"), dpi = "screen", width = 6, height = 6)
+        ggsave(paste0(prepost_figs, "n_", var, "_", merge_id, ".png"), dpi = "screen", width = 6, height = 6)
       
       # Median across tracts
       dt_med_tmp <- dt_tmp[!is.na(group) & !is.na(get(var)) & event_yr >= -5 & event_yr <= 5,.(median_var = median_na(get(var))), .(agg_var, year, group)]
@@ -424,15 +397,7 @@ for (merge_id in unique(mergers$MergeID_1)){
         geom_vline(xintercept=norm_year) + geom_vline(xintercept=year_announced, linetype="dashed") +
         scale_x_continuous(breaks = unique(dt_med_tmp$year)) +
         labs(x = "Normalized Year", y = var, title = paste("Median Tract", var, "by Year, Merger:",merge_label)) + 
-        ggsave(paste0(prepost_figs, "zip/prepost_med_", var, "_",merge_id, ".png"), width = 15, height = 6)
-      
-      # Mean across tracts
-      # dt_mean_tmp <- dt_tmp[!is.na(group) & !is.na(get(var)) & event_yr >= -5 & event_yr <= 5,.(mean_var = mean_na(get(var))), .(agg_var, year, group)]
-      # ggplot(data = dt_mean_tmp, aes(x = event_yr, y = mean_var, color = group, shape = agg_var)) + geom_point(size = 3, alpha = 0.5) +
-      #   geom_line(linetype = "dashed") + geom_vline(xintercept=norm_year) + geom_vline(xintercept=year_announced) +
-      #   scale_x_continuous(breaks = unique(dt_mean_tmp$year)) +
-      #   labs(x = "Normalized Year", y = var, title = paste("Mean Tract", var, "by Year, Merger:",merge_label)) + 
-      #   ggsave(paste0(prepost_figs, "zip/prepost_mean_", var, "_",merge_id, ".png"), width = 15, height = 6)
+        ggsave(paste0(prepost_figs, "prepost_med_", var, "_",merge_id, ".png"), width = 15, height = 6)
     }
   }
 }

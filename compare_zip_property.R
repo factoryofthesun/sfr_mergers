@@ -186,6 +186,9 @@ for (i in 0:4){
     ggsave(paste0(mergers_path, "figs/diagnostics/dhhi_post_", i, ".pdf"))
 }
 
+# ============= Compare Pre-Post Slopes of HHI/Rent For Each Zip DHHI ==============
+pre_hhi_slopes <- 
+
 # ======================= (1) Comparison of Trends =========================
 # Zip code coverage 
 prop_zips <- unique(dt_prop[!is.na(RentPrice), Zip5])

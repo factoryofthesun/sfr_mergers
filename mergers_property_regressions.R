@@ -185,23 +185,22 @@ sd_hhi <- round(sd(dt_tmp[hhi != 0,.(hhi = median_na(hhi)), .(Zip5)][,hhi], na.r
 
 # Time trend
 dt_tmp[,time_trend := year - min_na(year)]
+dt_tmp[,sq_time_trend := year - min_na(year)]
 
 # We will need to remove the zips that we only observe for 1 period
 dt_tmp[,n_zip_trend := uniqueN(.SD[!is.na(log_sqft) & !is.na(tot_unit_val), time_trend]), Zip5]
 
-reg0 <- felm(log_rent ~ treated + delta_hhi:treated + delta_hhi:treated:merge_firm_owned|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg1 <- felm(log_rent ~ treated + delta_hhi:treated + delta_hhi:treated:merge_firm_owned + log_sqft + tot_unit_val|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg2 <- felm(log_rent ~ treated + delta_hhi:treated + delta_hhi:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg3 <- felm(log_rent ~ treated + delta_hhi:treated + delta_hhi:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
-reg4 <- felm(log_rent ~ treated + delta_hhi:treated + delta_hhi:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg5 <- felm(log_rent ~ treated + delta_hhi:treated + delta_hhi:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5|0|Zip5, data = dt_tmp)
-reg6 <- felm(log_rent ~ treated + delta_hhi:treated + delta_hhi:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
-reg7 <- felm(log_rent ~ treated + delta_hhi:treated + delta_hhi:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg0 <- felm(log_rent ~ treated + delta_hhi:treated + delta_hhi:treated:merge_firm_owned + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg1 <- felm(log_rent ~ treated + delta_hhi:treated + delta_hhi:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg2 <- felm(log_rent ~ treated + delta_hhi:treated + delta_hhi:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5 + Zip5:time_trend|0|Zip5, data = dt_tmp[n_zip_trend >= 3])
+reg3 <- felm(log_rent ~ treated + delta_hhi:treated + delta_hhi:treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|factor(year) + Zip5|0|Zip5, data = dt_tmp)
+reg4 <- felm(log_rent ~ treated + delta_hhi:treated + delta_hhi:treated:merge_position + log_sqft + 
+               tot_unit_val + prop_unemp + median_household_income + delta_hhi:sq_time_trend|factor(year) + Zip5|0|Zip5, data = dt_tmp)
 
 zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "Yes","No","No", "Yes", "No")
 hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "Yes","No", "No", "Yes")
 lines <- list(zip_trend_line, hhi_trend_line)
-out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7,
+out <- capture.output(stargazer(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7,reg8, 
                                 add.lines = lines,
                                 title = "2-Way FE with delta HHI and firm owned indicator, All Treated Zips, Baseline Indicator"))
 
@@ -311,7 +310,11 @@ out[grepl("Note",out)] <- note.latex
 cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
 
 # Each merger: 2-Way FE without DHHI interaction 
+merge_labels <- c("Beazer Pre-Owned - American Homes 4 Rent", "Beazer Pre-Owned - American Homes 4 Rent", 
+                  "Colony American - Starwood Waypoint", "American Residential Properties - American Homes 4 Rent",
+                  "Starwood Waypoint - Invitation Homes", "Silver Bay - Tricon Capital")
 mergers <- fread(paste0(mergers_path, "mergers_final_cleaned.csv"))
+mergers$label <- merge_labels
 for (merge_id in unique(mergers$MergeID_1)){
   # Skip American Residential Ppty (no props found)
   # if (merge_id == 3){
