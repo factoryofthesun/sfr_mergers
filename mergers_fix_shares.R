@@ -220,6 +220,20 @@ for (merge_id in unique(mergers$MergeID_1)){
   dt[, (sample_3_var) := get(sample_1_var)]
   dt[Zip5 %in% single_firm_zips, (sample_3_var) := 1]
   
+  # Print pre-post merger property counts for each company
+  for (company in target_name){
+    n_pre <- uniqueN(dt[Merger_Owner_Fill == company & get(post_var) == 0, id])
+    n_post <- uniqueN(dt[Merger_Owner_Fill == company & get(post_var) == 1, id])
+    print(paste0("# Pre-Merger Properties for ", company, ": ", n_pre))
+    print(paste0("# Post-Merger Properties for ", company, ": ", n_post))
+  }
+  for (company in acquiror_name){
+    n_pre <- uniqueN(dt[Merger_Owner_Fill == company & get(post_var) == 0, id])
+    n_post <- uniqueN(dt[Merger_Owner_Fill == company & get(post_var) == 1, id])
+    print(paste0("# Pre-Merger Properties for ", company, ": ", n_pre))
+    print(paste0("# Post-Merger Properties for ", company, ": ", n_post))
+  }
+  
   # Target firms become assigned to acquiror firms in post-merger
   dt[Merger_Owner_Fill %in% acquiror_name | (Merger_Owner_Fill %in% target_name & get(post_var) == 1), owner_hhi := acquiror_name]
 }

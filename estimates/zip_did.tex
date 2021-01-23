@@ -2,11 +2,11 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Sat, Jan 16, 2021 - 01:39:23 AM 
+ % Date and time: Sat, Jan 23, 2021 - 01:05:20 AM 
 
  \begin{table}[H] \centering  
 
-   \caption{2-Way FE HHI}  
+   \caption{Post-Merger Concentration on Simulated Concentration}  
 
    \label{}  
 
@@ -20,57 +20,51 @@
 
  \cline{2-6}  
 
- \\[-1.8ex] & \multicolumn{5}{c}{hhi} \\  
+ \\[-1.8ex] & \multicolumn{5}{c}{HHI} \\  
 
  \\[-1.8ex] & (1) & (2) & (3) & (4) & (5)\\  
 
  \hline \\[-1.8ex]  
 
-  prop\_unemp &  & $-$55.324$^{**}$ & $-$56.657$^{*}$ & $-$18.078 & $-$58.708$^{**}$ \\  
+  $\Delta \text{sim\_HHI} 	imes 	ext{Post}$ & 0.786$^{***}$ & 0.604$^{***}$ & 0.604$^{***}$ & $-$0.249 & $-$0.598$^{***}$ \\  
 
-   &  & (27.922) & (28.910) & (17.736) & (29.134) \\  
+   & (0.239) & (0.214) & (0.214) & (0.209) & (0.164) \\  
 
    & & & & & \\  
 
-  median\_household\_income &  &  & 0.0001 & 0.0002$^{**}$ & 0.0001 \\  
+  prop\_unemp &  & $-$39.622$^{*}$ & $-$40.109$^{*}$ & $-$21.674 & $-$43.841$^{*}$ \\  
+
+   &  & (23.060) & (23.500) & (20.560) & (23.224) \\  
+
+   & & & & & \\  
+
+  median\_household\_income &  &  & 0.00004 & 0.0002 & 0.0001 \\  
 
    &  &  & (0.0001) & (0.0001) & (0.0001) \\  
 
    & & & & & \\  
 
-  delta\_hhi:treated & 0.525$^{***}$ & 0.434$^{***}$ & 0.435$^{***}$ & 0.012 & $-$1.031$^{***}$ \\  
+  delta\_hhi:year\_trend &  &  &  &  & 0.401$^{***}$ \\  
 
-   & (0.052) & (0.048) & (0.049) & (0.047) & (0.177) \\  
-
-   & & & & & \\  
-
-  delta\_hhi:year\_trend &  &  &  &  & 0.411$^{***}$ \\  
-
-   &  &  &  &  & (0.052) \\  
+   &  &  &  &  & (0.062) \\  
 
    & & & & & \\  
 
  \hline \\[-1.8ex]  
 
- Zip*Linear Trend & No & No & No & Yes & No \\  
+ Zip Controls & No & Yes & Yes & Yes & Yes \\  
 
- Delta HHI*Linear Trend & No & No & No & No & Yes \\  
+ Zip Time Trend & No & No & No & Yes & No \\  
 
- # Zips Codes & 1825 & 1824 & 1824 & 1824 & 1824 \\  
+ $\Delta \text{sim\_HHI}$ Time Trend & No & No & No & No & Yes \\  
 
- HHI Statistics & Mean & SD & 10 Pctl & 50 Pctl & 99 Pctl \\  
+ Observations & 8,430 & 7,020 & 7,020 & 7,020 & 7,020 \\  
 
- HHI & 25.8643466627295 & 58.5371292133024 & 3.75785609226685 & 10.7140182753823 & 280.077265104239 \\  
+ R$^{2}$ & 0.968 & 0.971 & 0.971 & 0.990 & 0.972 \\  
 
- Delta HHI & 4.04185634770037 & 13.3820316316122 & 0.0144503524074306 & 0.391523416411762 & 54.0469139903962 \\  
+ Adjusted R$^{2}$ & 0.962 & 0.964 & 0.964 & 0.983 & 0.965 \\  
 
- Observations & 10,950 & 9,120 & 9,120 & 9,120 & 9,120 \\  
-
- R$^{2}$ & 0.981 & 0.983 & 0.983 & 0.994 & 0.985 \\  
-
- Adjusted R$^{2}$ & 0.978 & 0.978 & 0.978 & 0.989 & 0.981 \\  
-
- Residual Std. Error & 8.753 (df = 9119) & 8.453 (df = 7290) & 8.451 (df = 7289) & 5.953 (df = 5465) & 7.967 (df = 7288) \\  
+ Residual Std. Error & 7.244 (df = 7019) & 7.051 (df = 5610) & 7.052 (df = 5609) & 4.837 (df = 4205) & 6.866 (df = 5608) \\  
 
  \hline  
 
@@ -86,11 +80,11 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Sat, Jan 16, 2021 - 01:39:24 AM 
+ % Date and time: Sat, Jan 23, 2021 - 01:05:22 AM 
 
  \begin{table}[H] \centering  
 
-   \caption{2-Way FE HHI, Multi-Merge Alt}  
+   \caption{Post-Merger Concentration on Simulated Concentration, With Control HHI}  
 
    \label{}  
 
@@ -104,57 +98,51 @@
 
  \cline{2-6}  
 
- \\[-1.8ex] & \multicolumn{5}{c}{hhi} \\  
+ \\[-1.8ex] & \multicolumn{5}{c}{HHI} \\  
 
  \\[-1.8ex] & (1) & (2) & (3) & (4) & (5)\\  
 
  \hline \\[-1.8ex]  
 
-  prop\_unemp &  & $-$55.553$^{**}$ & $-$57.092$^{**}$ & $-$17.487 & $-$57.922$^{**}$ \\  
+  $\Delta \text{sim\_HHI} 	imes 	ext{Post}$ & 0.792$^{***}$ & 0.607$^{***}$ & 0.608$^{***}$ & $-$0.246 & $-$0.599$^{***}$ \\  
 
-   &  & (27.663) & (28.649) & (17.364) & (28.729) \\  
+   & (0.239) & (0.214) & (0.214) & (0.211) & (0.165) \\  
 
    & & & & & \\  
 
-  median\_household\_income &  &  & 0.0001 & 0.0001 & 0.0001 \\  
+  prop\_unemp &  & $-$33.287$^{*}$ & $-$33.920$^{*}$ & $-$17.746 & $-$36.218$^{**}$ \\  
+
+   &  & (17.907) & (18.178) & (15.068) & (18.019) \\  
+
+   & & & & & \\  
+
+  median\_household\_income &  &  & 0.00004 & 0.0001$^{*}$ & 0.0001 \\  
 
    &  &  & (0.0001) & (0.0001) & (0.0001) \\  
 
    & & & & & \\  
 
-  delta\_hhi\_alt:treated\_alt & 0.346$^{***}$ & 0.281$^{***}$ & 0.282$^{***}$ & $-$0.294$^{***}$ & $-$0.195$^{***}$ \\  
+  delta\_hhi:year\_trend &  &  &  &  & 0.402$^{***}$ \\  
 
-   & (0.031) & (0.028) & (0.029) & (0.043) & (0.041) \\  
-
-   & & & & & \\  
-
-  delta\_hhi\_alt:year\_trend &  &  &  &  & 0.126$^{***}$ \\  
-
-   &  &  &  &  & (0.014) \\  
+   &  &  &  &  & (0.062) \\  
 
    & & & & & \\  
 
  \hline \\[-1.8ex]  
 
- Zip*Linear Trend & No & No & No & Yes & No \\  
+ Zip Controls & No & Yes & Yes & Yes & Yes \\  
 
- Delta HHI*Linear Trend & No & No & No & No & Yes \\  
+ Zip Time Trend & No & No & No & Yes & No \\  
 
- # Zips Codes & 1825 & 1824 & 1824 & 1824 & 1824 \\  
+ $\Delta \text{sim\_HHI}$ Time Trend & No & No & No & No & Yes \\  
 
- HHI Statistics & Mean & SD & 10 Pctl & 50 Pctl & 99 Pctl \\  
+ Observations & 11,460 & 9,545 & 9,545 & 9,545 & 9,545 \\  
 
- HHI & 25.8643466627295 & 58.5371292133024 & 3.75785609226685 & 10.7140182753823 & 280.077265104239 \\  
+ R$^{2}$ & 0.985 & 0.986 & 0.986 & 0.995 & 0.987 \\  
 
- Delta HHI & 10.4134765937454 & 27.1119449086071 & 0.0651498343483118 & 2.29297428855825 & 123.544472127527 \\  
+ Adjusted R$^{2}$ & 0.982 & 0.983 & 0.983 & 0.992 & 0.984 \\  
 
- Observations & 10,950 & 9,120 & 9,120 & 9,120 & 9,120 \\  
-
- R$^{2}$ & 0.981 & 0.982 & 0.983 & 0.994 & 0.984 \\  
-
- Adjusted R$^{2}$ & 0.977 & 0.978 & 0.978 & 0.990 & 0.981 \\  
-
- Residual Std. Error & 8.865 (df = 9119) & 8.522 (df = 7290) & 8.519 (df = 7289) & 5.742 (df = 5465) & 8.022 (df = 7288) \\  
+ Residual Std. Error & 6.656 (df = 9544) & 6.488 (df = 7630) & 6.488 (df = 7629) & 4.409 (df = 5720) & 6.339 (df = 7628) \\  
 
  \hline  
 
@@ -170,7 +158,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Sat, Jan 16, 2021 - 01:39:24 AM 
+ % Date and time: Sat, Jan 23, 2021 - 01:05:24 AM 
 
  \begin{table}[H] \centering  
 
@@ -194,27 +182,27 @@
 
  \hline \\[-1.8ex]  
 
-  prop\_unemp &  & 11.854 & 8.589 & 11.410 & 11.472 \\  
+  prop\_unemp &  & 6.073 & 3.647 & 23.207 & 3.902 \\  
 
-   &  & (35.240) & (36.353) & (26.009) & (36.462) \\  
-
-   & & & & & \\  
-
-  median\_household\_income &  &  & 0.0001$^{*}$ & 0.0001 & 0.0001$^{*}$ \\  
-
-   &  &  & (0.0001) & (0.0001) & (0.0001) \\  
+   &  & (19.533) & (20.639) & (22.926) & (20.708) \\  
 
    & & & & & \\  
 
-  delta\_hhi:treated & 1.291$^{***}$ & 0.976$^{***}$ & 1.041$^{***}$ & $-$0.206 & $-$0.218 \\  
+  median\_household\_income &  &  & 0.0001 & 0.0002 & 0.0001 \\  
 
-   & (0.243) & (0.266) & (0.301) & (0.361) & (0.368) \\  
+   &  &  & (0.0001) & (0.0002) & (0.0001) \\  
 
    & & & & & \\  
 
-  delta\_hhi:year\_trend &  &  &  &  & 0.508$^{***}$ \\  
+  delta\_hhi:treated & $-$1.348 & $-$1.406 & $-$1.389 & $-$1.703 & $-$1.714 \\  
 
-   &  &  &  &  & (0.166) \\  
+   & (1.308) & (1.214) & (1.218) & (1.090) & (1.199) \\  
+
+   & & & & & \\  
+
+  delta\_hhi:year\_trend &  &  &  &  & 0.131 \\  
+
+   &  &  &  &  & (0.508) \\  
 
    & & & & & \\  
 
@@ -224,21 +212,21 @@
 
  Delta HHI*Linear Trend & No & No & No & No & Yes \\  
 
- # Zips Codes & 341 & 341 & 341 & 341 & 341 \\  
+ # Zips Codes & 569 & 569 & 569 & 569 & 569 \\  
 
  HHI Statistics & Mean & SD & 10 Pctl & 50 Pctl & 99 Pctl \\  
 
- HHI & 18.9923411813731 & 65.3855600388889 & 3.11932559852082 & 6.47051262592009 & 297.957787105646 \\  
+ HHI & 15.2907981242748 & 32.3087798829897 & 2.80673212155295 & 6.26146621804443 & 146.401636983099 \\  
 
- Delta HHI & 0.234873313292779 & 0.6214510956797 & 0.00668040112602169 & 0.0406612788966155 & 4.10606373226822 \\  
+ Delta HHI & 0.0942154881462202 & 0.280691366160032 & 0.00222634169087797 & 0.0183817538929469 & 1.37797982259707 \\  
 
- Observations & 2,046 & 1,705 & 1,705 & 1,705 & 1,705 \\  
+ Observations & 3,414 & 2,845 & 2,845 & 2,845 & 2,845 \\  
 
- R$^{2}$ & 0.996 & 0.996 & 0.996 & 0.998 & 0.996 \\  
+ R$^{2}$ & 0.954 & 0.961 & 0.961 & 0.989 & 0.961 \\  
 
- Adjusted R$^{2}$ & 0.995 & 0.995 & 0.995 & 0.997 & 0.995 \\  
+ Adjusted R$^{2}$ & 0.945 & 0.952 & 0.952 & 0.982 & 0.952 \\  
 
- Residual Std. Error & 4.723 (df = 1699) & 4.747 (df = 1358) & 4.739 (df = 1357) & 3.372 (df = 1016) & 4.735 (df = 1356) \\  
+ Residual Std. Error & 7.564 (df = 2839) & 7.210 (df = 2270) & 7.209 (df = 2269) & 4.419 (df = 1700) & 7.211 (df = 2268) \\  
 
  \hline  
 
@@ -254,7 +242,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Sat, Jan 16, 2021 - 01:39:28 AM 
+ % Date and time: Sat, Jan 23, 2021 - 01:05:32 AM 
 
  \begin{table}[H] \centering  
 
@@ -280,9 +268,9 @@
 
  \hline \\[-1.8ex]  
 
-  median\_sqft & $-$0.469$^{***}$ & $-$0.470$^{***}$ & $-$0.451$^{***}$ &  &  &  &  &  &  \\  
+  median\_sqft & $-$0.453$^{***}$ & $-$0.454$^{***}$ & $-$0.454$^{***}$ &  &  &  &  &  &  \\  
 
-   & (0.140) & (0.140) & (0.139) &  &  &  &  &  &  \\  
+   & (0.139) & (0.139) & (0.139) &  &  &  &  &  &  \\  
 
    & & & & & & & & & \\  
 
@@ -292,9 +280,9 @@
 
    & & & & & & & & & \\  
 
-  prop\_unemp &  &  &  &  &  &  & $-$1.032$^{***}$ & $-$1.032$^{***}$ & $-$1.029$^{***}$ \\  
+  prop\_unemp &  &  &  &  &  &  & $-$1.034$^{***}$ & $-$1.034$^{***}$ & $-$1.033$^{***}$ \\  
 
-   &  &  &  &  &  &  & (0.089) & (0.089) & (0.088) \\  
+   &  &  &  &  &  &  & (0.089) & (0.089) & (0.089) \\  
 
    & & & & & & & & & \\  
 
@@ -304,19 +292,19 @@
 
    & & & & & & & & & \\  
 
-  median\_log\_sqft &  &  &  &  & 0.234$^{*}$ & 0.058 & 0.067 & 0.067 & 0.076 \\  
+  median\_log\_sqft &  &  &  &  & 0.216$^{*}$ & 0.050 & 0.071 & 0.071 & 0.071 \\  
 
-   &  &  &  &  & (0.125) & (0.124) & (0.103) & (0.103) & (0.103) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:treated & 0.040 & 0.040 & $-$6.798$^{***}$ & 0.0003$^{***}$ & 0.0003$^{***}$ & 0.0004$^{***}$ & 0.0002$^{***}$ & 0.0002$^{***}$ & $-$0.003$^{***}$ \\  
-
-   & (0.063) & (0.063) & (1.211) & (0.0001) & (0.0001) & (0.0001) & (0.00005) & (0.00005) & (0.001) \\  
+   &  &  &  &  & (0.125) & (0.124) & (0.104) & (0.104) & (0.104) \\  
 
    & & & & & & & & & \\  
 
-  delta\_hhi:month\_trend &  &  & $-$0.000$^{***}$ &  &  &  &  &  & $-$0.000$^{***}$ \\  
+  delta\_hhi:treated & 0.172 & 0.172 & $-$0.222$^{**}$ & 0.001$^{**}$ & 0.001$^{**}$ & 0.001$^{**}$ & 0.001$^{**}$ & 0.001$^{**}$ & 0.0003$^{***}$ \\  
+
+   & (0.325) & (0.325) & (0.099) & (0.0003) & (0.0004) & (0.0004) & (0.0002) & (0.0002) & (0.00005) \\  
+
+   & & & & & & & & & \\  
+
+  delta\_hhi:month\_trend &  &  & $-$0.000 &  &  &  &  &  & $-$0.000$^{*}$ \\  
 
    &  &  & (0.000) &  &  &  &  &  & (0.000) \\  
 
@@ -330,17 +318,17 @@
 
  Observations & 131,580 & 131,578 & 131,580 & 131,580 & 131,580 & 131,580 & 108,885 & 108,884 & 108,885 \\  
 
- R$^{2}$ & 0.993 & 0.993 & 0.993 & 0.991 & 0.991 & 0.992 & 0.993 & 0.993 & 0.993 \\  
+ R$^{2}$ & 0.993 & 0.993 & 0.993 & 0.991 & 0.991 & 0.991 & 0.993 & 0.993 & 0.993 \\  
 
  Adjusted R$^{2}$ & 0.993 & 0.993 & 0.993 & 0.991 & 0.991 & 0.991 & 0.993 & 0.993 & 0.993 \\  
 
- Residual Std. Error & 58.501 (df = 129596) & 58.304 (df = 127686) & 58.314 (df = 129595) & 0.033 (df = 129598) & 0.033 (df = 129597) & 0.032 (df = 129596) & 0.029 (df = 106912) & 0.029 (df = 105004) & 0.029 (df = 106911) \\  
+ Residual Std. Error & 58.514 (df = 129596) & 58.317 (df = 127686) & 58.512 (df = 129595) & 0.033 (df = 129598) & 0.033 (df = 129597) & 0.033 (df = 129596) & 0.029 (df = 106912) & 0.029 (df = 105004) & 0.029 (df = 106911) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \multicolumn{10}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average ZORI: 1673.68. Sample average log ZORI: 7.36. Sample average HHI: 26.41. Sample average delta HHI: 3.07. Sample SD HHI: 60.58. Sample SD delta HHI: 11.36. ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
+ \multicolumn{10}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average ZORI: 1673.68. Sample average log ZORI: 7.36. Sample average HHI: 18.45. Sample average delta HHI: 0.4. Sample SD HHI: 49.45. Sample SD delta HHI: 3.71. ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
 
  \end{tabular}}  
 
@@ -350,7 +338,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Sat, Jan 16, 2021 - 01:39:30 AM 
+ % Date and time: Sat, Jan 23, 2021 - 01:05:41 AM 
 
  \begin{table}[H] \centering  
 
@@ -376,45 +364,45 @@
 
  \hline \\[-1.8ex]  
 
-  median\_sqft & $-$0.725$^{**}$ & $-$0.728$^{**}$ & $-$0.726$^{**}$ &  &  &  &  &  &  \\  
+  median\_sqft & $-$0.515$^{***}$ & $-$0.516$^{***}$ & $-$0.515$^{***}$ &  &  &  &  &  &  \\  
 
-   & (0.298) & (0.298) & (0.297) &  &  &  &  &  &  \\  
+   & (0.186) & (0.186) & (0.186) &  &  &  &  &  &  \\  
 
    & & & & & & & & & \\  
 
-  median\_tot\_unit\_val & 0.002$^{***}$ & 0.002$^{***}$ & 0.002$^{***}$ &  &  & 0.00000$^{**}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ \\  
+  median\_tot\_unit\_val & 0.003$^{***}$ & 0.003$^{***}$ & 0.003$^{***}$ &  &  & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ \\  
 
    & (0.0002) & (0.0002) & (0.0002) &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
 
    & & & & & & & & & \\  
 
-  prop\_unemp &  &  &  &  &  &  & $-$0.992$^{***}$ & $-$0.992$^{***}$ & $-$0.959$^{***}$ \\  
+  prop\_unemp &  &  &  &  &  &  & $-$1.235$^{***}$ & $-$1.235$^{***}$ & $-$1.225$^{***}$ \\  
 
-   &  &  &  &  &  &  & (0.248) & (0.248) & (0.244) \\  
+   &  &  &  &  &  &  & (0.142) & (0.142) & (0.142) \\  
 
    & & & & & & & & & \\  
 
-  median\_household\_income &  &  &  &  &  &  & $-$0.00000 & $-$0.00000 & $-$0.00000 \\  
+  median\_household\_income &  &  &  &  &  &  & 0.00000 & 0.00000 & 0.00000 \\  
 
    &  &  &  &  &  &  & (0.00000) & (0.00000) & (0.00000) \\  
 
    & & & & & & & & & \\  
 
-  median\_log\_sqft &  &  &  &  & 0.324 & 0.186 & 0.255 & 0.255 & 0.250 \\  
+  median\_log\_sqft &  &  &  &  & 0.204 & 0.024 & 0.066 & 0.066 & 0.065 \\  
 
-   &  &  &  &  & (0.214) & (0.218) & (0.217) & (0.217) & (0.215) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:treated & 26.991$^{***}$ & 26.878$^{***}$ & 18.755$^{***}$ & 0.017$^{***}$ & 0.017$^{***}$ & 0.018$^{***}$ & 0.014$^{***}$ & 0.014$^{***}$ & 0.005$^{**}$ \\  
-
-   & (8.555) & (8.542) & (4.722) & (0.004) & (0.004) & (0.004) & (0.004) & (0.004) & (0.002) \\  
+   &  &  &  &  & (0.149) & (0.146) & (0.126) & (0.126) & (0.126) \\  
 
    & & & & & & & & & \\  
 
-  delta\_hhi:month\_trend &  &  & 0.240 &  &  &  &  &  & 0.0003$^{**}$ \\  
+  delta\_hhi:treated & 45.686$^{***}$ & 45.611$^{***}$ & 40.642$^{***}$ & 0.039$^{***}$ & 0.039$^{***}$ & 0.041$^{***}$ & 0.031$^{***}$ & 0.031$^{***}$ & 0.018$^{***}$ \\  
 
-   &  &  & (0.295) &  &  &  &  &  & (0.0002) \\  
+   & (15.937) & (15.935) & (12.750) & (0.008) & (0.008) & (0.008) & (0.007) & (0.007) & (0.005) \\  
+
+   & & & & & & & & & \\  
+
+  delta\_hhi:month\_trend &  &  & 0.144 &  &  &  &  &  & 0.0004$^{***}$ \\  
+
+   &  &  & (0.268) &  &  &  &  &  & (0.0002) \\  
 
    & & & & & & & & & \\  
 
@@ -424,19 +412,19 @@
 
  Delta HHI*Linear Trend & No & No & Yes & No & No & No & No & No & Yes \\  
 
- Observations & 28,490 & 28,488 & 28,490 & 28,490 & 28,490 & 28,490 & 23,449 & 23,448 & 23,449 \\  
+ Observations & 72,515 & 72,513 & 72,515 & 72,515 & 72,515 & 72,515 & 59,875 & 59,874 & 59,875 \\  
 
- R$^{2}$ & 0.993 & 0.994 & 0.993 & 0.992 & 0.992 & 0.992 & 0.993 & 0.993 & 0.993 \\  
+ R$^{2}$ & 0.993 & 0.993 & 0.993 & 0.992 & 0.992 & 0.992 & 0.993 & 0.993 & 0.993 \\  
 
  Adjusted R$^{2}$ & 0.993 & 0.993 & 0.993 & 0.992 & 0.992 & 0.992 & 0.993 & 0.993 & 0.993 \\  
 
- Residual Std. Error & 78.053 (df = 27990) & 76.378 (df = 27564) & 78.039 (df = 27989) & 0.033 (df = 27992) & 0.033 (df = 27991) & 0.033 (df = 27990) & 0.031 (df = 22959) & 0.032 (df = 22534) & 0.031 (df = 22958) \\  
+ Residual Std. Error & 69.094 (df = 71373) & 68.632 (df = 70305) & 69.094 (df = 71372) & 0.035 (df = 71375) & 0.035 (df = 71374) & 0.034 (df = 71373) & 0.031 (df = 58743) & 0.031 (df = 57676) & 0.031 (df = 58742) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \multicolumn{10}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average ZORI: 2313.03. Sample average log ZORI: 7.67. Sample average HHI: 22.82. Sample average delta HHI: 0.23. Sample SD HHI: 72.31. Sample SD delta HHI: 0.62. ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
+ \multicolumn{10}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average ZORI: 1896.45. Sample average log ZORI: 7.47. Sample average HHI: 18.6. Sample average delta HHI: 0.09. Sample SD HHI: 55.77. Sample SD delta HHI: 0.28. ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
 
  \end{tabular}}  
 
@@ -446,7 +434,457 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Sat, Jan 16, 2021 - 01:39:32 AM 
+ % Date and time: Sat, Jan 23, 2021 - 01:05:46 AM 
+
+ \begin{table}[H] \centering  
+
+   \caption{2-Way FE Zip, No DHHI, Merger: Beazer/Ellington - American Homes 4 Rent}  
+
+   \label{}  
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lccccc}  
+
+ \\[-1.8ex]\hline  
+
+ \hline \\[-1.8ex]  
+
+  & \multicolumn{5}{c}{\textit{Dependent variable:}} \\  
+
+ \cline{2-6}  
+
+ \\[-1.8ex] & \multicolumn{5}{c}{log\_zori} \\  
+
+  & Log Zori &  &  &  &  \\  
+
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5)\\  
+
+ \hline \\[-1.8ex]  
+
+  median\_log\_sqft &  & 0.029 & 0.043 & 0.043 & 0.043 \\  
+
+   &  & (0.140) & (0.113) & (0.113) & (0.113) \\  
+
+   & & & & & \\  
+
+  median\_tot\_unit\_val &  & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ \\  
+
+   &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
+
+   & & & & & \\  
+
+  prop\_unemp &  &  & $-$1.066$^{***}$ & $-$1.066$^{***}$ & $-$1.067$^{***}$ \\  
+
+   &  &  & (0.091) & (0.091) & (0.091) \\  
+
+   & & & & & \\  
+
+  median\_household\_income &  &  & $-$0.00000 & $-$0.00000 & $-$0.00000 \\  
+
+   &  &  & (0.00000) & (0.00000) & (0.00000) \\  
+
+   & & & & & \\  
+
+  post:treated & $-$0.016$^{***}$ & $-$0.012$^{***}$ & $-$0.015$^{***}$ & $-$0.015$^{***}$ & $-$0.016$^{***}$ \\  
+
+   & (0.003) & (0.003) & (0.002) & (0.002) & (0.002) \\  
+
+   & & & & & \\  
+
+  delta\_hhi:month\_trend &  &  &  &  & 0.0001 \\  
+
+   &  &  &  &  & (0.0001) \\  
+
+   & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No \\  
+
+ Delta HHI*Linear Trend & No & No & No & No & Yes \\  
+
+ Observations & 127,410 & 127,410 & 105,468 & 105,468 & 105,468 \\  
+
+ R$^{2}$ & 0.991 & 0.991 & 0.993 & 0.993 & 0.993 \\  
+
+ Adjusted R$^{2}$ & 0.991 & 0.991 & 0.993 & 0.993 & 0.993 \\  
+
+ Residual Std. Error & 0.032 (df = 125493) & 0.032 (df = 125491) & 0.028 (df = 103560) & 0.029 (df = 101716) & 0.028 (df = 103559) \\  
+
+ \hline  
+
+ \hline \\[-1.8ex]  
+
+ \multicolumn{6}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average log ZORI: 7.34230095219858. Sample average ZORI: 1642.28553488737. Sample average HHI: 17.63. Sample average delta HHI: 0.15. Sample SD HHI: 43.85. Sample SD delta HHI: 0.41ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
+
+ \end{tabular}}  
+
+ \end{table}  
+
+ 
+
+ % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
+
+ % Date and time: Sat, Jan 23, 2021 - 01:05:52 AM 
+
+ \begin{table}[H] \centering  
+
+   \caption{2-Way FE Zip, No DHHI, Merger: Colony American - Starwood Waypoint}  
+
+   \label{}  
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lccccc}  
+
+ \\[-1.8ex]\hline  
+
+ \hline \\[-1.8ex]  
+
+  & \multicolumn{5}{c}{\textit{Dependent variable:}} \\  
+
+ \cline{2-6}  
+
+ \\[-1.8ex] & \multicolumn{5}{c}{log\_zori} \\  
+
+  & Log Zori &  &  &  &  \\  
+
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5)\\  
+
+ \hline \\[-1.8ex]  
+
+  median\_log\_sqft &  & 0.030 & 0.030 & 0.030 & 0.030 \\  
+
+   &  & (0.136) & (0.109) & (0.109) & (0.108) \\  
+
+   & & & & & \\  
+
+  median\_tot\_unit\_val &  & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ \\  
+
+   &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
+
+   & & & & & \\  
+
+  prop\_unemp &  &  & $-$1.048$^{***}$ & $-$1.048$^{***}$ & $-$1.049$^{***}$ \\  
+
+   &  &  & (0.088) & (0.088) & (0.088) \\  
+
+   & & & & & \\  
+
+  median\_household\_income &  &  & 0.00000 & 0.00000 & 0.00000 \\  
+
+   &  &  & (0.00000) & (0.00000) & (0.00000) \\  
+
+   & & & & & \\  
+
+  post:treated & $-$0.001 & 0.001 & $-$0.001 & $-$0.001 & $-$0.004 \\  
+
+   & (0.007) & (0.007) & (0.006) & (0.006) & (0.007) \\  
+
+   & & & & & \\  
+
+  delta\_hhi:month\_trend &  &  &  &  & 0.008 \\  
+
+   &  &  &  &  & (0.013) \\  
+
+   & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No \\  
+
+ Delta HHI*Linear Trend & No & No & No & No & Yes \\  
+
+ Observations & 128,085 & 128,085 & 106,016 & 106,015 & 106,016 \\  
+
+ R$^{2}$ & 0.991 & 0.991 & 0.993 & 0.993 & 0.993 \\  
+
+ Adjusted R$^{2}$ & 0.991 & 0.991 & 0.993 & 0.993 & 0.993 \\  
+
+ Residual Std. Error & 0.033 (df = 126156) & 0.032 (df = 126154) & 0.029 (df = 104096) & 0.029 (df = 102241) & 0.029 (df = 104095) \\  
+
+ \hline  
+
+ \hline \\[-1.8ex]  
+
+ \multicolumn{6}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average log ZORI: 7.35029991288564. Sample average ZORI: 1661.57247140571. Sample average HHI: 18.16. Sample average delta HHI: 0.01. Sample SD HHI: 47.36. Sample SD delta HHI: 0.01ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
+
+ \end{tabular}}  
+
+ \end{table}  
+
+ 
+
+ % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
+
+ % Date and time: Sat, Jan 23, 2021 - 01:05:55 AM 
+
+ \begin{table}[H] \centering  
+
+   \caption{2-Way FE Zip, No DHHI, Merger: American Residential Properties - American Homes 4 Rent}  
+
+   \label{}  
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lccccc}  
+
+ \\[-1.8ex]\hline  
+
+ \hline \\[-1.8ex]  
+
+  & \multicolumn{5}{c}{\textit{Dependent variable:}} \\  
+
+ \cline{2-6}  
+
+ \\[-1.8ex] & \multicolumn{5}{c}{log\_zori} \\  
+
+  & Log Zori &  &  &  &  \\  
+
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5)\\  
+
+ \hline \\[-1.8ex]  
+
+  median\_log\_sqft &  & 0.024 & 0.047 & 0.047 & 0.049 \\  
+
+   &  & (0.145) & (0.115) & (0.115) & (0.115) \\  
+
+   & & & & & \\  
+
+  median\_tot\_unit\_val &  & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ \\  
+
+   &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
+
+   & & & & & \\  
+
+  prop\_unemp &  &  & $-$1.084$^{***}$ & $-$1.084$^{***}$ & $-$1.086$^{***}$ \\  
+
+   &  &  & (0.092) & (0.092) & (0.092) \\  
+
+   & & & & & \\  
+
+  median\_household\_income &  &  & $-$0.00000 & $-$0.00000 & $-$0.00000 \\  
+
+   &  &  & (0.00000) & (0.00000) & (0.00000) \\  
+
+   & & & & & \\  
+
+  post:treated & 0.032$^{***}$ & 0.031$^{***}$ & 0.021$^{***}$ & 0.021$^{***}$ & 0.013$^{**}$ \\  
+
+   & (0.006) & (0.006) & (0.005) & (0.005) & (0.006) \\  
+
+   & & & & & \\  
+
+  delta\_hhi:month\_trend &  &  &  &  & 0.006$^{***}$ \\  
+
+   &  &  &  &  & (0.001) \\  
+
+   & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No \\  
+
+ Delta HHI*Linear Trend & No & No & No & No & Yes \\  
+
+ Observations & 112,762 & 112,762 & 93,412 & 93,412 & 93,412 \\  
+
+ R$^{2}$ & 0.989 & 0.990 & 0.992 & 0.992 & 0.992 \\  
+
+ Adjusted R$^{2}$ & 0.989 & 0.989 & 0.992 & 0.992 & 0.992 \\  
+
+ Residual Std. Error & 0.032 (df = 111063) & 0.032 (df = 111061) & 0.028 (df = 91722) & 0.028 (df = 90096) & 0.028 (df = 91721) \\  
+
+ \hline  
+
+ \hline \\[-1.8ex]  
+
+ \multicolumn{6}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average log ZORI: 7.29757489882954. Sample average ZORI: 1556.43644135436. Sample average HHI: 17.34. Sample average delta HHI: 0.05. Sample SD HHI: 40.66. Sample SD delta HHI: 0.07ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
+
+ \end{tabular}}  
+
+ \end{table}  
+
+ 
+
+ % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
+
+ % Date and time: Sat, Jan 23, 2021 - 01:05:59 AM 
+
+ \begin{table}[H] \centering  
+
+   \caption{2-Way FE Zip, No DHHI, Merger: Starwood Waypoint - Invitation Homes}  
+
+   \label{}  
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lccccc}  
+
+ \\[-1.8ex]\hline  
+
+ \hline \\[-1.8ex]  
+
+  & \multicolumn{5}{c}{\textit{Dependent variable:}} \\  
+
+ \cline{2-6}  
+
+ \\[-1.8ex] & \multicolumn{5}{c}{log\_zori} \\  
+
+  & Log Zori &  &  &  &  \\  
+
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5)\\  
+
+ \hline \\[-1.8ex]  
+
+  median\_log\_sqft &  & 0.054 & 0.049 & 0.049 & 0.052 \\  
+
+   &  & (0.134) & (0.108) & (0.108) & (0.108) \\  
+
+   & & & & & \\  
+
+  median\_tot\_unit\_val &  & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ \\  
+
+   &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
+
+   & & & & & \\  
+
+  prop\_unemp &  &  & $-$1.006$^{***}$ & $-$1.006$^{***}$ & $-$1.013$^{***}$ \\  
+
+   &  &  & (0.088) & (0.088) & (0.088) \\  
+
+   & & & & & \\  
+
+  median\_household\_income &  &  & 0.00000 & 0.00000 & 0.00000 \\  
+
+   &  &  & (0.00000) & (0.00000) & (0.00000) \\  
+
+   & & & & & \\  
+
+  post:treated & 0.017$^{***}$ & 0.020$^{***}$ & 0.014$^{***}$ & 0.014$^{***}$ & 0.014$^{***}$ \\  
+
+   & (0.002) & (0.002) & (0.002) & (0.002) & (0.002) \\  
+
+   & & & & & \\  
+
+  delta\_hhi:month\_trend &  &  &  &  & 0.00001$^{**}$ \\  
+
+   &  &  &  &  & (0.00001) \\  
+
+   & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No \\  
+
+ Delta HHI*Linear Trend & No & No & No & No & Yes \\  
+
+ Observations & 130,748 & 130,748 & 108,205 & 108,204 & 108,205 \\  
+
+ R$^{2}$ & 0.991 & 0.992 & 0.993 & 0.993 & 0.993 \\  
+
+ Adjusted R$^{2}$ & 0.991 & 0.991 & 0.993 & 0.993 & 0.993 \\  
+
+ Residual Std. Error & 0.033 (df = 128779) & 0.032 (df = 128777) & 0.029 (df = 106245) & 0.029 (df = 104350) & 0.029 (df = 106244) \\  
+
+ \hline  
+
+ \hline \\[-1.8ex]  
+
+ \multicolumn{6}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average log ZORI: 7.35535519444743. Sample average ZORI: 1670.88714167712. Sample average HHI: 18.4. Sample average delta HHI: 0.74. Sample SD HHI: 49.51. Sample SD delta HHI: 4.52ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
+
+ \end{tabular}}  
+
+ \end{table}  
+
+ 
+
+ % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
+
+ % Date and time: Sat, Jan 23, 2021 - 01:06:01 AM 
+
+ \begin{table}[H] \centering  
+
+   \caption{2-Way FE Zip, No DHHI, Merger: Silver Bay - Tricon Capital}  
+
+   \label{}  
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lccccc}  
+
+ \\[-1.8ex]\hline  
+
+ \hline \\[-1.8ex]  
+
+  & \multicolumn{5}{c}{\textit{Dependent variable:}} \\  
+
+ \cline{2-6}  
+
+ \\[-1.8ex] & \multicolumn{5}{c}{log\_zori} \\  
+
+  & Log Zori &  &  &  &  \\  
+
+ \\[-1.8ex] & (1) & (2) & (3) & (4) & (5)\\  
+
+ \hline \\[-1.8ex]  
+
+  median\_log\_sqft &  & 0.016 & 0.039 & 0.039 & 0.039 \\  
+
+   &  & (0.133) & (0.108) & (0.108) & (0.108) \\  
+
+   & & & & & \\  
+
+  median\_tot\_unit\_val &  & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ \\  
+
+   &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
+
+   & & & & & \\  
+
+  prop\_unemp &  &  & $-$1.031$^{***}$ & $-$1.031$^{***}$ & $-$1.030$^{***}$ \\  
+
+   &  &  & (0.090) & (0.090) & (0.090) \\  
+
+   & & & & & \\  
+
+  median\_household\_income &  &  & 0.000 & 0.000 & 0.000 \\  
+
+   &  &  & (0.00000) & (0.00000) & (0.00000) \\  
+
+   & & & & & \\  
+
+  post:treated & $-$0.071$^{**}$ & $-$0.070$^{**}$ & $-$0.055$^{**}$ & $-$0.055$^{**}$ & $-$0.060$^{***}$ \\  
+
+   & (0.033) & (0.033) & (0.023) & (0.023) & (0.009) \\  
+
+   & & & & & \\  
+
+  delta\_hhi:month\_trend &  &  &  &  & 0.030 \\  
+
+   &  &  &  &  & (0.077) \\  
+
+   & & & & & \\  
+
+ \hline \\[-1.8ex]  
+
+ Zip*Linear Trend & No & No & No & Yes & No \\  
+
+ Delta HHI*Linear Trend & No & No & No & No & Yes \\  
+
+ Observations & 126,627 & 126,627 & 104,827 & 104,826 & 104,827 \\  
+
+ R$^{2}$ & 0.991 & 0.991 & 0.993 & 0.993 & 0.993 \\  
+
+ Adjusted R$^{2}$ & 0.991 & 0.991 & 0.993 & 0.993 & 0.993 \\  
+
+ Residual Std. Error & 0.033 (df = 124720) & 0.033 (df = 124718) & 0.029 (df = 102929) & 0.029 (df = 101096) & 0.029 (df = 102928) \\  
+
+ \hline  
+
+ \hline \\[-1.8ex]  
+
+ \multicolumn{6}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average log ZORI: 7.34042836836331. Sample average ZORI: 1640.27016355122. Sample average HHI: 17.48. Sample average delta HHI: 0.01. Sample SD HHI: 43.35. Sample SD delta HHI: 0ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
+
+ \end{tabular}}  
+
+ \end{table}  
+
+ 
+
+ % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
+
+ % Date and time: Sat, Jan 23, 2021 - 01:06:05 AM 
 
  \begin{table}[H] \centering  
 
@@ -472,7 +910,7 @@
 
  \hline \\[-1.8ex]  
 
-  median\_log\_sqft &  & 0.047 & 0.058 & 0.058 & 0.059 \\  
+  median\_log\_sqft &  & 0.044 & 0.060 & 0.060 & 0.060 \\  
 
    &  & (0.140) & (0.113) & (0.113) & (0.113) \\  
 
@@ -484,7 +922,7 @@
 
    & & & & & \\  
 
-  prop\_unemp &  &  & $-$1.043$^{***}$ & $-$1.043$^{***}$ & $-$1.042$^{***}$ \\  
+  prop\_unemp &  &  & $-$1.048$^{***}$ & $-$1.048$^{***}$ & $-$1.048$^{***}$ \\  
 
    &  &  & (0.090) & (0.090) & (0.090) \\  
 
@@ -496,15 +934,15 @@
 
    & & & & & \\  
 
-  delta\_hhi:month\_trend &  &  &  &  & $-$0.00001 \\  
+  delta\_hhi:month\_trend &  &  &  &  & 0.0002$^{***}$ \\  
 
-   &  &  &  &  & (0.00002) \\  
+   &  &  &  &  & (0.0001) \\  
 
    & & & & & \\  
 
-  delta\_hhi:post:treated & $-$0.003$^{***}$ & $-$0.002$^{***}$ & $-$0.002$^{***}$ & $-$0.002$^{***}$ & $-$0.002$^{***}$ \\  
+  delta\_hhi:post:treated & $-$0.006 & $-$0.004 & $-$0.007$^{*}$ & $-$0.007$^{*}$ & $-$0.014$^{***}$ \\  
 
-   & (0.001) & (0.001) & (0.001) & (0.001) & (0.001) \\  
+   & (0.004) & (0.004) & (0.004) & (0.004) & (0.003) \\  
 
    & & & & & \\  
 
@@ -514,19 +952,19 @@
 
  Delta HHI*Linear Trend & No & No & No & No & Yes \\  
 
- Observations & 127,338 & 127,338 & 105,408 & 105,408 & 105,408 \\  
+ Observations & 127,410 & 127,410 & 105,468 & 105,468 & 105,468 \\  
 
  R$^{2}$ & 0.991 & 0.991 & 0.993 & 0.993 & 0.993 \\  
 
  Adjusted R$^{2}$ & 0.991 & 0.991 & 0.993 & 0.993 & 0.993 \\  
 
- Residual Std. Error & 0.033 (df = 125422) & 0.032 (df = 125420) & 0.028 (df = 103501) & 0.029 (df = 101658) & 0.028 (df = 103500) \\  
+ Residual Std. Error & 0.033 (df = 125493) & 0.032 (df = 125491) & 0.028 (df = 103560) & 0.029 (df = 101716) & 0.028 (df = 103559) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \multicolumn{6}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average log ZORI: 7.3420808521325. Sample average ZORI: 1641.92146884669. Sample average HHI: 25.88. Sample average delta HHI: 0.73. Sample SD HHI: 56.61. Sample SD delta HHI: 2.04ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
+ \multicolumn{6}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average log ZORI: 7.34230095219858. Sample average ZORI: 1642.28553488737. Sample average HHI: 17.63. Sample average delta HHI: 0.15. Sample SD HHI: 43.85. Sample SD delta HHI: 0.41ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
 
  \end{tabular}}  
 
@@ -536,7 +974,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Sat, Jan 16, 2021 - 01:39:36 AM 
+ % Date and time: Sat, Jan 23, 2021 - 01:06:21 AM 
 
  \begin{table}[H] \centering  
 
@@ -562,7 +1000,7 @@
 
  \hline \\[-1.8ex]  
 
-  median\_log\_sqft &  & 0.034 & 0.025 & 0.025 & 0.026 \\  
+  median\_log\_sqft &  & 0.030 & 0.030 & 0.030 & 0.030 \\  
 
    &  & (0.136) & (0.108) & (0.108) & (0.108) \\  
 
@@ -574,7 +1012,7 @@
 
    & & & & & \\  
 
-  prop\_unemp &  &  & $-$1.045$^{***}$ & $-$1.045$^{***}$ & $-$1.045$^{***}$ \\  
+  prop\_unemp &  &  & $-$1.048$^{***}$ & $-$1.048$^{***}$ & $-$1.049$^{***}$ \\  
 
    &  &  & (0.088) & (0.088) & (0.088) \\  
 
@@ -586,15 +1024,15 @@
 
    & & & & & \\  
 
-  delta\_hhi:month\_trend &  &  &  &  & 0.0001$^{***}$ \\  
+  delta\_hhi:month\_trend &  &  &  &  & 0.008 \\  
 
-   &  &  &  &  & (0.00002) \\  
+   &  &  &  &  & (0.011) \\  
 
    & & & & & \\  
 
-  delta\_hhi:post:treated & 0.002$^{***}$ & 0.003$^{***}$ & 0.002$^{***}$ & 0.002$^{***}$ & $-$0.001$^{**}$ \\  
+  delta\_hhi:post:treated & 0.079 & 0.155 & 0.081 & 0.081 & $-$0.162$^{**}$ \\  
 
-   & (0.001) & (0.001) & (0.001) & (0.001) & (0.0003) \\  
+   & (0.405) & (0.415) & (0.319) & (0.319) & (0.075) \\  
 
    & & & & & \\  
 
@@ -604,19 +1042,19 @@
 
  Delta HHI*Linear Trend & No & No & No & No & Yes \\  
 
- Observations & 128,017 & 128,017 & 105,960 & 105,959 & 105,960 \\  
+ Observations & 128,085 & 128,085 & 106,016 & 106,015 & 106,016 \\  
 
  R$^{2}$ & 0.991 & 0.991 & 0.993 & 0.993 & 0.993 \\  
 
  Adjusted R$^{2}$ & 0.991 & 0.991 & 0.993 & 0.993 & 0.993 \\  
 
- Residual Std. Error & 0.033 (df = 126089) & 0.032 (df = 126087) & 0.029 (df = 104041) & 0.029 (df = 102187) & 0.029 (df = 104040) \\  
+ Residual Std. Error & 0.033 (df = 126156) & 0.032 (df = 126154) & 0.029 (df = 104096) & 0.029 (df = 102241) & 0.029 (df = 104095) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \multicolumn{6}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average log ZORI: 7.3502607811451. Sample average ZORI: 1661.56060523212. Sample average HHI: 26.35. Sample average delta HHI: 2.22. Sample SD HHI: 59.26. Sample SD delta HHI: 2.72ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
+ \multicolumn{6}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average log ZORI: 7.35029991288564. Sample average ZORI: 1661.57247140571. Sample average HHI: 18.16. Sample average delta HHI: 0.01. Sample SD HHI: 47.36. Sample SD delta HHI: 0.01ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
 
  \end{tabular}}  
 
@@ -626,7 +1064,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Sat, Jan 16, 2021 - 01:39:41 AM 
+ % Date and time: Sat, Jan 23, 2021 - 01:06:28 AM 
 
  \begin{table}[H] \centering  
 
@@ -652,7 +1090,7 @@
 
  \hline \\[-1.8ex]  
 
-  median\_log\_sqft &  & 0.002 & 0.028 & 0.028 & 0.029 \\  
+  median\_log\_sqft &  & 0.014 & 0.041 & 0.041 & 0.044 \\  
 
    &  & (0.145) & (0.115) & (0.115) & (0.115) \\  
 
@@ -664,7 +1102,7 @@
 
    & & & & & \\  
 
-  prop\_unemp &  &  & $-$1.083$^{***}$ & $-$1.083$^{***}$ & $-$1.085$^{***}$ \\  
+  prop\_unemp &  &  & $-$1.079$^{***}$ & $-$1.079$^{***}$ & $-$1.081$^{***}$ \\  
 
    &  &  & (0.092) & (0.092) & (0.092) \\  
 
@@ -676,15 +1114,15 @@
 
    & & & & & \\  
 
-  delta\_hhi:month\_trend &  &  &  &  & 0.0001$^{***}$ \\  
+  delta\_hhi:month\_trend &  &  &  &  & 0.009$^{***}$ \\  
 
-   &  &  &  &  & (0.00002) \\  
+   &  &  &  &  & (0.001) \\  
 
    & & & & & \\  
 
-  delta\_hhi:post:treated & 0.004$^{***}$ & 0.004$^{***}$ & 0.004$^{***}$ & 0.004$^{***}$ & 0.0002 \\  
+  delta\_hhi:post:treated & 0.336$^{***}$ & 0.327$^{***}$ & 0.249$^{***}$ & 0.249$^{***}$ & $-$0.008 \\  
 
-   & (0.001) & (0.001) & (0.001) & (0.001) & (0.0004) \\  
+   & (0.046) & (0.045) & (0.036) & (0.036) & (0.016) \\  
 
    & & & & & \\  
 
@@ -694,19 +1132,19 @@
 
  Delta HHI*Linear Trend & No & No & No & No & Yes \\  
 
- Observations & 112,491 & 112,491 & 93,189 & 93,189 & 93,189 \\  
+ Observations & 112,762 & 112,762 & 93,412 & 93,412 & 93,412 \\  
 
  R$^{2}$ & 0.989 & 0.990 & 0.992 & 0.992 & 0.992 \\  
 
  Adjusted R$^{2}$ & 0.989 & 0.989 & 0.992 & 0.992 & 0.992 \\  
 
- Residual Std. Error & 0.032 (df = 110796) & 0.032 (df = 110794) & 0.028 (df = 91503) & 0.028 (df = 89881) & 0.028 (df = 91502) \\  
+ Residual Std. Error & 0.032 (df = 111063) & 0.032 (df = 111061) & 0.028 (df = 91722) & 0.028 (df = 90096) & 0.028 (df = 91721) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \multicolumn{6}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average log ZORI: 7.29717060990095. Sample average ZORI: 1555.94035967322. Sample average HHI: 26.65. Sample average delta HHI: 1.57. Sample SD HHI: 55.76. Sample SD delta HHI: 3.4ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
+ \multicolumn{6}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average log ZORI: 7.29757489882954. Sample average ZORI: 1556.43644135436. Sample average HHI: 17.34. Sample average delta HHI: 0.05. Sample SD HHI: 40.66. Sample SD delta HHI: 0.07ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
 
  \end{tabular}}  
 
@@ -716,7 +1154,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Sat, Jan 16, 2021 - 01:39:45 AM 
+ % Date and time: Sat, Jan 23, 2021 - 01:06:38 AM 
 
  \begin{table}[H] \centering  
 
@@ -742,9 +1180,9 @@
 
  \hline \\[-1.8ex]  
 
-  median\_log\_sqft &  & 0.050 & 0.041 & 0.041 & 0.041 \\  
+  median\_log\_sqft &  & 0.044 & 0.048 & 0.048 & 0.048 \\  
 
-   &  & (0.133) & (0.107) & (0.107) & (0.107) \\  
+   &  & (0.134) & (0.107) & (0.107) & (0.107) \\  
 
    & & & & & \\  
 
@@ -754,7 +1192,7 @@
 
    & & & & & \\  
 
-  prop\_unemp &  &  & $-$1.031$^{***}$ & $-$1.031$^{***}$ & $-$1.030$^{***}$ \\  
+  prop\_unemp &  &  & $-$1.032$^{***}$ & $-$1.032$^{***}$ & $-$1.033$^{***}$ \\  
 
    &  &  & (0.089) & (0.089) & (0.089) \\  
 
@@ -766,15 +1204,15 @@
 
    & & & & & \\  
 
-  delta\_hhi:month\_trend &  &  &  &  & $-$0.00000 \\  
+  delta\_hhi:month\_trend &  &  &  &  & 0.00001 \\  
 
-   &  &  &  &  & (0.00000) \\  
+   &  &  &  &  & (0.00001) \\  
 
    & & & & & \\  
 
-  delta\_hhi:post:treated & 0.0004$^{***}$ & 0.0004$^{***}$ & 0.0003$^{***}$ & 0.0003$^{***}$ & 0.0003$^{***}$ \\  
+  delta\_hhi:post:treated & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{**}$ \\  
 
-   & (0.0001) & (0.0001) & (0.00005) & (0.00005) & (0.0001) \\  
+   & (0.0003) & (0.0003) & (0.0002) & (0.0002) & (0.0002) \\  
 
    & & & & & \\  
 
@@ -790,13 +1228,13 @@
 
  Adjusted R$^{2}$ & 0.991 & 0.991 & 0.993 & 0.993 & 0.993 \\  
 
- Residual Std. Error & 0.033 (df = 128779) & 0.032 (df = 128777) & 0.029 (df = 106245) & 0.029 (df = 104350) & 0.029 (df = 106244) \\  
+ Residual Std. Error & 0.033 (df = 128779) & 0.033 (df = 128777) & 0.029 (df = 106245) & 0.029 (df = 104350) & 0.029 (df = 106244) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \multicolumn{6}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average log ZORI: 7.35535519444743. Sample average ZORI: 1670.88714167712. Sample average HHI: 26.42. Sample average delta HHI: 6.44. Sample SD HHI: 60.71. Sample SD delta HHI: 16.01ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
+ \multicolumn{6}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average log ZORI: 7.35535519444743. Sample average ZORI: 1670.88714167712. Sample average HHI: 18.4. Sample average delta HHI: 0.74. Sample SD HHI: 49.51. Sample SD delta HHI: 4.52ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
 
  \end{tabular}}  
 
@@ -806,7 +1244,7 @@
 
  % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
 
- % Date and time: Sat, Jan 16, 2021 - 01:39:49 AM 
+ % Date and time: Sat, Jan 23, 2021 - 01:06:53 AM 
 
  \begin{table}[H] \centering  
 
@@ -832,9 +1270,9 @@
 
  \hline \\[-1.8ex]  
 
-  median\_log\_sqft &  & 0.018 & 0.031 & 0.031 & 0.031 \\  
+  median\_log\_sqft &  & 0.017 & 0.038 & 0.038 & 0.038 \\  
 
-   &  & (0.133) & (0.107) & (0.107) & (0.107) \\  
+   &  & (0.133) & (0.108) & (0.108) & (0.108) \\  
 
    & & & & & \\  
 
@@ -844,7 +1282,7 @@
 
    & & & & & \\  
 
-  prop\_unemp &  &  & $-$1.039$^{***}$ & $-$1.039$^{***}$ & $-$1.039$^{***}$ \\  
+  prop\_unemp &  &  & $-$1.038$^{***}$ & $-$1.038$^{***}$ & $-$1.037$^{***}$ \\  
 
    &  &  & (0.091) & (0.091) & (0.091) \\  
 
@@ -856,15 +1294,15 @@
 
    & & & & & \\  
 
-  delta\_hhi:month\_trend &  &  &  &  & $-$0.00001 \\  
+  delta\_hhi:month\_trend &  &  &  &  & $-$0.101 \\  
 
-   &  &  &  &  & (0.00001) \\  
+   &  &  &  &  & (0.119) \\  
 
    & & & & & \\  
 
-  delta\_hhi:post:treated & $-$0.00005 & $-$0.00004 & $-$0.0001 & $-$0.0001 & 0.0001 \\  
+  delta\_hhi:post:treated & $-$1.026 & $-$0.983 & $-$1.333 & $-$1.333 & 1.687$^{***}$ \\  
 
-   & (0.0004) & (0.0004) & (0.0003) & (0.0003) & (0.0001) \\  
+   & (3.992) & (3.936) & (2.922) & (2.922) & (0.636) \\  
 
    & & & & & \\  
 
@@ -874,109 +1312,19 @@
 
  Delta HHI*Linear Trend & No & No & No & No & Yes \\  
 
- Observations & 126,829 & 126,829 & 104,993 & 104,992 & 104,993 \\  
+ Observations & 126,627 & 126,627 & 104,827 & 104,826 & 104,827 \\  
 
  R$^{2}$ & 0.991 & 0.991 & 0.993 & 0.993 & 0.993 \\  
 
  Adjusted R$^{2}$ & 0.991 & 0.991 & 0.993 & 0.993 & 0.993 \\  
 
- Residual Std. Error & 0.033 (df = 124919) & 0.033 (df = 124917) & 0.029 (df = 103092) & 0.029 (df = 101256) & 0.029 (df = 103091) \\  
+ Residual Std. Error & 0.033 (df = 124720) & 0.033 (df = 124718) & 0.029 (df = 102929) & 0.029 (df = 101096) & 0.029 (df = 102928) \\  
 
  \hline  
 
  \hline \\[-1.8ex]  
 
- \multicolumn{6}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average log ZORI: 7.34073238172593. Sample average ZORI: 1640.71545939809. Sample average HHI: 25.74. Sample average delta HHI: 44.12. Sample SD HHI: 56.25. Sample SD delta HHI: 46.36ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Sat, Jan 16, 2021 - 01:39:52 AM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE Zip, No Multi-Merge, Merger: Beazer/Ellington - American Homes 4 Rent}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{5}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-6}  
-
- \\[-1.8ex] & \multicolumn{5}{c}{log\_zori} \\  
-
-  & Log Zori &  &  &  &  \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5)\\  
-
- \hline \\[-1.8ex]  
-
-  median\_log\_sqft &  & 0.364 & 0.302 & $-$0.269 & 0.303 \\  
-
-   &  & (0.368) & (0.307) & (0.267) & (0.307) \\  
-
-   & & & & & \\  
-
-  median\_tot\_unit\_val &  & 0.00000 & 0.00000$^{**}$ & $-$0.00000$^{***}$ & 0.00000$^{*}$ \\  
-
-   &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & \\  
-
-  prop\_unemp &  &  & $-$1.027$^{***}$ & 0.315$^{**}$ & $-$1.022$^{***}$ \\  
-
-   &  &  & (0.283) & (0.154) & (0.282) \\  
-
-   & & & & & \\  
-
-  median\_household\_income &  &  & $-$0.00000 & 0.00000 & $-$0.00000 \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & \\  
-
-  delta\_hhi:month\_trend &  &  &  &  & $-$0.004 \\  
-
-   &  &  &  &  & (0.005) \\  
-
-   & & & & & \\  
-
-  delta\_hhi:post:treated & $-$0.425$^{**}$ & $-$0.399$^{**}$ & $-$0.378$^{**}$ & $-$0.281$^{***}$ & $-$0.260$^{**}$ \\  
-
-   & (0.196) & (0.196) & (0.185) & (0.100) & (0.116) \\  
-
-   & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes \\  
-
- Observations & 24,320 & 24,320 & 20,032 & 20,032 & 20,032 \\  
-
- R$^{2}$ & 0.992 & 0.992 & 0.993 & 0.998 & 0.993 \\  
-
- Adjusted R$^{2}$ & 0.992 & 0.992 & 0.993 & 0.998 & 0.993 \\  
-
- Residual Std. Error & 0.033 (df = 23887) & 0.033 (df = 23885) & 0.031 (df = 19607) & 0.018 (df = 19246) & 0.031 (df = 19606) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{6}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average log ZORI: 7.65536919229079. Sample average ZORI: 2257.99662828947. Sample average HHI: 19.43. Sample average delta HHI: 0.04. Sample SD HHI: 55.56. Sample SD delta HHI: 0.05ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
+ \multicolumn{6}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is zip level, with month-year and zip FE. Sample average log ZORI: 7.34042836836331. Sample average ZORI: 1640.27016355122. Sample average HHI: 17.48. Sample average delta HHI: 0.01. Sample SD HHI: 43.35. Sample SD delta HHI: 0ZORI sample covers years 2014-2020. MLS rent sample covers years 2007-2018.}} \\ 
 
  \end{tabular}}  
 

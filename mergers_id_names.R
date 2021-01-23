@@ -39,12 +39,12 @@ state <- args$state
 
 # Read and id names ---------------------------------------------------
 dt <- fread(paste0(mergers_data_path, state, "_mergers.csv"), colClasses=list(character = "apn_unformatted"))
-identify_banks_gov(dt, "owner_name_clean")
-builder_names <- c("builder", " loan ", " construction ")
-law_names <- c(" legal ", " law ", "attorney")
+identify_banks_gov(dt, "smty_owner_name")
+builder_names <- c("builder", " loan "," loan$", "construction")
+law_names <- c("legal", " law ", " law$", "^law ", "attorney")
 dt[, `:=`(owner_builder = 0, owner_law = 0)]
-dt[grepl(paste0(builder_names, collapse = "|"), owner_name_clean), owner_builder := 1]
-dt[grepl(paste0(law_names, collapse = "|"), owner_name_clean), owner_law := 1]
+dt[grepl(paste0(builder_names, collapse = "|"), smty_owner_name), owner_builder := 1]
+dt[grepl(paste0(law_names, collapse = "|"), smty_owner_name), owner_law := 1]
 
 # Write back 
 fwrite(dt, paste0(mergers_data_path, state, "_mergers.csv"))

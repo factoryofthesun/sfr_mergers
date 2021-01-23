@@ -55,6 +55,7 @@ dt <- dt[RentPrice < 1e5 & RentPrice > 100]
 # Get means for each merger
 for (id in 1:5){
   # Need to do Beazer/Ellington separately for first merger 
+  post_col <- paste0("post_", id)
   if (id == 1){
       acquiror_name <- mergers[1, AcquirorName]
       target_name1 <- mergers[1, TargetName]
@@ -64,12 +65,12 @@ for (id in 1:5){
       print(paste0("Summary for targets: ", target_name_concat, "----------------------"))
       
       # Number of properties
-      n_target1 <- uniqueN(dt[Merger_Owner_Fill == target_name1, id])
-      n_target2 <- uniqueN(dt[Merger_Owner_Fill == target_name2, id])
-      n_acquiror <- uniqueN(dt[Merger_Owner_Fill == acquiror_name, id])
-      print(paste0("# Beazer: ", n_target1))
-      print(paste0("# Ellington: ", n_target2))
-      print(paste0("# acquiror: ", n_acquiror))
+      n_target1 <- uniqueN(dt[Merger_Owner_Fill == target_name1 & get(post_col) == 0, id])
+      n_target2 <- uniqueN(dt[Merger_Owner_Fill == target_name2 & get(post_col) == 0, id])
+      n_acquiror <- uniqueN(dt[Merger_Owner_Fill == acquiror_name & get(post_col) == 0, id])
+      print(paste0("# pre Beazer: ", n_target1))
+      print(paste0("# pre Ellington: ", n_target2))
+      print(paste0("# pre acquiror: ", n_acquiror))
     } else{
     i <- id + 1
     acquiror_name <- mergers[i, AcquirorName]
@@ -77,13 +78,12 @@ for (id in 1:5){
     print(paste0("Summary for target: ", target_name, "----------------------"))
     
     # Number of properties
-    n_target <- uniqueN(dt[Merger_Owner_Fill == target_name, id])
-    n_acquiror <- uniqueN(dt[Merger_Owner_Fill == acquiror_name, id])
-    print(paste0("# target: ", n_target))
-    print(paste0("# acquiror: ", n_acquiror))
+    n_target <- uniqueN(dt[Merger_Owner_Fill == target_name & get(post_col) == 0, id])
+    n_acquiror <- uniqueN(dt[Merger_Owner_Fill == acquiror_name & get(post_col) == 0, id])
+    print(paste0("# pre target: ", n_target))
+    print(paste0("# pre acquiror: ", n_acquiror))
   }
   # Prepost firm mean rent 
-  post_col <- paste0("post_", id)
   target_pre_rent <- mean_na(dt[Merger_Owner_Fill %in% target_name & get(post_col) == 0, RentPrice])
   target_post_rent <- mean_na(dt[Merger_Owner_Fill %in% target_name & get(post_col) == 1, RentPrice])
   target_pre_rent_sd <- sd(dt[Merger_Owner_Fill %in% target_name & get(post_col) == 0, RentPrice], na.rm=T)

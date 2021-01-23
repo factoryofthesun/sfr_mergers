@@ -107,8 +107,8 @@ for (i in 1:length(post_names)){
 dt_zip <- dt_zip[year >= 2000 & year <= 2020]
 
 # Drop low property count zips 
-bad_zips <- dt_zip[,.(N = mean_na(N)), .(Zip5)][N < 10, Zip5]
-print(paste0("Dropping ", nrow(dt_zip[Zip5 %in% bad_zips]), " rows of zips with under 10 average property observations per year out of ", 
+bad_zips <- dt_zip[,.(N = mean_na(N)), .(Zip5)][N < 50, Zip5]
+print(paste0("Dropping ", nrow(dt_zip[Zip5 %in% bad_zips]), " rows of zips with under 50 average property observations per year out of ", 
              nrow(dt_zip), " total rows."))
 dt_zip <- dt_zip[!(Zip5 %in% bad_zips)]
 
@@ -136,6 +136,7 @@ hhi_names <- grep("^delta_hhi_", names(dt_zip), value = T)
 post_names <- grep("^post_", names(dt_zip), value = T)
 dt_zip[,delta_hhi := 0]
 dt_zip[,treated := 0]
+dt_zip[,post := 0]
 # Delta HHI for multi-merged zips will be discontinuous jumps (add new delta HHI after every additional post period)
 for (i in 1:length(post_names)){
   post_var <- post_names[i]
@@ -144,7 +145,47 @@ for (i in 1:length(post_names)){
   dt_zip[get(post_var) == 1 & get(treated_var) == 1 & delta_hhi > 0, delta_hhi := delta_hhi + get(hhi_var)]
   dt_zip[get(treated_var) == 1 & delta_hhi == 0, delta_hhi := get(hhi_var)]
   dt_zip[get(post_var) == 1 & get(treated_var) == 1, treated := 1]
+  dt_zip[post == 0, post := get(post_var)]
 }
+# ======================= (0.5) HHI and ZORI =========================
+# Median zip prices for DHHI quartiles
+dt_zip[delta_hhi > 0, dhhi_quart := cut(delta_hhi, breaks=c(quantile(delta_hhi,probs=seq(0,1,by=0.25),na.rm=T)),
+                                              labels=paste0("Q", 1:4), include.lowest = T)]
+
+dt_month_zori <- dt_zip[,.(med_zori = median_na(ZORI)),.(dhhi_quart, monthyear)]
+dt_month_zori[is.na(dhhi_quart), dhhi_quart := "Unmerged Zips"]
+ggplot(dt_month_zori, aes(x = monthyear, y = med_zori, color = dhhi_quart)) + geom_line() + 
+  labs(y = "Median ZORI", color = "\u0394 HHI Quartile", title = "HHI Trend By Quartile of Simulated HHI Increase") + 
+  ggsave(paste0(mergers_path, "figs/diagnostics/zori_dhhi_q.pdf"))
+
+# HHI Trends by DHHI Quartiles
+dt_hhi <- dt_zip[, .(mean_hhi = mean_na(hhi)), .(dhhi_quart, year)]
+dt_hhi[is.na(dhhi_quart), dhhi_quart := "Unmerged Zips"]
+ggplot(dt_hhi, aes(x = year, y = mean_hhi, color = dhhi_quart)) + geom_line() + 
+  labs(y = "Avg HHI", color = "\u0394 HHI Quartile", title = "HHI Trend By Quartile of Simulated HHI Increase") + 
+  ggsave(paste0(mergers_path, "figs/diagnostics/hhi_dhhi_q.pdf"))
+
+# Simple HHI plot for zip codes affected by merger
+dt_zip[, ever_treated := as.integer(treated_overlap > 0)]
+dt_hhi <- dt_zip[,.(mean_hhi = mean_na(hhi), median_hhi = median_na(hhi)), .(year, ever_treated)]
+ggplot(dt_hhi, aes(x = year, y = median_hhi, color = ever_treated)) + geom_line() +
+  labs(y = "Med HHI", title = "Med HHI Over Sample Period") + 
+  ggsave(paste0(mergers_path, "figs/diagnostics/med_hhi_treated.pdf"))
+
+ggplot(dt_hhi, aes(x = year, y = mean_hhi, color = ever_treated)) + geom_line() +
+  labs(y = "Mean HHI", title = "Mean HHI Over Sample Period") + 
+  ggsave(paste0(mergers_path, "figs/diagnostics/mean_hhi_treated.pdf"))
+
+# DHHI and 1-5 Year Post-Merger HHI 
+setorder(dt_zip, Zip5, year)
+dt_zip[post > 0, post_yr := year[1], Zip5]
+for (i in 0:4){
+  dt_tmp <- dt_zip[year == post_yr + 1]
+  ggplot(dt_tmp, aes(x = delta_hhi, y = hhi)) + geom_point() + 
+    labs(x = "\u0394 Sim HHI", y = paste0("Year ", i, " Post-Merger"), title = paste0("\u0394 Sim HHI and Post-Merger Year")) + 
+    ggsave(paste0(mergers_path, "figs/diagnostics/dhhi_post_", i, ".pdf"))
+}
+
 # ======================= (1) Comparison of Trends =========================
 # Zip code coverage 
 prop_zips <- unique(dt_prop[!is.na(RentPrice), Zip5])
