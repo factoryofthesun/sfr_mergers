@@ -186,8 +186,9 @@ sd_hhi <- round(sd(dt_tmp[hhi != 0,.(hhi = median_na(hhi)), .(Zip5)][,hhi], na.r
 
 # Time trend
 dt_tmp[,time_trend := year - min_na(year)]
-dt_tmp[,sq_time_trend := year - min_na(year)]
-
+dt_tmp[,sq_time_trend := time_trend^2]
+dt_tmp[,n_zip_trend := uniqueN(.SD[!is.na(log_sqft) & !is.na(tot_unit_val) & 
+                                     !is.na(prop_unemp) & !is.na(median_household_income), time_trend]), Zip5]
 # OG spec, DHHI ONLY ---------
 
 reg0 <- felm(log_rent ~ treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5|0|Zip5, data = dt_tmp) # OG treated variable to compare 
@@ -220,7 +221,7 @@ note.latex <- paste0("\\multicolumn{7}{l} {\\parbox[t]{\\textwidth}{ \\textit{No
                      "}} \\\\")
 note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
 out[grepl("Note",out)] <- note.latex
-cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
+cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=F)
 
 # Robustness check -- all values in control groups 1 and 2 --------------------
 sample_cols <- grep("_c1|_c2", names(dt), value=T)
@@ -284,9 +285,9 @@ mergers <- fread(paste0(mergers_path, "mergers_final_cleaned.csv"))
 mergers$label <- merge_labels
 for (merge_id in unique(mergers$MergeID_1)){
   # Skip American Residential Ppty (no props found)
-  # if (merge_id == 3){
-  #   next 
-  # }
+  if (merge_id %in% c(3,5)){
+    next
+  }
   merge_label <- unique(mergers[MergeID_1 == merge_id, label])
   merge_announce_year <- unique(mergers[MergeID_1 == merge_id, year_announced])
   merge_eff_year <- unique(mergers[MergeID_1 == merge_id, year_effective])
@@ -486,9 +487,9 @@ for (merge_id in unique(mergers$MergeID_1)){
 mergers <- fread(paste0(mergers_path, "mergers_final_cleaned.csv"))
 for (merge_id in unique(mergers$MergeID_1)){
   # Skip American Residential Ppty (no props found)
-  # if (merge_id == 3){
-  #   next 
-  # }
+  if (merge_id %in% c(3,5)){
+    next
+  }
   merge_label <- unique(mergers[MergeID_1 == merge_id, label])
   merge_announce_year <- unique(mergers[MergeID_1 == merge_id, year_announced])
   merge_eff_year <- unique(mergers[MergeID_1 == merge_id, year_effective])
@@ -567,8 +568,8 @@ for (merge_id in unique(mergers$MergeID_1)){
   
   cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
   
-  # 2) Control = merging firms in unmerged zips; include all c1 properties as delta_hhi:treated now
-  dt[get(post_var) == 1, delta_hhi:treated := get(sample1_var)]
+  # 2) Control = merging firms in unmerged zips; include all c1 properties as treated now
+  dt[get(post_var) == 1, treated := get(sample1_var)]
   sample_var <- paste0("sample_", merge_id, "_c2")
   dt_tmp <- dt[((year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year) & 
                  (get(sample_var) == 1 | get(sample1_var) == 1)]
@@ -576,6 +577,7 @@ for (merge_id in unique(mergers$MergeID_1)){
   # Add linear time trend to regressions 
   dt_tmp[, min_year := min_na(year)]
   dt_tmp[,time_trend := year - min_year]
+  dt_tmp[,sq_time_trend := time_trend^2]
   
   # We will need to remove the zips that we only observe for 1 period
   dt_tmp[,n_zip_trend := uniqueN(.SD[!is.na(sqft) & !is.na(tot_unit_val), time_trend]), Zip5]
@@ -633,6 +635,7 @@ for (merge_id in unique(mergers$MergeID_1)){
   # Add linear time trend to regressions 
   dt_tmp[, min_year := min_na(year)]
   dt_tmp[,time_trend := year - min_year]
+  dt_tmp[,sq_time_trend := time_trend^2]
   
   # We will need to remove the zips that we only observe for 1 period
   dt_tmp[,n_zip_trend := uniqueN(.SD[!is.na(sqft) & !is.na(tot_unit_val), time_trend]), Zip5]
