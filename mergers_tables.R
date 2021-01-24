@@ -36,8 +36,9 @@ dt_zip <- fread(paste0(data_path, "panel_zip_hhi.csv"), integer64 = "character")
 t1 <- Sys.time() 
 
 mergers <- fread(paste0(mergers_path, "mergers_final_cleaned.csv"))
+keep_ids <- c(1,2,4)
 
-for (id in 1:5){
+for (id in keep_ids){
   target_name <- unique(mergers[MergeID_1 == id, TargetName])
   post_col <- paste0("post_", id)
   print(target_name)
@@ -47,13 +48,13 @@ for (id in 1:5){
 }
 
 # Drop outlier rents 
-n_bad_rents <- nrow(dt[RentPrice >= 1e5 | RentPrice <= 100])
-print(paste0("Dropping ", n_bad_rents, " rows with rent higher than 100k and lower than 100"))
-dt <- dt[RentPrice < 1e5 & RentPrice > 100]
+n_bad_rents <- nrow(dt[RentPrice >= 5000 | RentPrice <= 500])
+print(paste0("Dropping ", n_bad_rents, " rows with rent higher than 5k and lower than 500"))
+dt <- dt[RentPrice < 5000 & RentPrice > 500]
 
 # Table 1 + 2 : Mergers Summary and Concentration 
 # Get means for each merger
-for (id in 1:5){
+for (id in keep_ids){
   # Need to do Beazer/Ellington separately for first merger 
   post_col <- paste0("post_", id)
   if (id == 1){
@@ -156,6 +157,17 @@ for (id in 1:5){
   print(paste0("Control pre-sd: ", control_pre_sd))
   print(paste0("Control post-HHI: ", control_post_hhi))
   print(paste0("Control post-sd: ", control_post_sd))
+  
+  # Delta HHI 
+  dhhi_col <- paste0("delta_hhi_", id)
+  treated_dhhi <- mean_na(dt_zip[get(treated_col) == 1, get(dhhi_col)])
+  treated_sd_dhhi <- sd(dt_zip[get(treated_col) == 1, get(dhhi_col)])
+  print(paste0("Mean DHHI: ", treated_dhhi))
+  print(paste0("SD DHHI: ", treated_sd_dhhi))
+
+  # Num zip code markets
+  print(paste0("# Zip Code Markets: ", uniqueN(dt_zip[get(treated_col) == 1, Zip5])))
+  
 }
 
 # All outside zip HHI
@@ -166,3 +178,10 @@ all_hhi <- mean_na(dt_zip[treated_overlap == 0, hhi])
 all_sd <- sd(dt_zip[treated_overlap == 0, hhi], na.rm=T)
 print(paste0("All outside HHI: ", all_hhi))
 print(paste0("All outside SD: ", all_sd))
+
+for (id in keep_ids){
+  delta_hhi_var <- paste0("delta_hhi_", id)
+  treated_var <- paste0("treated_", id)
+  print(quantile(dt_zip[get(treated_var) == 1,get(delta_hhi_var)], probs = c(0.1, 0.5, 0.9)))
+}
+

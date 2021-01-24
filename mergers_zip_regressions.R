@@ -59,10 +59,16 @@ print(paste0("Dropping ", nrow(dt[Zip5 %in% bad_zips]), " rows of zips with unde
              nrow(dt), " total rows."))
 dt <- dt[!(Zip5 %in% bad_zips)]
 
+# Drop bad mergers columns from the table
+bad_ids <- c(3,5)
+bad_cols <- c(paste0("post_", bad_ids), paste0("merge_label_", bad_ids), paste0("delta_hhi_", bad_ids), 
+              paste0("treated_", bad_ids))
+dt[, (bad_cols) := NULL]
+
 # Define new vars 
 dt[,log_zori := log(ZORI)]
 dt[!is.na(month) & !is.na(year),monthyear := parse_date_time(paste0(year, "-", month), "ym")]
-treated_names <- grep("^treated_", names(dt), value=T)
+treated_names <- setdiff(grep("^treated_", names(dt), value=T), "treated_overlap")
 dt[,treated_overlap := rowSums(.SD, na.rm = T), .SDcols = treated_names]
 
 # Aggregate vars
@@ -328,9 +334,9 @@ cat(paste(out, "\n\n"), file = paste0(estimate_path, "zip_did.tex"), append=T)
 # 2-way FE, each merger, zip clustered SE
 for (merge_id in unique(mergers$MergeID_1)){
   # Skip American Residential Ppty (no props found)
-  # if (merge_id == 3){
-  #   next 
-  # }
+  if (merge_id %in% c(3,5)){
+    next
+  }
   merge_label <- unique(mergers[MergeID_1 == merge_id, label])
   merge_announce_date <- min(mergers[MergeID_1 == merge_id, DateAnnounced])
   merge_eff_date <- max(mergers[MergeID_1 == merge_id, DateEffective])
@@ -403,9 +409,9 @@ for (merge_id in unique(mergers$MergeID_1)){
 # 2-way FE + delta HHI, each merger, zip clustered SE
 for (merge_id in unique(mergers$MergeID_1)){
   # Skip American Residential Ppty (no props found)
-  # if (merge_id == 3){
-  #   next 
-  # }
+  if (merge_id %in% c(3,5)){
+    next
+  }
   merge_label <- unique(mergers[MergeID_1 == merge_id, label])
   merge_announce_date <- min(mergers[MergeID_1 == merge_id, DateAnnounced])
   merge_eff_date <- max(mergers[MergeID_1 == merge_id, DateEffective])
