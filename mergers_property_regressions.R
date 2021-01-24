@@ -119,6 +119,13 @@ for (label in label_names){
 }
 
 hhi_names <- grep("^delta_hhi_", names(dt), value = T)
+
+# Need to set delta hhi for all in zip 
+for (hhi_name in hhi_names){
+  dt[, (hhi_name) := median_na0(get(hhi_name)), Zip5]
+  dt[is.na(get(hhi_name)), (hhi_name) := 0]
+}
+
 dt[,delta_hhi_alt := 0]
 dt[,delta_hhi := 0]
 dt[,treated := 0]
