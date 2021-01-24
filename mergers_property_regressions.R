@@ -277,6 +277,66 @@ out[grepl("Note",out)] <- note.latex
 
 cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
 
+merge_labels <- c("Beazer Pre-Owned - American Homes 4 Rent", "Beazer Pre-Owned - American Homes 4 Rent", 
+                  "Colony American - Starwood Waypoint", "American Residential Properties - American Homes 4 Rent",
+                  "Starwood Waypoint - Invitation Homes", "Silver Bay - Tricon Capital")
+mergers <- fread(paste0(mergers_path, "mergers_final_cleaned.csv"))
+mergers$label <- merge_labels
+# Each mergers: event time coefficients
+for (merge_id in c(1,2,4)){
+  merge_label <- unique(mergers[MergeID_1 == merge_id, label])
+  merge_announce_year <- unique(mergers[MergeID_1 == merge_id, year_announced])
+  merge_eff_year <- unique(mergers[MergeID_1 == merge_id, year_effective])
+  merge_target <- unique(mergers[MergeID_1 == merge_id, TargetName])
+  merge_acquiror <- unique(mergers[MergeID_1 == merge_id, AcquirorName])
+  
+  # Relevant column names based on merge id
+  treated_var <- paste0("treated_", merge_id)
+  post_var <- paste0("post_", merge_id)
+  delta_hhi_var <- paste0("delta_hhi_", merge_id)
+  dt[, treated := 0]
+  dt[,delta_hhi := get(delta_hhi_var)]
+  
+  # Set treated and sample
+  sample1_var <- paste0("sample_", merge_id, "_c1")
+  dt[get(sample1_var) == 1 & get(post_var) == 1, treated := 1]
+  
+  sample_var <- paste0("sample_", merge_id, "_c3")
+  dt_tmp <- dt[((year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year) & 
+                 (get(sample_var) == 1 | get(sample1_var) == 1)]
+  dt_tmp[, event_yr := factor(year - merge_eff_year)]
+  avg_delta_hhi <- round(mean_na0(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi]), digits=2)
+  
+  event_reg <- felm(log_rent ~ delta_hhi:event_yr + log_sqft + tot_unit_val + 
+                      prop_unemp + median_household_income|factor(year) + factor(Zip5)|0|Zip5, 
+                    data = dt_tmp)
+  
+  # Plot event time coefficients with 1 SE shading 
+  varnames <- rownames(event_reg$coefficients)[-1:-4]
+  event_years <- as.integer(gsub("delta_hhi:event_yr", "", varnames, fixed = T))
+  years <- sort(unique(dt_tmp$year))
+  
+  # Enforce reference level at event month 0
+  coefs <- event_reg$coefficients[-1:-4] 
+  coefs[is.na(coefs)] <- 0
+  ref_coef <- coefs[which(event_years == 0)]
+  coefs <- coefs - ref_coef
+  
+  coefs <- coefs * avg_delta_hhi
+  se <- event_reg$se[-1:-4] * 1.96
+  se[is.na(se)] <- se[which(event_years == 0)]
+  
+  # TODO: WHY IS REGRESSION RANK DEFICIENT + DROPPING SOME MONTHS????
+  years <- years[1:length(coefs)]
+  event_month_dt <- data.table(coefs = coefs, event_years = event_years, se_ub = coefs + se, se_lb = coefs - se, date = years)
+  ggplot(event_month_dt, aes(x = date, y = coefs)) + geom_line() + geom_point(shape=16, size=1) + 
+    geom_ribbon(aes(ymin = se_lb, ymax = se_ub), color="lightgrey", alpha=0.5) + geom_vline(aes(linetype = "Merge Effective", xintercept = merge_eff_year)) + 
+    geom_vline(aes(linetype="Merge Announced", xintercept = merge_announce_year)) + 
+    scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 
+    labs(x = "Date", y = "Estimate Scaled by Average Simulated \u0394 HHI", title = merge_label) + 
+    ggsave(paste0(mergers_path, "figs/regs/year_coefs_", merge_id, ".png"), width = 20)
+}
+
 # Each merger: 2-Way FE without DHHI interaction 
 merge_labels <- c("Beazer Pre-Owned - American Homes 4 Rent", "Beazer Pre-Owned - American Homes 4 Rent", 
                   "Colony American - Starwood Waypoint", "American Residential Properties - American Homes 4 Rent",
@@ -484,7 +544,11 @@ for (merge_id in unique(mergers$MergeID_1)){
 }
 
 # Each merger: 2-Way FE with DHHI interaction 
+merge_labels <- c("Beazer Pre-Owned - American Homes 4 Rent", "Beazer Pre-Owned - American Homes 4 Rent", 
+                  "Colony American - Starwood Waypoint", "American Residential Properties - American Homes 4 Rent",
+                  "Starwood Waypoint - Invitation Homes", "Silver Bay - Tricon Capital")
 mergers <- fread(paste0(mergers_path, "mergers_final_cleaned.csv"))
+mergers$label <- merge_labels
 for (merge_id in unique(mergers$MergeID_1)){
   # Skip American Residential Ppty (no props found)
   if (merge_id %in% c(3,5)){
@@ -685,52 +749,4 @@ for (merge_id in unique(mergers$MergeID_1)){
   
 }
 
-# Quadruple differences: exploit variation in cross-merge zip HHI changes, merging firm ownership, single-firm zips, and time
-# for (merge_id in unique(mergers$MergeID_1)){
-#   # Skip American Residential Ppty (no props found)
-#   if (merge_id == 3){
-#     next 
-#   }
-#   treated_var <- paste0("treated_", merge_id)
-#   post_var <- paste0("post_", merge_id)
-#   hhi_var <- paste0("delta_hhi_", merge_id)
-#   sample_var1 <- paste0("sample_", merge_id, "_c1")
-#   sample_var2 <- paste0("sample_", merge_id, "_c3")
-#   treated_zips <- unique(dt[get(treated_var) == 1, Zip5])
-#   merge_label <- unique(mergers[MergeID_1 == merge_id, label])
-#   
-#   dt[,treated_zip := 0]
-#   dt[Zip5 %in% treated_zips, treated_zip := 1]
-#   dt[, treated := get(treated_var)]
-#   dt[, post := get(post_var)]
-#   dt[, delta_hhi := get(hhi_var)]
-#   dt_tmp <- dt[(year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year & (get(sample_var1) == 1 | get(sample_var2) == 1)]
-#   reg0 <- felm(RentPrice ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
-#                  post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated, data = dt_tmp)
-#   reg1 <- felm(RentPrice ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
-#                  post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated +
-#                  sqft + tot_unit_val, data = dt_tmp)
-#   reg2 <- felm(log_rent ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
-#                  post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated, data = dt_tmp)
-#   reg3 <- felm(log_rent ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
-#                  post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated +
-#                  sqft + tot_unit_val, data = dt_tmp)
-#   # reg4 <- felm(rent_sqft ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
-#   #                post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated, data = dt_tmp)
-#   # reg5 <- felm(rent_sqft ~ treated_zip + post + delta_hhi + treated + post:treated_zip + post:treated +
-#   #                post:treated_zip:delta_hhi + post:treated_zip:delta_hhi:treated +
-#   #                tot_unit_val, data = dt_tmp)
-#   
-#   out <- capture.output(stargazer(reg0,reg1, reg2, reg3,
-#                                   column.labels = c("Rent", "Log Rent"), column.separate = c(2,2), 
-#                                   title = paste0("Prepost Quad Differences, Merger: ", merge_label)))
-#   
-#   # Wrap tabular environment in resizebox
-#   out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
-#   out <- gsub("\\end{tabular}", "\\end{tabular}}", out, fixed = T)
-#   
-#   # Set position
-#   out <- gsub("!htbp", "H", out, fixed = T)
-#   cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
-# }
-# 
+
