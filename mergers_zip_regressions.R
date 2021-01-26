@@ -415,7 +415,7 @@ for (merge_id in unique(mergers$MergeID_1)){
   delta_dt[, se_ub := delta_log_zori + sd_log_zori]
   
   ggplot(delta_dt[event_months >= -30 & event_months <= 30], aes(x = date, y = delta_log_zori)) + geom_line() + geom_point(shape=16, size=2, color="red") + 
-    geom_ribbon(aes(ymin = se_lb, ymax = se_ub), fill="lightgrey", alpha=0.5) + geom_vline(aes(linetype = "Merge Effective", xintercept = merge_eff_date)) + 
+    geom_ribbon(aes(ymin = se_lb, ymax = se_ub), alpha=0.5) + geom_vline(aes(linetype = "Merge Effective", xintercept = merge_eff_date)) + 
     geom_vline(aes(linetype="Merge Announced", xintercept = merge_announce_date)) + 
     scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 
     labs(x = "Date", y = "\u0394 Log(ZORI)", title = merge_label) + 
@@ -458,7 +458,7 @@ for (merge_id in unique(mergers$MergeID_1)){
   for (var in c("prop_min", "prop_hs_grad_plus", "prop_unemp", "median_household_income", "gini_inequality_index")){
     dt_tmp_plot <- dt_tmp[, .(tmp = median_na(get(var))), .(dhhi_quart, year)]
     color_label <- acs_to_name[var]
-    ggplot(dt_tmp_plot, aes(x = year, y = tmp, color = dhhi_quart)) + geom_line() +
+    ggplot(dt_tmp_plot[year <= 2018], aes(x = year, y = tmp, color = dhhi_quart)) + geom_line() +
       geom_vline(aes(linetype = "Merge Effective", xintercept = year(merge_eff_date))) + 
       geom_vline(aes(linetype="Merge Announced", xintercept = year(merge_announce_date))) + 
       scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 

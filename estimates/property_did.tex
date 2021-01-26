@@ -1,2276 +1,276 @@
- 
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
 
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
+ \begin{table}[H]\centering 
 
- % Date and time: Mon, Jan 25, 2021 - 04:48:19 PM 
+ \caption{\label{Post-Merger Concentration on Simulated Concentration} no title} 
 
- \begin{table}[H] \centering  
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccc} 
 
-   \caption{Post-Merger Concentration on Simulated Concentration}  
+  & & & & & & & \tabularnewline 
 
-   \label{}  
+ \hline 
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lccccccc}  
+ \hline 
 
- \\[-1.8ex]\hline  
+ Dependent Variable:&\multicolumn{7}{c}{hhi}\\ 
 
- \hline \\[-1.8ex]  
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)\\ 
 
-  & \multicolumn{7}{c}{\textit{Dependent variable:}} \\  
+ \hline 
 
- \cline{2-8}  
+ \emph{Variables}\tabularnewline 
 
- \\[-1.8ex] & \multicolumn{7}{c}{HHI} \\  
+ $\Delta \text{sim\_HHI} \times \text{Post}$&1.6928\sym{***}&1.6923\sym{***}&1.6916\sym{***}&1.6916\sym{***}&0.9827\sym{***}&1.9067\sym{***}&2.0319\sym{***}\\ 
 
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7)\\  
+   &(0.1763)&(0.1762)&(0.1757)&(0.1864)&(0.1062)&(0.2890)&(0.3309)\\ 
 
- \hline \\[-1.8ex]  
+ prop_unemp&  &-14.908&-20.674&-20.674&0.8667&-20.752&-20.401\\ 
 
-  $\Delta \text{sim\_HHI} \times \text{Post}$ & 1.693$^{***}$ & 1.692$^{***}$ & 1.692$^{***}$ & 0.983$^{***}$ & 1.078$^{***}$ & 1.907$^{***}$ & 2.032$^{***}$ \\  
+   &  &(13.607)&(13.703)&(14.536)&(11.830)&(13.695)&(13.690)\\ 
 
-   & (0.167) & (0.167) & (0.167) & (0.089) & (0.084) & (0.274) & (0.314) \\  
+ median_household_income&  &  &-0.0002\sym{***}&-0.0002\sym{**}&$1.103\times 10^{-5}$&-0.0002\sym{***}&-0.0002\sym{***}\\ 
 
-   & & & & & & & \\  
+   &  &  &($8.002\times 10^{-5}$)&($8.488\times 10^{-5}$)&($6.655\times 10^{-5}$)&($8.01\times 10^{-5}$)&($8.004\times 10^{-5}$)\\ 
 
-  prop\_unemp &  & $-$14.908 & $-$20.674 & 0.867 & 3.905 & $-$20.752 & $-$20.401 \\  
+ delta_hhi:year_trend&  &  &  &  &  &-0.03&0.0693\\ 
 
-   &  & (12.905) & (12.996) & (9.892) & (5.929) & (12.988) & (12.983) \\  
+   &  &  &  &  &  &(0.0418)&(0.0602)\\ 
 
-   & & & & & & & \\  
+ delta_hhi:sq_year_trend&  &  &  &  &  &  &-0.01\\ 
 
-  median\_household\_income &  &  & $-$0.0002$^{***}$ & 0.00001 & 0.0001 & $-$0.0002$^{***}$ & $-$0.0002$^{***}$ \\  
+   &  &  &  &  &  &  &(0.0074)\\ 
 
-   &  &  & (0.0001) & (0.0001) & (0.0001) & (0.0001) & (0.0001) \\  
+ \hline 
 
-   & & & & & & & \\  
+ \emph{Fixed-Effects}&  & & & & & & \\ 
 
-  delta\_hhi:year\_trend &  &  &  &  &  & $-$0.025 & 0.069 \\  
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
 
-   &  &  &  &  &  & (0.040) & (0.057) \\  
+ factor(Zip5)&Yes&Yes&Yes&No&No&Yes&Yes\\ 
 
-   & & & & & & & \\  
+ Zip5&No&No&No&Yes&Yes&No&No\\ 
 
-  delta\_hhi:sq\_year\_trend &  &  &  &  &  &  & $-$0.012$^{*}$ \\  
+ \hline 
 
-   &  &  &  &  &  &  & (0.007) \\  
+ \emph{Varying Slopes}&  & & & & & & \\ 
 
-   & & & & & & & \\  
+ year_trend (Zip5)&No&No&No&Yes&Yes&No&No\\ 
 
- \hline \\[-1.8ex]  
+ sq_year_trend (Zip5)&No&No&No&No&Yes&No&No\\ 
 
- Zip Controls & No & Yes & Yes & Yes & Yes & Yes & Yes \\  
+ \hline 
 
- Zip Time Trend & No & No & No & Yes & Sq & No & No \\  
+ \emph{Fit statistics}&  & & & & & & \\ 
 
- $\Delta \text{sim\_HHI}$ Time Trend & No & No & No & No & No & Yes & Sq \\  
+ Observations& 15,334&15,314&15,314&15,314&15,314&15,314&15,314\\ 
 
- Observations & 15,334 & 15,314 & 15,314 & 15,314 & 15,314 & 15,314 & 15,314 \\  
+ Adj-pseudo $R^2$ &0.27403&0.27408&0.2744&0.25583&0.33651&0.27441&0.27442\\ 
 
- R$^{2}$ & 0.957 & 0.957 & 0.957 & 0.985 & 0.992 & 0.957 & 0.957 \\  
+ BIC & 146,583.97&146,409.51&146,373.26&175,899.56&189,051.57&146,390.36&146,405.80\\ 
 
- Adjusted R$^{2}$ & 0.952 & 0.953 & 0.953 & 0.982 & 0.988 & 0.953 & 0.953 \\  
+ \hline 
 
- Residual Std. Error & 11.512 (df = 13790) & 11.513 (df = 13771) & 11.492 (df = 13770) & 7.142 (df = 12238) & 5.674 (df = 10706) & 11.492 (df = 13769) & 11.491 (df = 13768) \\  
+ \hline 
 
- \hline  
+ \multicolumn{8}{l}{\emph{Clustered (Zip5) standard-errors in parenthesis. Signif Codes: ***: 0.01, **: 0.05, *: 0.1}}\\ 
 
- \hline \\[-1.8ex]  
+ \end{tabular}} 
 
- \textit{Note:}  & \multicolumn{7}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\  
+ \end{table} 
 
- \end{tabular}}  
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
 
- \end{table}  
+ \begin{table}[H]\centering 
 
- 
+ \caption{\label{2-Way FE with delta HHI and firm owned indicator, All Treated Zips, OG} no title} 
 
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
+ \resizebox{\textwidth}{!}{\begin{tabular}{lcccccc} 
 
- % Date and time: Mon, Jan 25, 2021 - 04:49:35 PM 
+  & & & & & & \tabularnewline 
 
- \begin{table}[H] \centering  
+ \hline 
 
-   \caption{2-Way FE with delta HHI and firm owned indicator, All Treated Zips, OG}  
+ \hline 
 
-   \label{}  
+ Dependent Variable:&\multicolumn{6}{c}{log_rent}\\ 
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccc}  
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)\\ 
 
- \\[-1.8ex]\hline  
+ \hline 
 
- \hline \\[-1.8ex]  
+ \emph{Variables}\tabularnewline 
 
-  & \multicolumn{6}{c}{\textit{Dependent variable:}} \\  
+ treated&-0.010\sym{***}&  &  &  &  &  \\ 
 
- \cline{2-7}  
+   &(0.0037)&  &  &  &  &  \\ 
 
- \\[-1.8ex] & \multicolumn{6}{c}{log\_rent} \\  
+ log_sqft&0.5619\sym{***}&0.5619\sym{***}&0.5618\sym{***}&0.5618\sym{***}&0.5618\sym{***}&0.5619\sym{***}\\ 
 
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6)\\  
+   &(0.0097)&(0.0097)&(0.0097)&(0.0097)&(0.0097)&(0.0097)\\ 
 
- \hline \\[-1.8ex]  
+ tot_unit_val&$-1.953\times 10^{-9}$&$-1.918\times 10^{-9}$&$-1.917\times 10^{-9}$&$-1.917\times 10^{-9}$&$-1.918\times 10^{-9}$&$-1.929\times 10^{-9}$\\ 
 
-  treated & $-$0.010$^{***}$ &  &  &  &  &  \\  
+   &($9.848\times 10^{-9}$)&($9.853\times 10^{-9}$)&($9.853\times 10^{-9}$)&($9.855\times 10^{-9}$)&($9.852\times 10^{-9}$)&($9.851\times 10^{-9}$)\\ 
 
-   & (0.004) &  &  &  &  &  \\  
+ prop_unemp&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}\\ 
 
-   & & & & & & \\  
+   &(0.0946)&(0.0946)&(0.0946)&(0.0947)&(0.0946)&(0.0938)\\ 
 
-  log\_sqft & 0.562$^{***}$ & 0.562$^{***}$ & 0.562$^{***}$ & 0.563$^{***}$ & 0.562$^{***}$ & 0.562$^{***}$ \\  
+ median_household_income&$9.389\times 10^{-7}$\sym{***}&$1\times 10^{-6}$\sym{***}&$9.997\times 10^{-7}$\sym{***}&$9.998\times 10^{-7}$\sym{***}&$1.002\times 10^{-6}$\sym{***}&$9.799\times 10^{-7}$\sym{***}\\ 
 
-   & (0.010) & (0.010) & (0.010) & (0.010) & (0.010) & (0.010) \\  
+   &($2.85\times 10^{-7}$)&($2.853\times 10^{-7}$)&($2.853\times 10^{-7}$)&($2.854\times 10^{-7}$)&($2.849\times 10^{-7}$)&($2.835\times 10^{-7}$)\\ 
 
-   & & & & & & \\  
+ dhhi_treated&  &0.0002&  &  &  &  \\ 
 
-  tot\_unit\_val & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 \\  
+   &  &(0.0002)&  &  &  &  \\ 
 
-   & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\  
+ dhhi_treated:merge_position&  &  &0.0002&0.0002&-0.0004&-0.003\sym{***}\\ 
 
-   & & & & & & \\  
+   &  &  &(0.0002)&(0.0002)&(0.0007)&(0.0008)\\ 
 
-  prop\_unemp & $-$0.677$^{***}$ & $-$0.669$^{***}$ & $-$0.670$^{***}$ & $-$0.696$^{***}$ & $-$0.669$^{***}$ & $-$0.685$^{***}$ \\  
+ dhhi_treated:merge_positiontarget&  &  &0.0004\sym{***}&0.0004\sym{***}&-0.0002&-0.003\sym{***}\\ 
 
-   & (0.095) & (0.095) & (0.095) & (0.088) & (0.095) & (0.094) \\  
+   &  &  &(0.0002)&(0.0002)&(0.0007)&(0.0008)\\ 
 
-   & & & & & & \\  
+ dhhi_treated:merge_positionacquiror&  &  &0.0003\sym{**}&0.0003\sym{**}&-0.0003&-0.003\sym{***}\\ 
 
-  median\_household\_income & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ \\  
+   &  &  &(0.0001)&(0.0001)&(0.0007)&(0.0008)\\ 
 
-   & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
+ delta_hhi:time_trend&  &  &  &  &$6.626\times 10^{-5}$&-0.002\sym{***}\\ 
 
-   & & & & & & \\  
+   &  &  &  &  &($8.058\times 10^{-5}$)&(0.0006)\\ 
 
-  delta\_hhi:treated &  & 0.0002 &  &  &  &  \\  
+ delta_hhi:sq_time_trend&  &  &  &  &  &0.0003\sym{***}\\ 
 
-   &  & (0.0002) &  &  &  &  \\  
+   &  &  &  &  &  &($6.609\times 10^{-5}$)\\ 
 
-   & & & & & & \\  
+ \hline 
 
-  delta\_hhi:time\_trend &  &  &  &  & 0.0001 & $-$0.002$^{***}$ \\  
+ \emph{Fixed-Effects}&  & & & & & \\ 
 
-   &  &  &  &  & (0.0001) & (0.001) \\  
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes\\ 
 
-   & & & & & & \\  
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes\\ 
 
-  delta\_hhi:sq\_time\_trend &  &  &  &  &  & 0.0003$^{***}$ \\  
+ \hline 
 
-   &  &  &  &  &  & (0.0001) \\  
+ \emph{Varying Slopes}&  & & & & & \\ 
 
-   & & & & & & \\  
+ time_trend (Zip5)&No&No&No&Yes&No&No\\ 
 
-  delta\_hhi:treated:merge\_position &  &  & 0.0002 & 0.001$^{***}$ & $-$0.0004 & $-$0.003$^{***}$ \\  
+ \hline 
 
-   &  &  & (0.0002) & (0.0003) & (0.001) & (0.001) \\  
+ \emph{Fit statistics}&  & & & & & \\ 
 
-   & & & & & & \\  
+ Observations& 2,886,200&2,886,200&2,886,200&2,886,198&2,886,200&2,886,200\\ 
 
-  delta\_hhi:treated:merge\_positiontarget &  &  & 0.0004$^{***}$ & 0.001$^{***}$ & $-$0.0002 & $-$0.003$^{***}$ \\  
+ Adj-pseudo $R^2$ &1.15119&1.15116&1.15116&1.15016&1.15117&1.1514\\ 
 
-   &  &  & (0.0002) & (0.0003) & (0.001) & (0.001) \\  
+ BIC & -436,216.92&-436,120.27&-436,065.71&-388,403.94&-436,043.26&-436,753.54\\ 
 
-   & & & & & & \\  
+ \hline 
 
-  delta\_hhi:treated:merge\_positionacquiror &  &  & 0.0003$^{**}$ & 0.001$^{***}$ & $-$0.0003 & $-$0.003$^{***}$ \\  
-
-   &  &  & (0.0001) & (0.0003) & (0.001) & (0.001) \\  
-
-   & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & Yes \\  
-
- Observations & 2,886,200 & 2,886,200 & 2,886,200 & 2,886,198 & 2,886,200 & 2,886,200 \\  
-
- R$^{2}$ & 0.719 & 0.719 & 0.719 & 0.725 & 0.719 & 0.719 \\  
-
- Adjusted R$^{2}$ & 0.719 & 0.719 & 0.719 & 0.724 & 0.719 & 0.719 \\  
-
- Residual Std. Error & 0.223 (df = 2884582) & 0.223 (df = 2884582) & 0.223 (df = 2884580) & 0.220 (df = 2882976) & 0.223 (df = 2884579) & 0.223 (df = 2884578) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
+ \hline 
 
  \multicolumn{7}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1548.97. Sample average log rent: 7.25. Sample average HHI: 25.04. Sample average delta HHI: 0.8. Sample SD HHI: 53.22. Sample SD delta HHI: 2.15}} \\ 
 
- \end{tabular}}  
+ \end{tabular}} 
 
- \end{table}  
+ \end{table} 
 
- 
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
 
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
+ \begin{table}[H]\centering 
 
- % Date and time: Mon, Jan 25, 2021 - 04:52:36 PM 
+ \caption{\label{2-Way FE, No DHHI, Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Within-Zip Non-Firm} no title} 
 
- \begin{table}[H] \centering  
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccccc} 
 
-   \caption{2-Way FE, No DHHI, Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Within-Zip Non-Firm}  
+  & & & & & & & & & \tabularnewline 
 
-   \label{}  
+ \hline 
 
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lccccccccc}  
+ \hline 
 
- \\[-1.8ex]\hline  
+ Dependent Variable:&\multicolumn{9}{c}{log_rent}\\ 
 
- \hline \\[-1.8ex]  
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)&(8)&(9)\\ 
 
-  & \multicolumn{9}{c}{\textit{Dependent variable:}} \\  
+ \hline 
 
- \cline{2-10}  
+ \emph{Variables}\tabularnewline 
 
- \\[-1.8ex] & \multicolumn{9}{c}{log\_rent} \\  
+ treated&0.0236\sym{***}&-0.007\sym{*}&-0.006&-0.006&-0.003&  &  &  &  \\ 
 
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9)\\  
+   &(0.0067)&(0.0041)&(0.0040)&(0.0040)&(0.0039)&  &  &  &  \\ 
 
- \hline \\[-1.8ex]  
+ log_sqft&  &0.5558\sym{***}&0.5558\sym{***}&0.5558\sym{***}&0.5559\sym{***}&$-3.027\times 10^{-13}$NA&$-3.027\times 10^{-13}$NA&$-3.027\times 10^{-13}$NA&$-1.128\times 10^{-9}$NA\\ 
 
-  treated & 0.024$^{***}$ & $-$0.007$^{*}$ & $-$0.006 & 0.003 & $-$0.003 &  &  &  &  \\  
+   &  &(0.0120)&(0.0120)&(0.0120)&(0.0120)&(NA)&(NA)&(NA)&(NA)\\ 
 
-   & (0.007) & (0.004) & (0.004) & (0.003) & (0.004) &  &  &  &  \\  
+ tot_unit_val&  &$4.074\times 10^{-8}$&$4.06\times 10^{-8}$&$4.06\times 10^{-8}$&$4.049\times 10^{-8}$&$2.819\times 10^{-7}$NA&$2.819\times 10^{-7}$NA&$2.819\times 10^{-7}$NA&$2.819\times 10^{-7}$NA\\ 
 
-   & & & & & & & & & \\  
+   &  &($3.104\times 10^{-8}$)&($3.101\times 10^{-8}$)&($3.102\times 10^{-8}$)&($3.098\times 10^{-8}$)&(NA)&(NA)&(NA)&(NA)\\ 
 
-  log\_sqft &  & 0.556$^{***}$ & 0.556$^{***}$ & 0.557$^{***}$ & 0.556$^{***}$ & 0.556$^{***}$ & 0.557$^{***}$ & 0.556$^{***}$ & 0.556$^{***}$ \\  
+ prop_unemp&  &  &-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&$-2.501\times 10^{-13}$NA&$-2.501\times 10^{-13}$NA&$-2.501\times 10^{-13}$NA&$-6.739\times 10^{-11}$NA\\ 
 
-   &  & (0.012) & (0.012) & (0.012) & (0.012) & (0.012) & (0.012) & (0.012) & (0.012) \\  
+   &  &  &(0.0990)&(0.0991)&(0.0971)&(NA)&(NA)&(NA)&(NA)\\ 
 
-   & & & & & & & & & \\  
+ median_household_income&  &  &$9.161\times 10^{-7}$\sym{***}&$9.161\times 10^{-7}$\sym{***}&$9.318\times 10^{-7}$\sym{***}&$8.469\times 10^{-7}$NA&$8.469\times 10^{-7}$NA&$8.469\times 10^{-7}$NA&$8.608\times 10^{-7}$NA\\ 
 
-  tot\_unit\_val &  & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 \\  
+   &  &  &($3.255\times 10^{-7}$)&($3.256\times 10^{-7}$)&($3.231\times 10^{-7}$)&(NA)&(NA)&(NA)&(NA)\\ 
 
-   &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
+ delta_hhi:time_trend&  &  &  &  &-0.0008\sym{***}&  &  &$1.829\times 10^{-11}$NA&$-4.292\times 10^{-6}$NA\\ 
 
-   & & & & & & & & & \\  
+   &  &  &  &  &(0.0002)&  &  &(NA)&(NA)\\ 
 
-  prop\_unemp &  &  & $-$0.710$^{***}$ & $-$0.638$^{***}$ & $-$0.713$^{***}$ & $-$0.710$^{***}$ & $-$0.638$^{***}$ & $-$0.713$^{***}$ & $-$0.733$^{***}$ \\  
+ treated:merge_position&  &  &  &  &  &$NaN\times 10^{-Inf}$NA&$NaN\times 10^{-Inf}$NA&$NaN\times 10^{-Inf}$NA&$NaN\times 10^{-Inf}$NA\\ 
 
-   &  &  & (0.099) & (0.091) & (0.097) & (0.099) & (0.091) & (0.097) & (0.097) \\  
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
 
-   & & & & & & & & & \\  
+ treated:merge_positiontarget&  &  &  &  &  &$-7.366\times 10^{-14}$NA&$-7.366\times 10^{-14}$NA&$-7.366\times 10^{-14}$NA&$-9.68\times 10^{-10}$NA\\ 
 
-  median\_household\_income &  &  & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ \\  
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
 
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
+ treated:merge_positionacquiror&  &  &  &  &  &$7.114\times 10^{-14}$NA&$7.114\times 10^{-14}$NA&$7.114\times 10^{-14}$NA&$-3.412\times 10^{-9}$NA\\ 
 
-   & & & & & & & & & \\  
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
 
-  delta\_hhi:time\_trend &  &  &  &  & $-$0.001$^{***}$ &  &  & $-$0.001$^{***}$ & $-$0.003$^{***}$ \\  
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &  &  &$-4.36\times 10^{-5}$NA\\ 
 
-   &  &  &  &  & (0.0002) &  &  & (0.0002) & (0.001) \\  
+   &  &  &  &  &  &  &  &  &(NA)\\ 
 
-   & & & & & & & & & \\  
+ \hline 
 
-  delta\_hhi:sq\_time\_trend &  &  &  &  &  &  &  &  & 0.0002$^{***}$ \\  
+ \emph{Fixed-Effects}&  & & & & & & & & \\ 
 
-   &  &  &  &  &  &  &  &  & (0.0001) \\  
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
 
-   & & & & & & & & & \\  
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
 
-  treated:merge\_position &  &  &  &  &  &  &  &  &  \\  
+ \hline 
 
-   &  &  &  &  &  & (0.000) & (0.000) & (0.000) & (0.000) \\  
+ \emph{Varying Slopes}&  & & & & & & & & \\ 
 
-   & & & & & & & & & \\  
+ time_trend (Zip5)&No&No&No&Yes&No&No&Yes&No&No\\ 
 
-  treated:merge\_positiontarget &  &  &  &  &  & $-$0.007$^{**}$ & $-$0.0005 & $-$0.005$^{*}$ & $-$0.006$^{*}$ \\  
+ \hline 
 
-   &  &  &  &  &  & (0.003) & (0.003) & (0.003) & (0.003) \\  
+ \emph{Fit statistics}&  & & & & & & & & \\ 
 
-   & & & & & & & & & \\  
+ Observations& 2,854,978&2,606,211&2,603,872&2,603,872&2,603,872&2,603,872&2,603,872&2,603,872&2,603,872\\ 
 
-  treated:merge\_positionacquiror &  &  &  &  &  & $-$0.006 & 0.005 & $-$0.002 & $-$0.003 \\  
+ Adj-pseudo $R^2$ &0.55367&1.20028&1.20094&1.19986&1.20129&0.63489&0.63381&0.63489&0.63495\\ 
 
-   &  &  &  &  &  & (0.006) & (0.005) & (0.006) & (0.006) \\  
+ BIC & 1,319,516.92&-480,643.96&-481,753.98&-440,509.13&-482,638.45&984,814.29&1,026,059.14&984,843.84&984,706.32\\ 
 
-   & & & & & & & & & \\  
+ \hline 
 
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes & Sq \\  
-
- Observations & 2,854,978 & 2,606,211 & 2,603,872 & 2,603,872 & 2,603,872 & 2,603,872 & 2,603,872 & 2,603,872 & 2,603,872 \\  
-
- R$^{2}$ & 0.427 & 0.697 & 0.698 & 0.704 & 0.698 & 0.698 & 0.704 & 0.698 & 0.698 \\  
-
- Adjusted R$^{2}$ & 0.427 & 0.697 & 0.697 & 0.703 & 0.698 & 0.697 & 0.703 & 0.698 & 0.698 \\  
-
- Residual Std. Error & 0.303 (df = 2853571) & 0.219 (df = 2604802) & 0.219 (df = 2602462) & 0.217 (df = 2601066) & 0.219 (df = 2602461) & 0.219 (df = 2602461) & 0.217 (df = 2601065) & 0.219 (df = 2602460) & 0.219 (df = 2602459) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
+ \hline 
 
  \multicolumn{10}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1479.26. Sample average log rent: 7.21. Sample average HHI: 25.25. Sample average delta HHI: 0.85. Sample SD HHI: 51.5. Sample SD delta HHI: 2.25}} \\ 
 
- \end{tabular}}  
+ \end{tabular}} 
 
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 04:57:36 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, No DHHI, Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Outside-Zip Merging Firm}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lccccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{9}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-10}  
-
- \\[-1.8ex] & \multicolumn{9}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & 0.019 & 0.003 & 0.003 & $-$0.037 & 0.005 &  &  &  &  \\  
-
-   & (0.044) & (0.017) & (0.017) & (0.079) & (0.018) &  &  &  &  \\  
-
-   & & & & & & & & & \\  
-
-  log\_sqft &  & 0.556$^{***}$ & 0.556$^{***}$ & 0.557$^{***}$ & 0.556$^{***}$ & 0.556$^{***}$ & 0.557$^{***}$ & 0.556$^{***}$ & 0.556$^{***}$ \\  
-
-   &  & (0.012) & (0.012) & (0.012) & (0.012) & (0.012) & (0.012) & (0.012) & (0.012) \\  
-
-   & & & & & & & & & \\  
-
-  tot\_unit\_val &  & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 \\  
-
-   &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.711$^{***}$ & $-$0.638$^{***}$ & $-$0.713$^{***}$ & $-$0.711$^{***}$ & $-$0.638$^{***}$ & $-$0.713$^{***}$ & $-$0.733$^{***}$ \\  
-
-   &  &  & (0.099) & (0.091) & (0.097) & (0.099) & (0.091) & (0.097) & (0.097) \\  
-
-   & & & & & & & & & \\  
-
-  median\_household\_income &  &  & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & $-$0.001$^{***}$ &  &  & $-$0.001$^{***}$ & $-$0.003$^{***}$ \\  
-
-   &  &  &  &  & (0.0002) &  &  & (0.0002) & (0.001) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:sq\_time\_trend &  &  &  &  &  &  &  &  & 0.0002$^{***}$ \\  
-
-   &  &  &  &  &  &  &  &  & (0.0001) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_position &  &  &  &  &  & 0.003 & $-$0.037 & 0.005 & 0.004 \\  
-
-   &  &  &  &  &  & (0.017) & (0.079) & (0.018) & (0.018) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_positiontarget &  &  &  &  &  & $-$0.004 & $-$0.037 & 0.0004 & $-$0.001 \\  
-
-   &  &  &  &  &  & (0.018) & (0.079) & (0.018) & (0.018) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_positionacquiror &  &  &  &  &  & $-$0.003 & $-$0.032 & 0.004 & 0.002 \\  
-
-   &  &  &  &  &  & (0.018) & (0.079) & (0.018) & (0.018) \\  
-
-   & & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes & Sq \\  
-
- Observations & 2,855,395 & 2,606,610 & 2,604,255 & 2,604,205 & 2,604,255 & 2,604,255 & 2,604,205 & 2,604,255 & 2,604,255 \\  
-
- R$^{2}$ & 0.427 & 0.697 & 0.698 & 0.704 & 0.698 & 0.698 & 0.704 & 0.698 & 0.698 \\  
-
- Adjusted R$^{2}$ & 0.427 & 0.697 & 0.697 & 0.703 & 0.697 & 0.697 & 0.703 & 0.697 & 0.698 \\  
-
- Residual Std. Error & 0.303 (df = 2853920) & 0.219 (df = 2605136) & 0.219 (df = 2602782) & 0.217 (df = 2601345) & 0.219 (df = 2602781) & 0.219 (df = 2602780) & 0.217 (df = 2601343) & 0.219 (df = 2602779) & 0.219 (df = 2602778) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1479.32. Sample average log rent: 7.21. Sample average HHI: 24.9. Sample average delta HHI: 0.85. Sample SD HHI: 51.07. Sample SD delta HHI: 2.25}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 04:59:22 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, No DHHI, Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Single Firm Zips}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lccccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{9}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-10}  
-
- \\[-1.8ex] & \multicolumn{9}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & $-$0.006 & $-$0.012$^{**}$ & $-$0.011$^{*}$ & 0.024$^{***}$ & $-$0.008 &  &  &  &  \\  
-
-   & (0.007) & (0.006) & (0.006) & (0.008) & (0.006) &  &  &  &  \\  
-
-   & & & & & & & & & \\  
-
-  log\_sqft &  & 0.561$^{***}$ & 0.561$^{***}$ & 0.562$^{***}$ & 0.561$^{***}$ & 0.561$^{***}$ & 0.562$^{***}$ & 0.561$^{***}$ & 0.561$^{***}$ \\  
-
-   &  & (0.011) & (0.011) & (0.011) & (0.011) & (0.011) & (0.011) & (0.011) & (0.011) \\  
-
-   & & & & & & & & & \\  
-
-  tot\_unit\_val &  & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 \\  
-
-   &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.687$^{***}$ & $-$0.670$^{***}$ & $-$0.689$^{***}$ & $-$0.687$^{***}$ & $-$0.670$^{***}$ & $-$0.689$^{***}$ & $-$0.709$^{***}$ \\  
-
-   &  &  & (0.096) & (0.089) & (0.095) & (0.096) & (0.089) & (0.095) & (0.094) \\  
-
-   & & & & & & & & & \\  
-
-  median\_household\_income &  &  & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & $-$0.001$^{***}$ &  &  & $-$0.001$^{***}$ & $-$0.003$^{***}$ \\  
-
-   &  &  &  &  & (0.0002) &  &  & (0.0002) & (0.001) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:sq\_time\_trend &  &  &  &  &  &  &  &  & 0.0003$^{***}$ \\  
-
-   &  &  &  &  &  &  &  &  & (0.0001) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_position &  &  &  &  &  & $-$0.011$^{*}$ & 0.024$^{***}$ & $-$0.008 & $-$0.009 \\  
-
-   &  &  &  &  &  & (0.006) & (0.008) & (0.006) & (0.006) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_positiontarget &  &  &  &  &  & $-$0.019$^{***}$ & 0.024$^{***}$ & $-$0.014$^{**}$ & $-$0.015$^{**}$ \\  
-
-   &  &  &  &  &  & (0.006) & (0.008) & (0.007) & (0.007) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_positionacquiror &  &  &  &  &  & $-$0.018$^{**}$ & 0.029$^{***}$ & $-$0.010 & $-$0.012 \\  
-
-   &  &  &  &  &  & (0.008) & (0.009) & (0.008) & (0.008) \\  
-
-   & & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes & Sq \\  
-
- Observations & 3,104,854 & 2,829,750 & 2,825,812 & 2,825,810 & 2,825,812 & 2,825,812 & 2,825,810 & 2,825,812 & 2,825,812 \\  
-
- R$^{2}$ & 0.457 & 0.713 & 0.713 & 0.719 & 0.713 & 0.713 & 0.719 & 0.713 & 0.713 \\  
-
- Adjusted R$^{2}$ & 0.457 & 0.713 & 0.713 & 0.718 & 0.713 & 0.713 & 0.718 & 0.713 & 0.713 \\  
-
- Residual Std. Error & 0.305 (df = 3103288) & 0.222 (df = 2828182) & 0.222 (df = 2824245) & 0.219 (df = 2822692) & 0.222 (df = 2824244) & 0.222 (df = 2824243) & 0.219 (df = 2822690) & 0.222 (df = 2824242) & 0.221 (df = 2824241) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1529.67. Sample average log rent: 7.24. Sample average HHI: 24.91. Sample average delta HHI: 0.85. Sample SD HHI: 52.9. Sample SD delta HHI: 2.25}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 04:59:34 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, No DHHI, Merger: Colony American - Starwood Waypoint, Control: Within-Zip Non-Firm}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lccccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{9}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-10}  
-
- \\[-1.8ex] & \multicolumn{9}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & 0.019 & $-$0.030$^{***}$ & $-$0.029$^{***}$ & $-$0.015$^{*}$ & $-$0.024$^{***}$ &  &  &  &  \\  
-
-   & (0.012) & (0.008) & (0.008) & (0.008) & (0.008) &  &  &  &  \\  
-
-   & & & & & & & & & \\  
-
-  log\_sqft &  & 0.591$^{***}$ & 0.591$^{***}$ & 0.591$^{***}$ & 0.591$^{***}$ & 0.591$^{***}$ & 0.591$^{***}$ & 0.591$^{***}$ & 0.591$^{***}$ \\  
-
-   &  & (0.041) & (0.041) & (0.041) & (0.041) & (0.041) & (0.041) & (0.041) & (0.041) \\  
-
-   & & & & & & & & & \\  
-
-  tot\_unit\_val &  & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 \\  
-
-   &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.523$^{***}$ & $-$0.288$^{***}$ & $-$0.502$^{***}$ & $-$0.523$^{***}$ & $-$0.288$^{***}$ & $-$0.502$^{***}$ & $-$0.502$^{***}$ \\  
-
-   &  &  & (0.173) & (0.107) & (0.151) & (0.173) & (0.107) & (0.151) & (0.150) \\  
-
-   & & & & & & & & & \\  
-
-  median\_household\_income &  &  & $-$0.00000 & 0.00000$^{*}$ & $-$0.00000 & $-$0.00000 & 0.00000$^{*}$ & $-$0.00000 & $-$0.00000 \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & $-$0.026$^{***}$ &  &  & $-$0.026$^{***}$ & $-$0.029 \\  
-
-   &  &  &  &  & (0.004) &  &  & (0.004) & (0.018) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:sq\_time\_trend &  &  &  &  &  &  &  &  & 0.0003 \\  
-
-   &  &  &  &  &  &  &  &  & (0.002) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_position &  &  &  &  &  &  &  &  &  \\  
-
-   &  &  &  &  &  & (0.000) & (0.000) & (0.000) & (0.000) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_positiontarget &  &  &  &  &  & $-$0.061$^{***}$ & $-$0.058$^{***}$ & $-$0.055$^{***}$ & $-$0.055$^{***}$ \\  
-
-   &  &  &  &  &  & (0.019) & (0.019) & (0.019) & (0.019) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_positionacquiror &  &  &  &  &  & $-$0.028$^{***}$ & $-$0.013$^{*}$ & $-$0.022$^{***}$ & $-$0.022$^{***}$ \\  
-
-   &  &  &  &  &  & (0.008) & (0.008) & (0.008) & (0.008) \\  
-
-   & & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes & Sq \\  
-
- Observations & 302,790 & 291,101 & 291,101 & 291,101 & 291,101 & 291,101 & 291,101 & 291,101 & 291,101 \\  
-
- R$^{2}$ & 0.325 & 0.719 & 0.720 & 0.723 & 0.720 & 0.720 & 0.723 & 0.720 & 0.720 \\  
-
- Adjusted R$^{2}$ & 0.325 & 0.719 & 0.719 & 0.723 & 0.720 & 0.719 & 0.723 & 0.720 & 0.720 \\  
-
- Residual Std. Error & 0.295 (df = 302604) & 0.189 (df = 290913) & 0.189 (df = 290911) & 0.188 (df = 290734) & 0.189 (df = 290910) & 0.189 (df = 290910) & 0.188 (df = 290733) & 0.189 (df = 290909) & 0.189 (df = 290908) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{10}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1304.65. Sample average log rent: 7.1. Sample average HHI: 36.97. Sample average delta HHI: 0.1. Sample SD HHI: 75.48. Sample SD delta HHI: 0.12}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 05:00:38 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, No DHHI, Merger: Colony American - Starwood Waypoint, Control: Outside-Zip Merging Firm}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lccccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{9}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-10}  
-
- \\[-1.8ex] & \multicolumn{9}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & 0.021$^{***}$ & 0.038$^{***}$ & 0.036$^{***}$ & 0.003 & 0.044$^{***}$ &  &  &  &  \\  
-
-   & (0.007) & (0.006) & (0.006) & (0.007) & (0.006) &  &  &  &  \\  
-
-   & & & & & & & & & \\  
-
-  log\_sqft &  & 0.580$^{***}$ & 0.580$^{***}$ & 0.582$^{***}$ & 0.580$^{***}$ & 0.580$^{***}$ & 0.582$^{***}$ & 0.580$^{***}$ & 0.580$^{***}$ \\  
-
-   &  & (0.040) & (0.040) & (0.040) & (0.040) & (0.040) & (0.040) & (0.040) & (0.040) \\  
-
-   & & & & & & & & & \\  
-
-  tot\_unit\_val &  & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 \\  
-
-   &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.575$^{***}$ & $-$0.291$^{***}$ & $-$0.558$^{***}$ & $-$0.575$^{***}$ & $-$0.291$^{***}$ & $-$0.558$^{***}$ & $-$0.558$^{***}$ \\  
-
-   &  &  & (0.162) & (0.103) & (0.141) & (0.161) & (0.103) & (0.141) & (0.140) \\  
-
-   & & & & & & & & & \\  
-
-  median\_household\_income &  &  & $-$0.00000 & 0.00000$^{**}$ & $-$0.00000 & $-$0.00000 & 0.00000$^{**}$ & $-$0.00000 & $-$0.00000 \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & $-$0.025$^{***}$ &  &  & $-$0.025$^{***}$ & $-$0.026 \\  
-
-   &  &  &  &  & (0.004) &  &  & (0.004) & (0.017) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:sq\_time\_trend &  &  &  &  &  &  &  &  & 0.0001 \\  
-
-   &  &  &  &  &  &  &  &  & (0.002) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_position &  &  &  &  &  & 0.037$^{***}$ & 0.003 & 0.045$^{***}$ & 0.044$^{***}$ \\  
-
-   &  &  &  &  &  & (0.006) & (0.007) & (0.006) & (0.007) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_positiontarget &  &  &  &  &  & $-$0.023 & $-$0.054$^{***}$ & $-$0.010 & $-$0.010 \\  
-
-   &  &  &  &  &  & (0.020) & (0.020) & (0.019) & (0.019) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_positionacquiror &  &  &  &  &  & 0.009 & $-$0.010 & 0.023$^{**}$ & 0.023$^{**}$ \\  
-
-   &  &  &  &  &  & (0.010) & (0.010) & (0.010) & (0.010) \\  
-
-   & & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes & Sq \\  
-
- Observations & 327,224 & 314,661 & 314,630 & 314,054 & 314,630 & 314,630 & 314,054 & 314,630 & 314,630 \\  
-
- R$^{2}$ & 0.345 & 0.724 & 0.724 & 0.728 & 0.725 & 0.724 & 0.728 & 0.725 & 0.725 \\  
-
- Adjusted R$^{2}$ & 0.342 & 0.723 & 0.723 & 0.727 & 0.723 & 0.723 & 0.727 & 0.723 & 0.723 \\  
-
- Residual Std. Error & 0.289 (df = 325905) & 0.186 (df = 313373) & 0.186 (df = 313343) & 0.185 (df = 312051) & 0.186 (df = 313342) & 0.186 (df = 313341) & 0.185 (df = 312049) & 0.186 (df = 313340) & 0.186 (df = 313339) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1312.48. Sample average log rent: 7.11. Sample average HHI: 27.65. Sample average delta HHI: 0.1. Sample SD HHI: 55.09. Sample SD delta HHI: 0.12}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 05:02:16 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, No DHHI, Merger: Colony American - Starwood Waypoint, Control: Single Firm Zips}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lccccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{9}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-10}  
-
- \\[-1.8ex] & \multicolumn{9}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & 0.038$^{***}$ & 0.033$^{***}$ & 0.033$^{***}$ & 0.037$^{***}$ & 0.043$^{***}$ &  &  &  &  \\  
-
-   & (0.005) & (0.005) & (0.004) & (0.008) & (0.004) &  &  &  &  \\  
-
-   & & & & & & & & & \\  
-
-  log\_sqft &  & 0.561$^{***}$ & 0.561$^{***}$ & 0.562$^{***}$ & 0.561$^{***}$ & 0.561$^{***}$ & 0.562$^{***}$ & 0.561$^{***}$ & 0.561$^{***}$ \\  
-
-   &  & (0.010) & (0.010) & (0.010) & (0.010) & (0.010) & (0.010) & (0.010) & (0.010) \\  
-
-   & & & & & & & & & \\  
-
-  tot\_unit\_val &  & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 \\  
-
-   &  & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\  
-
-   & & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.674$^{***}$ & $-$0.577$^{***}$ & $-$0.677$^{***}$ & $-$0.674$^{***}$ & $-$0.577$^{***}$ & $-$0.677$^{***}$ & $-$0.679$^{***}$ \\  
-
-   &  &  & (0.090) & (0.079) & (0.089) & (0.090) & (0.079) & (0.089) & (0.089) \\  
-
-   & & & & & & & & & \\  
-
-  median\_household\_income &  &  & 0.00000$^{**}$ & 0.00000$^{***}$ & 0.00000$^{**}$ & 0.00000$^{**}$ & 0.00000$^{***}$ & 0.00000$^{**}$ & 0.00000$^{**}$ \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & $-$0.023$^{***}$ &  &  & $-$0.023$^{***}$ & $-$0.046$^{***}$ \\  
-
-   &  &  &  &  & (0.004) &  &  & (0.004) & (0.009) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:sq\_time\_trend &  &  &  &  &  &  &  &  & 0.003$^{***}$ \\  
-
-   &  &  &  &  &  &  &  &  & (0.001) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_position &  &  &  &  &  & 0.034$^{***}$ & 0.037$^{***}$ & 0.043$^{***}$ & 0.040$^{***}$ \\  
-
-   &  &  &  &  &  & (0.004) & (0.008) & (0.004) & (0.005) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_positiontarget &  &  &  &  &  & $-$0.020 & $-$0.015 & $-$0.005 & $-$0.009 \\  
-
-   &  &  &  &  &  & (0.019) & (0.020) & (0.019) & (0.019) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_positionacquiror &  &  &  &  &  & 0.009 & 0.028$^{***}$ & 0.024$^{***}$ & 0.020$^{**}$ \\  
-
-   &  &  &  &  &  & (0.009) & (0.009) & (0.009) & (0.009) \\  
-
-   & & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes & Sq \\  
-
- Observations & 2,855,658 & 2,607,452 & 2,604,538 & 2,604,536 & 2,604,538 & 2,604,538 & 2,604,536 & 2,604,538 & 2,604,538 \\  
-
- R$^{2}$ & 0.475 & 0.723 & 0.723 & 0.728 & 0.723 & 0.723 & 0.728 & 0.723 & 0.723 \\  
-
- Adjusted R$^{2}$ & 0.475 & 0.723 & 0.723 & 0.728 & 0.723 & 0.723 & 0.728 & 0.723 & 0.723 \\  
-
- Residual Std. Error & 0.303 (df = 2854085) & 0.219 (df = 2605877) & 0.219 (df = 2602963) & 0.217 (df = 2601401) & 0.219 (df = 2602962) & 0.219 (df = 2602961) & 0.217 (df = 2601399) & 0.219 (df = 2602960) & 0.219 (df = 2602959) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1549.01. Sample average log rent: 7.25. Sample average HHI: 24.61. Sample average delta HHI: 0.1. Sample SD HHI: 51.29. Sample SD delta HHI: 0.12}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 05:03:29 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, No DHHI, Merger: Starwood Waypoint - Invitation Homes, Control: Within-Zip Non-Firm}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lccccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{9}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-10}  
-
- \\[-1.8ex] & \multicolumn{9}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & 0.074$^{***}$ & 0.015$^{***}$ & 0.014$^{***}$ & 0.006$^{**}$ & 0.012$^{***}$ &  &  &  &  \\  
-
-   & (0.005) & (0.004) & (0.003) & (0.003) & (0.003) &  &  &  &  \\  
-
-   & & & & & & & & & \\  
-
-  log\_sqft &  & 0.554$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ \\  
-
-   &  & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) \\  
-
-   & & & & & & & & & \\  
-
-  tot\_unit\_val &  & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 \\  
-
-   &  & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\  
-
-   & & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.748$^{***}$ & $-$0.285$^{***}$ & $-$0.748$^{***}$ & $-$0.748$^{***}$ & $-$0.285$^{***}$ & $-$0.748$^{***}$ & $-$0.757$^{***}$ \\  
-
-   &  &  & (0.095) & (0.057) & (0.095) & (0.095) & (0.057) & (0.095) & (0.095) \\  
-
-   & & & & & & & & & \\  
-
-  median\_household\_income &  &  & $-$0.00000 & 0.00000$^{*}$ & $-$0.00000 & $-$0.00000 & 0.00000$^{*}$ & $-$0.00000 & $-$0.00000 \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & 0.0001$^{**}$ &  &  & 0.0001$^{**}$ & $-$0.0005$^{***}$ \\  
-
-   &  &  &  &  & (0.00003) &  &  & (0.00003) & (0.0001) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:sq\_time\_trend &  &  &  &  &  &  &  &  & 0.0001$^{***}$ \\  
-
-   &  &  &  &  &  &  &  &  & (0.00002) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_position &  &  &  &  &  &  &  &  &  \\  
-
-   &  &  &  &  &  & (0.000) & (0.000) & (0.000) & (0.000) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_positiontarget &  &  &  &  &  & 0.008$^{*}$ & 0.001 & 0.008$^{*}$ & 0.005 \\  
-
-   &  &  &  &  &  & (0.004) & (0.004) & (0.004) & (0.004) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_positionacquiror &  &  &  &  &  & 0.018$^{***}$ & 0.010$^{***}$ & 0.015$^{***}$ & 0.010$^{**}$ \\  
-
-   &  &  &  &  &  & (0.004) & (0.004) & (0.004) & (0.004) \\  
-
-   & & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes & Sq \\  
-
- Observations & 2,296,350 & 2,102,354 & 2,098,935 & 2,098,933 & 2,098,935 & 2,098,935 & 2,098,933 & 2,098,935 & 2,098,935 \\  
-
- R$^{2}$ & 0.489 & 0.730 & 0.730 & 0.735 & 0.730 & 0.730 & 0.735 & 0.730 & 0.730 \\  
-
- Adjusted R$^{2}$ & 0.489 & 0.730 & 0.730 & 0.734 & 0.730 & 0.730 & 0.734 & 0.730 & 0.730 \\  
-
- Residual Std. Error & 0.295 (df = 2294787) & 0.214 (df = 2100789) & 0.214 (df = 2097371) & 0.212 (df = 2095818) & 0.214 (df = 2097370) & 0.214 (df = 2097370) & 0.212 (df = 2095817) & 0.214 (df = 2097369) & 0.214 (df = 2097368) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{10}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1560.4. Sample average log rent: 7.26. Sample average HHI: 25.28. Sample average delta HHI: 2.61. Sample SD HHI: 52.26. Sample SD delta HHI: 9.95}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 05:04:44 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, No DHHI, Merger: Starwood Waypoint - Invitation Homes, Control: Outside-Zip Merging Firm}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lccccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{9}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-10}  
-
- \\[-1.8ex] & \multicolumn{9}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & 0.159$^{**}$ & 0.140$^{***}$ & 0.136$^{***}$ & 0.044 & 0.135$^{***}$ &  &  &  &  \\  
-
-   & (0.067) & (0.051) & (0.051) & (0.050) & (0.051) &  &  &  &  \\  
-
-   & & & & & & & & & \\  
-
-  log\_sqft &  & 0.554$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ \\  
-
-   &  & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) \\  
-
-   & & & & & & & & & \\  
-
-  tot\_unit\_val &  & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 \\  
-
-   &  & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\  
-
-   & & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.749$^{***}$ & $-$0.285$^{***}$ & $-$0.749$^{***}$ & $-$0.748$^{***}$ & $-$0.285$^{***}$ & $-$0.748$^{***}$ & $-$0.757$^{***}$ \\  
-
-   &  &  & (0.095) & (0.057) & (0.095) & (0.095) & (0.057) & (0.095) & (0.095) \\  
-
-   & & & & & & & & & \\  
-
-  median\_household\_income &  &  & $-$0.00000 & 0.00000$^{*}$ & $-$0.00000 & $-$0.00000 & 0.00000$^{*}$ & $-$0.00000 & $-$0.00000 \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & 0.0001$^{**}$ &  &  & 0.0001$^{**}$ & $-$0.0005$^{***}$ \\  
-
-   &  &  &  &  & (0.00003) &  &  & (0.00003) & (0.0001) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:sq\_time\_trend &  &  &  &  &  &  &  &  & 0.0001$^{***}$ \\  
-
-   &  &  &  &  &  &  &  &  & (0.00002) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_position &  &  &  &  &  & 0.135$^{***}$ & 0.044 & 0.134$^{***}$ & 0.133$^{***}$ \\  
-
-   &  &  &  &  &  & (0.051) & (0.050) & (0.051) & (0.051) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_positiontarget &  &  &  &  &  & 0.144$^{***}$ & 0.045 & 0.142$^{***}$ & 0.138$^{***}$ \\  
-
-   &  &  &  &  &  & (0.051) & (0.050) & (0.051) & (0.051) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_positionacquiror &  &  &  &  &  & 0.153$^{***}$ & 0.054 & 0.150$^{***}$ & 0.143$^{***}$ \\  
-
-   &  &  &  &  &  & (0.051) & (0.050) & (0.051) & (0.051) \\  
-
-   & & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes & Sq \\  
-
- Observations & 2,296,462 & 2,102,447 & 2,099,028 & 2,099,012 & 2,099,028 & 2,099,028 & 2,099,012 & 2,099,028 & 2,099,028 \\  
-
- R$^{2}$ & 0.489 & 0.730 & 0.730 & 0.735 & 0.730 & 0.730 & 0.735 & 0.730 & 0.730 \\  
-
- Adjusted R$^{2}$ & 0.489 & 0.730 & 0.730 & 0.734 & 0.730 & 0.730 & 0.734 & 0.730 & 0.730 \\  
-
- Residual Std. Error & 0.295 (df = 2294876) & 0.214 (df = 2100860) & 0.214 (df = 2097442) & 0.212 (df = 2095871) & 0.214 (df = 2097441) & 0.214 (df = 2097440) & 0.212 (df = 2095869) & 0.214 (df = 2097439) & 0.214 (df = 2097438) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1560.42. Sample average log rent: 7.26. Sample average HHI: 25.41. Sample average delta HHI: 2.61. Sample SD HHI: 52.75. Sample SD delta HHI: 9.95}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 05:06:00 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, No DHHI, Merger: Starwood Waypoint - Invitation Homes, Control: Single Firm Zips}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lccccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{9}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-10}  
-
- \\[-1.8ex] & \multicolumn{9}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8) & (9)\\  
-
- \hline \\[-1.8ex]  
-
-  treated & 0.054$^{***}$ & 0.061$^{***}$ & 0.058$^{***}$ & $-$0.003 & 0.057$^{***}$ &  &  &  &  \\  
-
-   & (0.008) & (0.009) & (0.010) & (0.009) & (0.010) &  &  &  &  \\  
-
-   & & & & & & & & & \\  
-
-  log\_sqft &  & 0.554$^{***}$ & 0.554$^{***}$ & 0.555$^{***}$ & 0.554$^{***}$ & 0.554$^{***}$ & 0.555$^{***}$ & 0.554$^{***}$ & 0.554$^{***}$ \\  
-
-   &  & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) \\  
-
-   & & & & & & & & & \\  
-
-  tot\_unit\_val &  & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 \\  
-
-   &  & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\  
-
-   & & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.753$^{***}$ & $-$0.291$^{***}$ & $-$0.753$^{***}$ & $-$0.752$^{***}$ & $-$0.291$^{***}$ & $-$0.752$^{***}$ & $-$0.761$^{***}$ \\  
-
-   &  &  & (0.094) & (0.056) & (0.094) & (0.094) & (0.056) & (0.094) & (0.094) \\  
-
-   & & & & & & & & & \\  
-
-  median\_household\_income &  &  & $-$0.00000 & 0.00000$^{**}$ & $-$0.00000 & $-$0.00000 & 0.00000$^{**}$ & $-$0.00000 & $-$0.00000 \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & 0.0001$^{***}$ &  &  & 0.0001$^{**}$ & $-$0.0005$^{***}$ \\  
-
-   &  &  &  &  & (0.00003) &  &  & (0.00003) & (0.0001) \\  
-
-   & & & & & & & & & \\  
-
-  delta\_hhi:sq\_time\_trend &  &  &  &  &  &  &  &  & 0.0001$^{***}$ \\  
-
-   &  &  &  &  &  &  &  &  & (0.00002) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_position &  &  &  &  &  & 0.058$^{***}$ & $-$0.003 & 0.057$^{***}$ & 0.055$^{***}$ \\  
-
-   &  &  &  &  &  & (0.010) & (0.009) & (0.010) & (0.010) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_positiontarget &  &  &  &  &  & 0.066$^{***}$ & $-$0.002 & 0.065$^{***}$ & 0.060$^{***}$ \\  
-
-   &  &  &  &  &  & (0.011) & (0.010) & (0.011) & (0.011) \\  
-
-   & & & & & & & & & \\  
-
-  treated:merge\_positionacquiror &  &  &  &  &  & 0.075$^{***}$ & 0.007 & 0.072$^{***}$ & 0.065$^{***}$ \\  
-
-   &  &  &  &  &  & (0.011) & (0.010) & (0.011) & (0.011) \\  
-
-   & & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes & Sq \\  
-
- Observations & 2,351,601 & 2,154,000 & 2,150,581 & 2,150,577 & 2,150,581 & 2,150,581 & 2,150,577 & 2,150,581 & 2,150,581 \\  
-
- R$^{2}$ & 0.493 & 0.729 & 0.729 & 0.734 & 0.729 & 0.729 & 0.734 & 0.729 & 0.730 \\  
-
- Adjusted R$^{2}$ & 0.492 & 0.729 & 0.729 & 0.734 & 0.729 & 0.729 & 0.734 & 0.729 & 0.729 \\  
-
- Residual Std. Error & 0.296 (df = 2349991) & 0.216 (df = 2152388) & 0.216 (df = 2148970) & 0.214 (df = 2147370) & 0.216 (df = 2148969) & 0.216 (df = 2148968) & 0.214 (df = 2147368) & 0.216 (df = 2148967) & 0.216 (df = 2148966) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1561.67. Sample average log rent: 7.26. Sample average HHI: 25.51. Sample average delta HHI: 2.61. Sample SD HHI: 53.58. Sample SD delta HHI: 9.95}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 05:07:34 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Within-Zip Non-Firm}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-9}  
-
- \\[-1.8ex] & \multicolumn{8}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
-
- \hline \\[-1.8ex]  
-
-  log\_sqft &  & 0.556$^{***}$ & 0.556$^{***}$ & 0.557$^{***}$ & 0.556$^{***}$ & 0.556$^{***}$ & 0.557$^{***}$ & 0.556$^{***}$ \\  
-
-   &  & (0.012) & (0.012) & (0.012) & (0.012) & (0.012) & (0.012) & (0.012) \\  
-
-   & & & & & & & & \\  
-
-  tot\_unit\_val &  & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 \\  
-
-   &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.711$^{***}$ & $-$0.638$^{***}$ & $-$0.714$^{***}$ & $-$0.711$^{***}$ & $-$0.638$^{***}$ & $-$0.714$^{***}$ \\  
-
-   &  &  & (0.099) & (0.091) & (0.097) & (0.099) & (0.091) & (0.097) \\  
-
-   & & & & & & & & \\  
-
-  median\_household\_income &  &  & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated & 0.003$^{***}$ & $-$0.001 & $-$0.001 & 0.001 & 0.001$^{**}$ &  &  &  \\  
-
-   & (0.001) & (0.001) & (0.001) & (0.001) & (0.001) &  &  &  \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & $-$0.001$^{***}$ &  &  & $-$0.001$^{***}$ \\  
-
-   &  &  &  &  & (0.0002) &  &  & (0.0002) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_position &  &  &  &  &  &  &  &  \\  
-
-   &  &  &  &  &  & (0.000) & (0.000) & (0.000) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positiontarget &  &  &  &  &  & $-$0.002$^{***}$ & $-$0.001 & $-$0.0003 \\  
-
-   &  &  &  &  &  & (0.001) & (0.001) & (0.001) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positionacquiror &  &  &  &  &  & $-$0.0001 & 0.001$^{*}$ & 0.002$^{**}$ \\  
-
-   &  &  &  &  &  & (0.001) & (0.001) & (0.001) \\  
-
-   & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes \\  
-
- Observations & 2,854,978 & 2,606,211 & 2,603,872 & 2,603,872 & 2,603,872 & 2,603,872 & 2,603,872 & 2,603,872 \\  
-
- R$^{2}$ & 0.427 & 0.697 & 0.698 & 0.704 & 0.698 & 0.698 & 0.704 & 0.698 \\  
-
- Adjusted R$^{2}$ & 0.427 & 0.697 & 0.697 & 0.703 & 0.698 & 0.697 & 0.703 & 0.698 \\  
-
- Residual Std. Error & 0.303 (df = 2853571) & 0.219 (df = 2604802) & 0.219 (df = 2602462) & 0.217 (df = 2601066) & 0.219 (df = 2602461) & 0.219 (df = 2602461) & 0.217 (df = 2601065) & 0.219 (df = 2602460) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1479.26. Sample average log rent: 7.21. Sample average HHI: 25.25. Sample average delta HHI: 0.85. Sample SD HHI: 51.5. Sample SD delta HHI: 2.25}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 05:12:49 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Outside-Zip Merging Firm}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-9}  
-
- \\[-1.8ex] & \multicolumn{8}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
-
- \hline \\[-1.8ex]  
-
-  log\_sqft &  & 0.556$^{***}$ & 0.556$^{***}$ & 0.557$^{***}$ & 0.556$^{***}$ & 0.556$^{***}$ & 0.557$^{***}$ & 0.556$^{***}$ \\  
-
-   &  & (0.012) & (0.012) & (0.012) & (0.012) & (0.012) & (0.012) & (0.012) \\  
-
-   & & & & & & & & \\  
-
-  tot\_unit\_val &  & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 \\  
-
-   &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.707$^{***}$ & $-$0.648$^{***}$ & $-$0.719$^{***}$ & $-$0.708$^{***}$ & $-$0.648$^{***}$ & $-$0.719$^{***}$ \\  
-
-   &  &  & (0.098) & (0.090) & (0.097) & (0.098) & (0.090) & (0.097) \\  
-
-   & & & & & & & & \\  
-
-  median\_household\_income &  &  & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated & $-$0.002$^{***}$ & $-$0.002$^{***}$ & $-$0.002$^{***}$ & 0.002$^{***}$ & 0.003$^{***}$ &  &  &  \\  
-
-   & (0.001) & (0.001) & (0.001) & (0.001) & (0.001) &  &  &  \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & $-$0.001$^{***}$ &  &  & $-$0.001$^{***}$ \\  
-
-   &  &  &  &  & (0.0002) &  &  & (0.0002) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_position &  &  &  &  &  & $-$0.002$^{***}$ & 0.002$^{***}$ & 0.003$^{***}$ \\  
-
-   &  &  &  &  &  & (0.001) & (0.001) & (0.001) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positiontarget &  &  &  &  &  & $-$0.003$^{***}$ & 0.001 & 0.002 \\  
-
-   &  &  &  &  &  & (0.001) & (0.001) & (0.001) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positionacquiror &  &  &  &  &  & $-$0.001 & 0.003$^{***}$ & 0.004$^{***}$ \\  
-
-   &  &  &  &  &  & (0.001) & (0.001) & (0.001) \\  
-
-   & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes \\  
-
- Observations & 2,855,395 & 2,606,610 & 2,604,255 & 2,604,205 & 2,604,255 & 2,604,255 & 2,604,205 & 2,604,255 \\  
-
- R$^{2}$ & 0.427 & 0.697 & 0.698 & 0.704 & 0.698 & 0.698 & 0.704 & 0.698 \\  
-
- Adjusted R$^{2}$ & 0.427 & 0.697 & 0.697 & 0.703 & 0.698 & 0.697 & 0.703 & 0.698 \\  
-
- Residual Std. Error & 0.303 (df = 2853920) & 0.219 (df = 2605136) & 0.219 (df = 2602782) & 0.217 (df = 2601345) & 0.219 (df = 2602781) & 0.219 (df = 2602780) & 0.217 (df = 2601343) & 0.219 (df = 2602779) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1479.32. Sample average log rent: 7.21. Sample average HHI: 24.9. Sample average delta HHI: 0.85. Sample SD HHI: 51.07. Sample SD delta HHI: 2.25}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 05:15:08 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Single Firm Zips}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-9}  
-
- \\[-1.8ex] & \multicolumn{8}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
-
- \hline \\[-1.8ex]  
-
-  log\_sqft &  & 0.561$^{***}$ & 0.561$^{***}$ & 0.562$^{***}$ & 0.561$^{***}$ & 0.561$^{***}$ & 0.562$^{***}$ & 0.561$^{***}$ \\  
-
-   &  & (0.011) & (0.011) & (0.011) & (0.011) & (0.011) & (0.011) & (0.011) \\  
-
-   & & & & & & & & \\  
-
-  tot\_unit\_val &  & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 \\  
-
-   &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.678$^{***}$ & $-$0.689$^{***}$ & $-$0.689$^{***}$ & $-$0.678$^{***}$ & $-$0.689$^{***}$ & $-$0.689$^{***}$ \\  
-
-   &  &  & (0.096) & (0.090) & (0.095) & (0.096) & (0.090) & (0.095) \\  
-
-   & & & & & & & & \\  
-
-  median\_household\_income &  &  & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ & 0.00000$^{***}$ \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated & $-$0.002$^{***}$ & $-$0.003$^{***}$ & $-$0.003$^{***}$ & 0.003$^{***}$ & 0.003$^{***}$ &  &  &  \\  
-
-   & (0.001) & (0.001) & (0.001) & (0.001) & (0.001) &  &  &  \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & $-$0.001$^{***}$ &  &  & $-$0.001$^{***}$ \\  
-
-   &  &  &  &  & (0.0002) &  &  & (0.0002) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_position &  &  &  &  &  & $-$0.003$^{***}$ & 0.003$^{***}$ & 0.003$^{***}$ \\  
-
-   &  &  &  &  &  & (0.001) & (0.001) & (0.001) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positiontarget &  &  &  &  &  & $-$0.004$^{***}$ & 0.002 & 0.002$^{*}$ \\  
-
-   &  &  &  &  &  & (0.001) & (0.001) & (0.001) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positionacquiror &  &  &  &  &  & $-$0.001 & 0.004$^{***}$ & 0.004$^{***}$ \\  
-
-   &  &  &  &  &  & (0.001) & (0.001) & (0.001) \\  
-
-   & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes \\  
-
- Observations & 3,104,854 & 2,829,750 & 2,825,812 & 2,825,810 & 2,825,812 & 2,825,812 & 2,825,810 & 2,825,812 \\  
-
- R$^{2}$ & 0.457 & 0.713 & 0.713 & 0.719 & 0.713 & 0.713 & 0.719 & 0.713 \\  
-
- Adjusted R$^{2}$ & 0.457 & 0.713 & 0.713 & 0.718 & 0.713 & 0.713 & 0.718 & 0.713 \\  
-
- Residual Std. Error & 0.305 (df = 3103288) & 0.222 (df = 2828182) & 0.222 (df = 2824245) & 0.219 (df = 2822692) & 0.222 (df = 2824244) & 0.222 (df = 2824243) & 0.219 (df = 2822690) & 0.222 (df = 2824242) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1529.67. Sample average log rent: 7.24. Sample average HHI: 24.91. Sample average delta HHI: 0.85. Sample SD HHI: 52.9. Sample SD delta HHI: 2.25}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 05:15:25 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, Merger: Colony American - Starwood Waypoint, Control: Within-Zip Non-Firm}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-9}  
-
- \\[-1.8ex] & \multicolumn{8}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
-
- \hline \\[-1.8ex]  
-
-  log\_sqft &  & 0.591$^{***}$ & 0.590$^{***}$ & 0.591$^{***}$ & 0.591$^{***}$ & 0.590$^{***}$ & 0.591$^{***}$ & 0.591$^{***}$ \\  
-
-   &  & (0.041) & (0.041) & (0.041) & (0.041) & (0.041) & (0.041) & (0.041) \\  
-
-   & & & & & & & & \\  
-
-  tot\_unit\_val &  & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 \\  
-
-   &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.522$^{***}$ & $-$0.287$^{***}$ & $-$0.501$^{***}$ & $-$0.522$^{***}$ & $-$0.288$^{***}$ & $-$0.501$^{***}$ \\  
-
-   &  &  & (0.173) & (0.107) & (0.151) & (0.173) & (0.107) & (0.151) \\  
-
-   & & & & & & & & \\  
-
-  median\_household\_income &  &  & $-$0.00000 & 0.00000$^{*}$ & $-$0.00000 & $-$0.00000 & 0.00000$^{*}$ & $-$0.00000 \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated & $-$0.052 & $-$0.132$^{***}$ & $-$0.129$^{***}$ & $-$0.053$^{*}$ & $-$0.062$^{**}$ &  &  &  \\  
-
-   & (0.044) & (0.031) & (0.030) & (0.028) & (0.030) &  &  &  \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & $-$0.026$^{***}$ &  &  & $-$0.026$^{***}$ \\  
-
-   &  &  &  &  & (0.004) &  &  & (0.004) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_position &  &  &  &  &  &  &  &  \\  
-
-   &  &  &  &  &  & (0.000) & (0.000) & (0.000) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positiontarget &  &  &  &  &  & $-$0.313$^{***}$ & $-$0.266$^{***}$ & $-$0.251$^{***}$ \\  
-
-   &  &  &  &  &  & (0.084) & (0.089) & (0.083) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positionacquiror &  &  &  &  &  & $-$0.121$^{***}$ & $-$0.044 & $-$0.054$^{*}$ \\  
-
-   &  &  &  &  &  & (0.029) & (0.027) & (0.029) \\  
-
-   & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes \\  
-
- Observations & 302,790 & 291,101 & 291,101 & 291,101 & 291,101 & 291,101 & 291,101 & 291,101 \\  
-
- R$^{2}$ & 0.325 & 0.719 & 0.720 & 0.723 & 0.720 & 0.720 & 0.723 & 0.720 \\  
-
- Adjusted R$^{2}$ & 0.325 & 0.719 & 0.719 & 0.723 & 0.720 & 0.719 & 0.723 & 0.720 \\  
-
- Residual Std. Error & 0.295 (df = 302604) & 0.189 (df = 290913) & 0.189 (df = 290911) & 0.188 (df = 290734) & 0.189 (df = 290910) & 0.189 (df = 290910) & 0.188 (df = 290733) & 0.189 (df = 290909) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1304.65. Sample average log rent: 7.1. Sample average HHI: 36.97. Sample average delta HHI: 0.1. Sample SD HHI: 75.48. Sample SD delta HHI: 0.12}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 05:16:40 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, Merger: Colony American - Starwood Waypoint, Control: Outside-Zip Merging Firm}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-9}  
-
- \\[-1.8ex] & \multicolumn{8}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
-
- \hline \\[-1.8ex]  
-
-  log\_sqft &  & 0.580$^{***}$ & 0.580$^{***}$ & 0.582$^{***}$ & 0.580$^{***}$ & 0.580$^{***}$ & 0.582$^{***}$ & 0.580$^{***}$ \\  
-
-   &  & (0.040) & (0.040) & (0.040) & (0.040) & (0.040) & (0.040) & (0.040) \\  
-
-   & & & & & & & & \\  
-
-  tot\_unit\_val &  & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 & 0.00000 \\  
-
-   &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.577$^{***}$ & $-$0.293$^{***}$ & $-$0.575$^{***}$ & $-$0.576$^{***}$ & $-$0.293$^{***}$ & $-$0.574$^{***}$ \\  
-
-   &  &  & (0.156) & (0.104) & (0.144) & (0.156) & (0.104) & (0.144) \\  
-
-   & & & & & & & & \\  
-
-  median\_household\_income &  &  & $-$0.00000 & 0.00000$^{**}$ & $-$0.00000 & $-$0.00000 & 0.00000$^{**}$ & $-$0.00000 \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated & $-$0.067$^{***}$ & $-$0.085$^{***}$ & $-$0.082$^{***}$ & 0.025 & 0.033 &  &  &  \\  
-
-   & (0.019) & (0.019) & (0.017) & (0.033) & (0.032) &  &  &  \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & $-$0.027$^{***}$ &  &  & $-$0.027$^{***}$ \\  
-
-   &  &  &  &  & (0.007) &  &  & (0.007) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_position &  &  &  &  &  & $-$0.079$^{***}$ & 0.028 & 0.037 \\  
-
-   &  &  &  &  &  & (0.017) & (0.033) & (0.032) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positiontarget &  &  &  &  &  & $-$0.334$^{***}$ & $-$0.242$^{***}$ & $-$0.220$^{***}$ \\  
-
-   &  &  &  &  &  & (0.084) & (0.091) & (0.085) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positionacquiror &  &  &  &  &  & $-$0.143$^{***}$ & $-$0.023 & $-$0.026 \\  
-
-   &  &  &  &  &  & (0.032) & (0.042) & (0.042) \\  
-
-   & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes \\  
-
- Observations & 327,224 & 314,661 & 314,630 & 314,054 & 314,630 & 314,630 & 314,054 & 314,630 \\  
-
- R$^{2}$ & 0.345 & 0.724 & 0.724 & 0.728 & 0.724 & 0.724 & 0.728 & 0.724 \\  
-
- Adjusted R$^{2}$ & 0.343 & 0.723 & 0.723 & 0.727 & 0.723 & 0.723 & 0.727 & 0.723 \\  
-
- Residual Std. Error & 0.289 (df = 325905) & 0.186 (df = 313373) & 0.186 (df = 313343) & 0.185 (df = 312051) & 0.186 (df = 313342) & 0.186 (df = 313341) & 0.185 (df = 312049) & 0.186 (df = 313340) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1312.48. Sample average log rent: 7.11. Sample average HHI: 27.65. Sample average delta HHI: 0.1. Sample SD HHI: 55.09. Sample SD delta HHI: 0.12}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 05:18:24 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, Merger: Colony American - Starwood Waypoint, Control: Single Firm Zips}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-9}  
-
- \\[-1.8ex] & \multicolumn{8}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
-
- \hline \\[-1.8ex]  
-
-  log\_sqft &  & 0.561$^{***}$ & 0.561$^{***}$ & 0.562$^{***}$ & 0.561$^{***}$ & 0.561$^{***}$ & 0.562$^{***}$ & 0.561$^{***}$ \\  
-
-   &  & (0.010) & (0.010) & (0.010) & (0.010) & (0.010) & (0.010) & (0.010) \\  
-
-   & & & & & & & & \\  
-
-  tot\_unit\_val &  & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 \\  
-
-   &  & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\  
-
-   & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.687$^{***}$ & $-$0.575$^{***}$ & $-$0.692$^{***}$ & $-$0.687$^{***}$ & $-$0.575$^{***}$ & $-$0.692$^{***}$ \\  
-
-   &  &  & (0.091) & (0.079) & (0.091) & (0.091) & (0.079) & (0.091) \\  
-
-   & & & & & & & & \\  
-
-  median\_household\_income &  &  & 0.00000$^{*}$ & 0.00000$^{***}$ & 0.00000$^{*}$ & 0.00000$^{*}$ & 0.00000$^{***}$ & 0.00000$^{*}$ \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated & 0.078$^{***}$ & 0.047$^{**}$ & 0.047$^{**}$ & 0.146$^{***}$ & 0.147$^{***}$ &  &  &  \\  
-
-   & (0.023) & (0.023) & (0.021) & (0.023) & (0.023) &  &  &  \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & $-$0.023$^{***}$ &  &  & $-$0.023$^{***}$ \\  
-
-   &  &  &  &  & (0.004) &  &  & (0.004) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_position &  &  &  &  &  & 0.051$^{**}$ & 0.149$^{***}$ & 0.150$^{***}$ \\  
-
-   &  &  &  &  &  & (0.022) & (0.023) & (0.024) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positiontarget &  &  &  &  &  & $-$0.189$^{**}$ & $-$0.101 & $-$0.091 \\  
-
-   &  &  &  &  &  & (0.073) & (0.081) & (0.074) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positionacquiror &  &  &  &  &  & $-$0.029 & 0.094$^{***}$ & 0.072$^{**}$ \\  
-
-   &  &  &  &  &  & (0.030) & (0.031) & (0.030) \\  
-
-   & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes \\  
-
- Observations & 2,855,658 & 2,607,452 & 2,604,538 & 2,604,536 & 2,604,538 & 2,604,538 & 2,604,536 & 2,604,538 \\  
-
- R$^{2}$ & 0.475 & 0.723 & 0.723 & 0.728 & 0.723 & 0.723 & 0.728 & 0.723 \\  
-
- Adjusted R$^{2}$ & 0.475 & 0.723 & 0.723 & 0.728 & 0.723 & 0.723 & 0.728 & 0.723 \\  
-
- Residual Std. Error & 0.303 (df = 2854085) & 0.219 (df = 2605877) & 0.219 (df = 2602963) & 0.217 (df = 2601401) & 0.219 (df = 2602962) & 0.219 (df = 2602961) & 0.217 (df = 2601399) & 0.219 (df = 2602960) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1549.01. Sample average log rent: 7.25. Sample average HHI: 24.61. Sample average delta HHI: 0.1. Sample SD HHI: 51.29. Sample SD delta HHI: 0.12}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 05:19:33 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, Merger: Starwood Waypoint - Invitation Homes, Control: Within-Zip Non-Firm}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-9}  
-
- \\[-1.8ex] & \multicolumn{8}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
-
- \hline \\[-1.8ex]  
-
-  log\_sqft &  & 0.554$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ \\  
-
-   &  & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) \\  
-
-   & & & & & & & & \\  
-
-  tot\_unit\_val &  & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 \\  
-
-   &  & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\  
-
-   & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.750$^{***}$ & $-$0.285$^{***}$ & $-$0.750$^{***}$ & $-$0.750$^{***}$ & $-$0.285$^{***}$ & $-$0.750$^{***}$ \\  
-
-   &  &  & (0.095) & (0.057) & (0.095) & (0.095) & (0.057) & (0.095) \\  
-
-   & & & & & & & & \\  
-
-  median\_household\_income &  &  & $-$0.00000 & 0.00000$^{*}$ & $-$0.00000 & $-$0.00000 & 0.00000$^{*}$ & $-$0.00000 \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ & 0.0005$^{***}$ &  &  &  \\  
-
-   & (0.0003) & (0.0001) & (0.0001) & (0.0001) & (0.0001) &  &  &  \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & 0.0001$^{**}$ &  &  & 0.0001$^{**}$ \\  
-
-   &  &  &  &  & (0.00003) &  &  & (0.00003) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_position &  &  &  &  &  &  &  &  \\  
-
-   &  &  &  &  &  & (0.000) & (0.000) & (0.000) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positiontarget &  &  &  &  &  & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ \\  
-
-   &  &  &  &  &  & (0.0002) & (0.0002) & (0.0002) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positionacquiror &  &  &  &  &  & 0.001$^{***}$ & 0.0005$^{***}$ & 0.0005$^{***}$ \\  
-
-   &  &  &  &  &  & (0.0001) & (0.0001) & (0.0001) \\  
-
-   & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes \\  
-
- Observations & 2,296,350 & 2,102,354 & 2,098,935 & 2,098,933 & 2,098,935 & 2,098,935 & 2,098,933 & 2,098,935 \\  
-
- R$^{2}$ & 0.489 & 0.730 & 0.730 & 0.735 & 0.730 & 0.730 & 0.735 & 0.730 \\  
-
- Adjusted R$^{2}$ & 0.489 & 0.730 & 0.730 & 0.734 & 0.730 & 0.730 & 0.734 & 0.730 \\  
-
- Residual Std. Error & 0.295 (df = 2294787) & 0.214 (df = 2100789) & 0.214 (df = 2097371) & 0.212 (df = 2095818) & 0.214 (df = 2097370) & 0.214 (df = 2097370) & 0.212 (df = 2095817) & 0.214 (df = 2097369) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1560.4. Sample average log rent: 7.26. Sample average HHI: 25.28. Sample average delta HHI: 2.61. Sample SD HHI: 52.26. Sample SD delta HHI: 9.95}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 05:20:54 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, Merger: Starwood Waypoint - Invitation Homes, Control: Outside-Zip Merging Firm}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-9}  
-
- \\[-1.8ex] & \multicolumn{8}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
-
- \hline \\[-1.8ex]  
-
-  log\_sqft &  & 0.554$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ & 0.555$^{***}$ \\  
-
-   &  & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) \\  
-
-   & & & & & & & & \\  
-
-  tot\_unit\_val &  & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 \\  
-
-   &  & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\  
-
-   & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.751$^{***}$ & $-$0.289$^{***}$ & $-$0.751$^{***}$ & $-$0.751$^{***}$ & $-$0.289$^{***}$ & $-$0.751$^{***}$ \\  
-
-   &  &  & (0.095) & (0.056) & (0.095) & (0.095) & (0.056) & (0.095) \\  
-
-   & & & & & & & & \\  
-
-  median\_household\_income &  &  & $-$0.00000 & 0.00000$^{*}$ & $-$0.00000 & $-$0.00000 & 0.00000$^{*}$ & $-$0.00000 \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ &  &  &  \\  
-
-   & (0.0002) & (0.0002) & (0.0002) & (0.0002) & (0.0002) &  &  &  \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & 0.00000 &  &  & 0.00000 \\  
-
-   &  &  &  &  & (0.00004) &  &  & (0.00004) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_position &  &  &  &  &  & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ \\  
-
-   &  &  &  &  &  & (0.0002) & (0.0002) & (0.0002) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positiontarget &  &  &  &  &  & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ \\  
-
-   &  &  &  &  &  & (0.0003) & (0.0002) & (0.0002) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positionacquiror &  &  &  &  &  & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ \\  
-
-   &  &  &  &  &  & (0.0002) & (0.0002) & (0.0002) \\  
-
-   & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes \\  
-
- Observations & 2,296,462 & 2,102,447 & 2,099,028 & 2,099,012 & 2,099,028 & 2,099,028 & 2,099,012 & 2,099,028 \\  
-
- R$^{2}$ & 0.489 & 0.730 & 0.730 & 0.735 & 0.730 & 0.730 & 0.735 & 0.730 \\  
-
- Adjusted R$^{2}$ & 0.489 & 0.730 & 0.730 & 0.735 & 0.730 & 0.730 & 0.735 & 0.730 \\  
-
- Residual Std. Error & 0.295 (df = 2294876) & 0.214 (df = 2100860) & 0.214 (df = 2097442) & 0.212 (df = 2095871) & 0.214 (df = 2097441) & 0.214 (df = 2097440) & 0.212 (df = 2095869) & 0.214 (df = 2097439) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1560.42. Sample average log rent: 7.26. Sample average HHI: 25.41. Sample average delta HHI: 2.61. Sample SD HHI: 52.75. Sample SD delta HHI: 9.95}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 05:22:12 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, Merger: Starwood Waypoint - Invitation Homes, Control: Single Firm Zips}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccccccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{8}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-9}  
-
- \\[-1.8ex] & \multicolumn{8}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\  
-
- \hline \\[-1.8ex]  
-
-  log\_sqft &  & 0.554$^{***}$ & 0.554$^{***}$ & 0.555$^{***}$ & 0.554$^{***}$ & 0.554$^{***}$ & 0.555$^{***}$ & 0.554$^{***}$ \\  
-
-   &  & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) & (0.009) \\  
-
-   & & & & & & & & \\  
-
-  tot\_unit\_val &  & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 & $-$0.000 \\  
-
-   &  & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) & (0.000) \\  
-
-   & & & & & & & & \\  
-
-  prop\_unemp &  &  & $-$0.764$^{***}$ & $-$0.295$^{***}$ & $-$0.764$^{***}$ & $-$0.764$^{***}$ & $-$0.295$^{***}$ & $-$0.764$^{***}$ \\  
-
-   &  &  & (0.094) & (0.056) & (0.094) & (0.094) & (0.056) & (0.094) \\  
-
-   & & & & & & & & \\  
-
-  median\_household\_income &  &  & $-$0.00000 & 0.00000$^{**}$ & $-$0.00000 & $-$0.00000 & 0.00000$^{**}$ & $-$0.00000 \\  
-
-   &  &  & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ &  &  &  \\  
-
-   & (0.0002) & (0.0002) & (0.0002) & (0.0002) & (0.0002) &  &  &  \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:time\_trend &  &  &  &  & 0.00001 &  &  & 0.00001 \\  
-
-   &  &  &  &  & (0.00003) &  &  & (0.00003) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_position &  &  &  &  &  & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ \\  
-
-   &  &  &  &  &  & (0.0002) & (0.0002) & (0.0002) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positiontarget &  &  &  &  &  & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ \\  
-
-   &  &  &  &  &  & (0.0003) & (0.0002) & (0.0002) \\  
-
-   & & & & & & & & \\  
-
-  delta\_hhi:treated:merge\_positionacquiror &  &  &  &  &  & 0.001$^{***}$ & 0.001$^{***}$ & 0.001$^{***}$ \\  
-
-   &  &  &  &  &  & (0.0002) & (0.0002) & (0.0002) \\  
-
-   & & & & & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Linear Trend & No & No & No & Yes & No & No & Yes & No \\  
-
- Delta HHI*Linear Trend & No & No & No & No & Yes & No & No & Yes \\  
-
- Observations & 2,351,601 & 2,154,000 & 2,150,581 & 2,150,577 & 2,150,581 & 2,150,581 & 2,150,577 & 2,150,581 \\  
-
- R$^{2}$ & 0.493 & 0.729 & 0.729 & 0.734 & 0.729 & 0.729 & 0.734 & 0.729 \\  
-
- Adjusted R$^{2}$ & 0.492 & 0.729 & 0.729 & 0.734 & 0.729 & 0.729 & 0.734 & 0.729 \\  
-
- Residual Std. Error & 0.296 (df = 2349991) & 0.216 (df = 2152388) & 0.216 (df = 2148970) & 0.214 (df = 2147370) & 0.216 (df = 2148969) & 0.216 (df = 2148968) & 0.214 (df = 2147368) & 0.216 (df = 2148967) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1561.67. Sample average log rent: 7.26. Sample average HHI: 25.51. Sample average delta HHI: 2.61. Sample SD HHI: 53.58. Sample SD delta HHI: 9.95}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
-
- 
-
- % Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu 
-
- % Date and time: Mon, Jan 25, 2021 - 05:31:57 PM 
-
- \begin{table}[H] \centering  
-
-   \caption{2-Way FE, Sq Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Within-Zip Non-Firm}  
-
-   \label{}  
-
- \resizebox{\textwidth}{!}{\begin{tabular}{@{\extracolsep{5pt}}lcccc}  
-
- \\[-1.8ex]\hline  
-
- \hline \\[-1.8ex]  
-
-  & \multicolumn{4}{c}{\textit{Dependent variable:}} \\  
-
- \cline{2-5}  
-
- \\[-1.8ex] & \multicolumn{4}{c}{log\_rent} \\  
-
- \\[-1.8ex] & (1) & (2) & (3) & (4)\\  
-
- \hline \\[-1.8ex]  
-
-  log\_sqft & 0.557$^{***}$ & 0.556$^{***}$ & 0.557$^{***}$ & 0.556$^{***}$ \\  
-
-   & (0.012) & (0.012) & (0.012) & (0.012) \\  
-
-   & & & & \\  
-
-  tot\_unit\_val & 0.00000 & 0.00000 & 0.00000 & 0.00000 \\  
-
-   & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & \\  
-
-  prop\_unemp & $-$0.136$^{***}$ & $-$0.733$^{***}$ & $-$0.136$^{***}$ & $-$0.734$^{***}$ \\  
-
-   & (0.047) & (0.097) & (0.047) & (0.097) \\  
-
-   & & & & \\  
-
-  median\_household\_income & 0.00000 & 0.00000$^{***}$ & 0.00000 & 0.00000$^{***}$ \\  
-
-   & (0.00000) & (0.00000) & (0.00000) & (0.00000) \\  
-
-   & & & & \\  
-
-  delta\_hhi:treated & 0.001 & 0.001 &  &  \\  
-
-   & (0.001) & (0.001) &  &  \\  
-
-   & & & & \\  
-
-  delta\_hhi:time\_trend &  & $-$0.003$^{***}$ &  & $-$0.003$^{***}$ \\  
-
-   &  & (0.001) &  & (0.001) \\  
-
-   & & & & \\  
-
-  delta\_hhi:sq\_time\_trend &  & 0.0002$^{***}$ &  & 0.0002$^{***}$ \\  
-
-   &  & (0.0001) &  & (0.0001) \\  
-
-   & & & & \\  
-
-  delta\_hhi:treated:merge\_position &  &  &  &  \\  
-
-   &  &  & (0.000) & (0.000) \\  
-
-   & & & & \\  
-
-  delta\_hhi:treated:merge\_positiontarget &  &  & $-$0.002$^{***}$ & $-$0.001 \\  
-
-   &  &  & (0.001) & (0.001) \\  
-
-   & & & & \\  
-
-  delta\_hhi:treated:merge\_positionacquiror &  &  & 0.001 & 0.001 \\  
-
-   &  &  & (0.001) & (0.001) \\  
-
-   & & & & \\  
-
- \hline \\[-1.8ex]  
-
- Zip*Sq Linear Trend & Yes & No & Yes & No \\  
-
- Delta HHI*Sq Linear Trend & No & Yes & No & Yes \\  
-
- Observations & 2,603,872 & 2,603,872 & 2,603,872 & 2,603,872 \\  
-
- R$^{2}$ & 0.707 & 0.698 & 0.707 & 0.698 \\  
-
- Adjusted R$^{2}$ & 0.706 & 0.698 & 0.706 & 0.698 \\  
-
- Residual Std. Error & 0.216 (df = 2599670) & 0.219 (df = 2602460) & 0.216 (df = 2599669) & 0.219 (df = 2602459) \\  
-
- \hline  
-
- \hline \\[-1.8ex]  
-
- \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1479.26. Sample average log rent: 7.21. Sample average HHI: 25.25. Sample average delta HHI: 0.85. Sample SD HHI: 51.5. Sample SD delta HHI: 2.25}} \\ 
-
- \end{tabular}}  
-
- \end{table}  
+ \end{table} 
 

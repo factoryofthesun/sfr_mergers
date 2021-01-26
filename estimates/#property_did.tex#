@@ -1,0 +1,2976 @@
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{Post-Merger Concentration on Simulated Concentration} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccc} 
+
+  & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{7}{c}{hhi}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ $\Delta \text{sim\_HHI} \times \text{Post}$&1.6928\sym{***}&1.6923\sym{***}&1.6916\sym{***}&1.6916\sym{***}&0.9827\sym{***}&1.9067\sym{***}&2.0319\sym{***}\\ 
+
+   &(0.1763)&(0.1762)&(0.1757)&(0.1864)&(0.1062)&(0.2890)&(0.3309)\\ 
+
+ prop_unemp&  &-14.908&-20.674&-20.674&0.8667&-20.752&-20.401\\ 
+
+   &  &(13.607)&(13.703)&(14.536)&(11.830)&(13.695)&(13.690)\\ 
+
+ median_household_income&  &  &-0.0002\sym{***}&-0.0002\sym{**}&$1.103\times 10^{-5}$&-0.0002\sym{***}&-0.0002\sym{***}\\ 
+
+   &  &  &($8.002\times 10^{-5}$)&($8.488\times 10^{-5}$)&($6.655\times 10^{-5}$)&($8.01\times 10^{-5}$)&($8.004\times 10^{-5}$)\\ 
+
+ delta_hhi:year_trend&  &  &  &  &  &-0.03&0.0693\\ 
+
+   &  &  &  &  &  &(0.0418)&(0.0602)\\ 
+
+ delta_hhi:sq_year_trend&  &  &  &  &  &  &-0.01\\ 
+
+   &  &  &  &  &  &  &(0.0074)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & \\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(Zip5)&Yes&Yes&Yes&No&No&Yes&Yes\\ 
+
+ Zip5&No&No&No&Yes&Yes&No&No\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & \\ 
+
+ year_trend (Zip5)&No&No&No&Yes&Yes&No&No\\ 
+
+ sq_year_trend (Zip5)&No&No&No&No&Yes&No&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & \\ 
+
+ Observations& 15,334&15,314&15,314&15,314&15,314&15,314&15,314\\ 
+
+ Adj-pseudo $R^2$ &0.27403&0.27408&0.2744&0.25583&0.33651&0.27441&0.27442\\ 
+
+ BIC & 146,583.97&146,409.51&146,373.26&175,899.56&189,051.57&146,390.36&146,405.80\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{8}{l}{\emph{Clustered (Zip5) standard-errors in parenthesis. Signif Codes: ***: 0.01, **: 0.05, *: 0.1}}\\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE with delta HHI and firm owned indicator, All Treated Zips, OG} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lcccccc} 
+
+  & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{6}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ treated&-0.010\sym{***}&  &  &  &  &  \\ 
+
+   &(0.0037)&  &  &  &  &  \\ 
+
+ log_sqft&0.5619\sym{***}&0.5619\sym{***}&0.5618\sym{***}&0.5618\sym{***}&0.5618\sym{***}&0.5619\sym{***}\\ 
+
+   &(0.0097)&(0.0097)&(0.0097)&(0.0097)&(0.0097)&(0.0097)\\ 
+
+ tot_unit_val&$-1.953\times 10^{-9}$&$-1.918\times 10^{-9}$&$-1.917\times 10^{-9}$&$-1.917\times 10^{-9}$&$-1.918\times 10^{-9}$&$-1.929\times 10^{-9}$\\ 
+
+   &($9.848\times 10^{-9}$)&($9.853\times 10^{-9}$)&($9.853\times 10^{-9}$)&($9.855\times 10^{-9}$)&($9.852\times 10^{-9}$)&($9.851\times 10^{-9}$)\\ 
+
+ prop_unemp&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}\\ 
+
+   &(0.0946)&(0.0946)&(0.0946)&(0.0947)&(0.0946)&(0.0938)\\ 
+
+ median_household_income&$9.389\times 10^{-7}$\sym{***}&$1\times 10^{-6}$\sym{***}&$9.997\times 10^{-7}$\sym{***}&$9.998\times 10^{-7}$\sym{***}&$1.002\times 10^{-6}$\sym{***}&$9.799\times 10^{-7}$\sym{***}\\ 
+
+   &($2.85\times 10^{-7}$)&($2.853\times 10^{-7}$)&($2.853\times 10^{-7}$)&($2.854\times 10^{-7}$)&($2.849\times 10^{-7}$)&($2.835\times 10^{-7}$)\\ 
+
+ dhhi_treated&  &0.0002&  &  &  &  \\ 
+
+   &  &(0.0002)&  &  &  &  \\ 
+
+ dhhi_treated:merge_position&  &  &0.0002&0.0002&-0.0004&-0.003\sym{***}\\ 
+
+   &  &  &(0.0002)&(0.0002)&(0.0007)&(0.0008)\\ 
+
+ dhhi_treated:merge_positiontarget&  &  &0.0004\sym{***}&0.0004\sym{***}&-0.0002&-0.003\sym{***}\\ 
+
+   &  &  &(0.0002)&(0.0002)&(0.0007)&(0.0008)\\ 
+
+ dhhi_treated:merge_positionacquiror&  &  &0.0003\sym{**}&0.0003\sym{**}&-0.0003&-0.003\sym{***}\\ 
+
+   &  &  &(0.0001)&(0.0001)&(0.0007)&(0.0008)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &$6.626\times 10^{-5}$&-0.002\sym{***}\\ 
+
+   &  &  &  &  &($8.058\times 10^{-5}$)&(0.0006)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &0.0003\sym{***}\\ 
+
+   &  &  &  &  &  &($6.609\times 10^{-5}$)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & \\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & \\ 
+
+ Observations& 2,886,200&2,886,200&2,886,200&2,886,198&2,886,200&2,886,200\\ 
+
+ Adj-pseudo $R^2$ &1.15119&1.15116&1.15116&1.15016&1.15117&1.1514\\ 
+
+ BIC & -436,216.92&-436,120.27&-436,065.71&-388,403.94&-436,043.26&-436,753.54\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{7}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1548.97. Sample average log rent: 7.25. Sample average HHI: 25.04. Sample average delta HHI: 0.8. Sample SD HHI: 53.22. Sample SD delta HHI: 2.15}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, No DHHI, Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Within-Zip Non-Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccccc} 
+
+  & & & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{9}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)&(8)&(9)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ treated&0.0236\sym{***}&-0.007\sym{*}&-0.006&-0.006&-0.003&  &  &  &  \\ 
+
+   &(0.0067)&(0.0041)&(0.0040)&(0.0040)&(0.0039)&  &  &  &  \\ 
+
+ log_sqft&  &0.5558\sym{***}&0.5558\sym{***}&0.5558\sym{***}&0.5559\sym{***}&$-3.027\times 10^{-13}$NA&$-3.027\times 10^{-13}$NA&$-3.027\times 10^{-13}$NA&$-1.128\times 10^{-9}$NA\\ 
+
+   &  &(0.0120)&(0.0120)&(0.0120)&(0.0120)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ tot_unit_val&  &$4.074\times 10^{-8}$&$4.06\times 10^{-8}$&$4.06\times 10^{-8}$&$4.049\times 10^{-8}$&$2.819\times 10^{-7}$NA&$2.819\times 10^{-7}$NA&$2.819\times 10^{-7}$NA&$2.819\times 10^{-7}$NA\\ 
+
+   &  &($3.104\times 10^{-8}$)&($3.101\times 10^{-8}$)&($3.102\times 10^{-8}$)&($3.098\times 10^{-8}$)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ prop_unemp&  &  &-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&$-2.501\times 10^{-13}$NA&$-2.501\times 10^{-13}$NA&$-2.501\times 10^{-13}$NA&$-6.739\times 10^{-11}$NA\\ 
+
+   &  &  &(0.0990)&(0.0991)&(0.0971)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ median_household_income&  &  &$9.161\times 10^{-7}$\sym{***}&$9.161\times 10^{-7}$\sym{***}&$9.318\times 10^{-7}$\sym{***}&$8.469\times 10^{-7}$NA&$8.469\times 10^{-7}$NA&$8.469\times 10^{-7}$NA&$8.608\times 10^{-7}$NA\\ 
+
+   &  &  &($3.255\times 10^{-7}$)&($3.256\times 10^{-7}$)&($3.231\times 10^{-7}$)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &-0.0008\sym{***}&  &  &$1.829\times 10^{-11}$NA&$-4.292\times 10^{-6}$NA\\ 
+
+   &  &  &  &  &(0.0002)&  &  &(NA)&(NA)\\ 
+
+ treated:merge_position&  &  &  &  &  &$NaN\times 10^{-Inf}$NA&$NaN\times 10^{-Inf}$NA&$NaN\times 10^{-Inf}$NA&$NaN\times 10^{-Inf}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ treated:merge_positiontarget&  &  &  &  &  &$-7.366\times 10^{-14}$NA&$-7.366\times 10^{-14}$NA&$-7.366\times 10^{-14}$NA&$-9.68\times 10^{-10}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ treated:merge_positionacquiror&  &  &  &  &  &$7.114\times 10^{-14}$NA&$7.114\times 10^{-14}$NA&$7.114\times 10^{-14}$NA&$-3.412\times 10^{-9}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &  &  &$-4.36\times 10^{-5}$NA\\ 
+
+   &  &  &  &  &  &  &  &  &(NA)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&No&Yes&No&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & & & \\ 
+
+ Observations& 2,854,978&2,606,211&2,603,872&2,603,872&2,603,872&2,603,872&2,603,872&2,603,872&2,603,872\\ 
+
+ Adj-pseudo $R^2$ &0.55367&1.20028&1.20094&1.19986&1.20129&0.63489&0.63381&0.63489&0.63495\\ 
+
+ BIC & 1,319,516.92&-480,643.96&-481,753.98&-440,509.13&-482,638.45&984,814.29&1,026,059.14&984,843.84&984,706.32\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{10}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1479.26. Sample average log rent: 7.21. Sample average HHI: 25.25. Sample average delta HHI: 0.85. Sample SD HHI: 51.5. Sample SD delta HHI: 2.25}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, No DHHI, Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Outside Zip Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccccc} 
+
+  & & & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{9}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)&(8)&(9)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ treated&0.0193&0.0033&0.0028&-0.001&0.0055&  &  &  &  \\ 
+
+   &(0.0438)&(0.0172)&(0.0175)&(0.0181)&(0.0175)&  &  &  &  \\ 
+
+ log_sqft&  &0.5557\sym{***}&0.5557\sym{***}&0.5557\sym{***}&0.5557\sym{***}&$-3.017\times 10^{-13}$NA&$-3.018\times 10^{-13}$NA&$-3.017\times 10^{-13}$NA&$-1.127\times 10^{-9}$NA\\ 
+
+   &  &(0.0120)&(0.0120)&(0.0120)&(0.0120)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ tot_unit_val&  &$4.072\times 10^{-8}$&$4.059\times 10^{-8}$&$4.059\times 10^{-8}$&$4.047\times 10^{-8}$&$2.82\times 10^{-7}$NA&$2.82\times 10^{-7}$NA&$2.82\times 10^{-7}$NA&$2.819\times 10^{-7}$NA\\ 
+
+   &  &($3.103\times 10^{-8}$)&($3.1\times 10^{-8}$)&($3.101\times 10^{-8}$)&($3.097\times 10^{-8}$)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ prop_unemp&  &  &-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&$-2.501\times 10^{-13}$NA&$-2.501\times 10^{-13}$NA&$-2.501\times 10^{-13}$NA&$-6.731\times 10^{-11}$NA\\ 
+
+   &  &  &(0.0991)&(0.0991)&(0.0971)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ median_household_income&  &  &$9.153\times 10^{-7}$\sym{***}&$9.153\times 10^{-7}$\sym{***}&$9.311\times 10^{-7}$\sym{***}&$8.468\times 10^{-7}$NA&$8.469\times 10^{-7}$NA&$8.468\times 10^{-7}$NA&$8.607\times 10^{-7}$NA\\ 
+
+   &  &  &($3.256\times 10^{-7}$)&($3.257\times 10^{-7}$)&($3.231\times 10^{-7}$)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &-0.0008\sym{***}&  &  &$1.827\times 10^{-11}$NA&$-4.291\times 10^{-6}$NA\\ 
+
+   &  &  &  &  &(0.0002)&  &  &(NA)&(NA)\\ 
+
+ treated:merge_position&  &  &  &  &  &$-5.214\times 10^{-16}$NA&$-5.68\times 10^{-16}$NA&$-5.215\times 10^{-16}$NA&$4.362\times 10^{-9}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ treated:merge_positiontarget&  &  &  &  &  &$-7.366\times 10^{-14}$NA&$-7.367\times 10^{-14}$NA&$-7.366\times 10^{-14}$NA&$-9.678\times 10^{-10}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ treated:merge_positionacquiror&  &  &  &  &  &$7.109\times 10^{-14}$NA&$7.109\times 10^{-14}$NA&$7.109\times 10^{-14}$NA&$-3.411\times 10^{-9}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &  &  &$-4.359\times 10^{-5}$NA\\ 
+
+   &  &  &  &  &  &  &  &  &(NA)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&No&Yes&No&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & & & \\ 
+
+ Observations& 2,855,395&2,606,610&2,604,255&2,604,205&2,604,255&2,604,255&2,604,205&2,604,255&2,604,255\\ 
+
+ Adj-pseudo $R^2$ &0.55365&1.19999&1.20065&1.19957&1.20101&0.63491&0.63381&0.63491&0.63497\\ 
+
+ BIC & 1,321,762.33&-478,251.16&-479,403.87&-438,367.77&-480,298.97&986,752.59&1,027,762.57&986,782.14&986,644.71\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1479.32. Sample average log rent: 7.21. Sample average HHI: 24.9. Sample average delta HHI: 0.85. Sample SD HHI: 51.07. Sample SD delta HHI: 2.25}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, No DHHI, Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Single Firm Zips} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccccc} 
+
+  & & & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{9}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)&(8)&(9)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ treated&-0.006&-0.01\sym{**}&-0.01\sym{*}&-0.01\sym{*}&-0.008&  &  &  &  \\ 
+
+   &(0.0074)&(0.0058)&(0.0059)&(0.0059)&(0.0059)&  &  &  &  \\ 
+
+ log_sqft&  &0.5609\sym{***}&0.5612\sym{***}&0.5612\sym{***}&0.5612\sym{***}&0.5612\sym{***}&0.5612\sym{***}&0.5612\sym{***}&0.5613\sym{***}\\ 
+
+   &  &(0.0106)&(0.0106)&(0.0106)&(0.0106)&(0.0106)&(0.0106)&(0.0106)&(0.0106)\\ 
+
+ tot_unit_val&  &$1.797\times 10^{-8}$&$1.777\times 10^{-8}$&$1.777\times 10^{-8}$&$1.769\times 10^{-8}$&$1.777\times 10^{-8}$&$1.777\times 10^{-8}$&$1.769\times 10^{-8}$&$1.767\times 10^{-8}$\\ 
+
+   &  &($1.883\times 10^{-8}$)&($1.879\times 10^{-8}$)&($1.88\times 10^{-8}$)&($1.877\times 10^{-8}$)&($1.879\times 10^{-8}$)&($1.88\times 10^{-8}$)&($1.877\times 10^{-8}$)&($1.877\times 10^{-8}$)\\ 
+
+ prop_unemp&  &  &-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}\\ 
+
+   &  &  &(0.0964)&(0.0964)&(0.0946)&(0.0964)&(0.0964)&(0.0946)&(0.0945)\\ 
+
+ median_household_income&  &  &$9.207\times 10^{-7}$\sym{***}&$9.208\times 10^{-7}$\sym{***}&$9.293\times 10^{-7}$\sym{***}&$9.207\times 10^{-7}$\sym{***}&$9.208\times 10^{-7}$\sym{***}&$9.291\times 10^{-7}$\sym{***}&$8.921\times 10^{-7}$\sym{***}\\ 
+
+   &  &  &($3.024\times 10^{-7}$)&($3.025\times 10^{-7}$)&($3.003\times 10^{-7}$)&($3.023\times 10^{-7}$)&($3.024\times 10^{-7}$)&($3.003\times 10^{-7}$)&($2.995\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &-0.0008\sym{***}&  &  &-0.0008\sym{***}&-0.003\sym{***}\\ 
+
+   &  &  &  &  &(0.0002)&  &  &(0.0002)&(0.0006)\\ 
+
+ treated:merge_position&  &  &  &  &  &-0.01\sym{*}&-0.01\sym{*}&-0.008&-0.009\\ 
+
+   &  &  &  &  &  &(0.0059)&(0.0059)&(0.0059)&(0.0059)\\ 
+
+ treated:merge_positiontarget&  &  &  &  &  &-0.02\sym{***}&-0.02\sym{***}&-0.01\sym{**}&-0.01\sym{**}\\ 
+
+   &  &  &  &  &  &(0.0065)&(0.0065)&(0.0065)&(0.0065)\\ 
+
+ treated:merge_positionacquiror&  &  &  &  &  &-0.02\sym{**}&-0.02\sym{**}&-0.01&-0.01\\ 
+
+   &  &  &  &  &  &(0.0082)&(0.0082)&(0.0082)&(0.0082)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &  &  &0.0003\sym{***}\\ 
+
+   &  &  &  &  &  &  &  &  &($5.756\times 10^{-5}$)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&No&Yes&No&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & & & \\ 
+
+ Observations& 3,104,854&2,829,750&2,825,812&2,825,810&2,825,812&2,825,812&2,825,810&2,825,812&2,825,812\\ 
+
+ Adj-pseudo $R^2$ &0.56696&1.1634&1.16386&1.16283&1.16419&1.16386&1.16284&1.16419&1.16446\\ 
+
+ BIC & 1,491,261.84&-452,020.93&-452,760.08&-406,681.10&-453,722.22&-452,715.72&-406,636.74&-453,666.86&-454,472.98\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1529.67. Sample average log rent: 7.24. Sample average HHI: 24.91. Sample average delta HHI: 0.85. Sample SD HHI: 52.9. Sample SD delta HHI: 2.25}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, No DHHI, Merger: Colony American - Starwood Waypoint, Control: Within-Zip Non-Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccccc} 
+
+  & & & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{9}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)&(8)&(9)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ treated&0.0189&-0.03\sym{***}&-0.03\sym{***}&-0.03\sym{***}&-0.02\sym{***}&  &  &  &  \\ 
+
+   &(0.0119)&(0.0083)&(0.0081)&(0.0081)&(0.0082)&  &  &  &  \\ 
+
+ log_sqft&  &0.5906\sym{***}&0.5905\sym{***}&0.5905\sym{***}&0.5908\sym{***}&$6.771\times 10^{-13}$NA&$6.771\times 10^{-13}$NA&$6.771\times 10^{-13}$NA&$6.771\times 10^{-13}$NA\\ 
+
+   &  &(0.0414)&(0.0414)&(0.0414)&(0.0414)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ tot_unit_val&  &$2.383\times 10^{-7}$&$2.383\times 10^{-7}$&$2.383\times 10^{-7}$&$2.38\times 10^{-7}$&$7.9\times 10^{-7}$NA&$7.9\times 10^{-7}$NA&$7.9\times 10^{-7}$NA&$7.9\times 10^{-7}$NA\\ 
+
+   &  &($1.885\times 10^{-7}$)&($1.885\times 10^{-7}$)&($1.886\times 10^{-7}$)&($1.884\times 10^{-7}$)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ prop_unemp&  &  &-0.5\sym{***}&-0.5\sym{***}&-0.5\sym{***}&$2.006\times 10^{-13}$NA&$2.006\times 10^{-13}$NA&$2.006\times 10^{-13}$NA&$2.006\times 10^{-13}$NA\\ 
+
+   &  &  &(0.1732)&(0.1733)&(0.1510)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ median_household_income&  &  &$-8.285\times 10^{-7}$&$-8.285\times 10^{-7}$&$-7.73\times 10^{-7}$&$-2.279\times 10^{-7}$NA&$-2.279\times 10^{-7}$NA&$-2.279\times 10^{-7}$NA&$-2.279\times 10^{-7}$NA\\ 
+
+   &  &  &($9.556\times 10^{-7}$)&($9.559\times 10^{-7}$)&($9.109\times 10^{-7}$)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &-0.03\sym{***}&  &  &$-3.526\times 10^{-13}$NA&$-3.526\times 10^{-13}$NA\\ 
+
+   &  &  &  &  &(0.0041)&  &  &(NA)&(NA)\\ 
+
+ treated:merge_position&  &  &  &  &  &$NaN\times 10^{-Inf}$NA&$NaN\times 10^{-Inf}$NA&$NaN\times 10^{-Inf}$NA&$NaN\times 10^{-Inf}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ treated:merge_positiontarget&  &  &  &  &  &$2.29\times 10^{-15}$NA&$2.29\times 10^{-15}$NA&$2.29\times 10^{-15}$NA&$2.29\times 10^{-15}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ treated:merge_positionacquiror&  &  &  &  &  &$-1.4\times 10^{-13}$NA&$-1.4\times 10^{-13}$NA&$-1.4\times 10^{-13}$NA&$-1.4\times 10^{-13}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &  &  &$-1.539\times 10^{-12}$NA\\ 
+
+   &  &  &  &  &  &  &  &  &(NA)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&No&Yes&No&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & & & \\ 
+
+ Observations& 302,790&291,101&291,101&291,101&291,101&291,101&291,101&291,101&291,101\\ 
+
+ Adj-pseudo $R^2$ &0.49593&1.62974&1.63065&1.62909&1.633&0.74944&0.74787&0.74943&0.74942\\ 
+
+ BIC & 124,933.96&-138,434.25&-138,594.07&-134,140.25&-139,105.39&61,263.87&65,717.70&61,289.04&61,314.20\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{10}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1304.65. Sample average log rent: 7.1. Sample average HHI: 36.97. Sample average delta HHI: 0.1. Sample SD HHI: 75.48. Sample SD delta HHI: 0.12}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, No DHHI, Merger: Colony American - Starwood Waypoint, Control: Outside Zip Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccccc} 
+
+  & & & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{9}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)&(8)&(9)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ treated&0.0207\sym{***}&0.0379\sym{***}&0.0361\sym{***}&0.0364\sym{***}&0.0441\sym{***}&  &  &  &  \\ 
+
+   &(0.0074)&(0.0060)&(0.0056)&(0.0057)&(0.0057)&  &  &  &  \\ 
+
+ log_sqft&  &0.5801\sym{***}&0.5801\sym{***}&0.5799\sym{***}&0.5803\sym{***}&0.5802\sym{***}&0.5800\sym{***}&0.5804\sym{***}&0.5804\sym{***}\\ 
+
+   &  &(0.0400)&(0.0400)&(0.0402)&(0.0400)&(0.0400)&(0.0402)&(0.0400)&(0.0400)\\ 
+
+ tot_unit_val&  &$2.459\times 10^{-7}$&$2.458\times 10^{-7}$&$2.469\times 10^{-7}$&$2.455\times 10^{-7}$&$2.457\times 10^{-7}$&$2.469\times 10^{-7}$&$2.455\times 10^{-7}$&$2.455\times 10^{-7}$\\ 
+
+   &  &($1.886\times 10^{-7}$)&($1.886\times 10^{-7}$)&($1.901\times 10^{-7}$)&($1.885\times 10^{-7}$)&($1.886\times 10^{-7}$)&($1.901\times 10^{-7}$)&($1.885\times 10^{-7}$)&($1.885\times 10^{-7}$)\\ 
+
+ prop_unemp&  &  &-0.6\sym{***}&-0.6\sym{***}&-0.6\sym{***}&-0.6\sym{***}&-0.6\sym{***}&-0.6\sym{***}&-0.6\sym{***}\\ 
+
+   &  &  &(0.1619)&(0.1622)&(0.1416)&(0.1618)&(0.1621)&(0.1417)&(0.1407)\\ 
+
+ median_household_income&  &  &$-8.992\times 10^{-7}$&$-8.993\times 10^{-7}$&$-8.644\times 10^{-7}$&$-8.837\times 10^{-7}$&$-8.837\times 10^{-7}$&$-8.524\times 10^{-7}$&$-8.52\times 10^{-7}$\\ 
+
+   &  &  &($8.817\times 10^{-7}$)&($8.838\times 10^{-7}$)&($8.372\times 10^{-7}$)&($8.787\times 10^{-7}$)&($8.808\times 10^{-7}$)&($8.359\times 10^{-7}$)&($8.362\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &-0.02\sym{***}&  &  &-0.02\sym{***}&-0.03\\ 
+
+   &  &  &  &  &(0.0039)&  &  &(0.0040)&(0.0174)\\ 
+
+ treated:merge_position&  &  &  &  &  &0.0368\sym{***}&0.0371\sym{***}&0.0446\sym{***}&0.0444\sym{***}\\ 
+
+   &  &  &  &  &  &(0.0056)&(0.0056)&(0.0057)&(0.0066)\\ 
+
+ treated:merge_positiontarget&  &  &  &  &  &-0.02&-0.02&-0.010&-0.010\\ 
+
+   &  &  &  &  &  &(0.0198)&(0.0198)&(0.0195)&(0.0194)\\ 
+
+ treated:merge_positionacquiror&  &  &  &  &  &0.0095&0.0098&0.0229\sym{**}&0.0227\sym{**}\\ 
+
+   &  &  &  &  &  &(0.0099)&(0.0100)&(0.0101)&(0.0104)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &  &  &0.0001\\ 
+
+   &  &  &  &  &  &  &  &  &(0.0019)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&No&Yes&No&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & & & \\ 
+
+ Observations& 327,224&314,661&314,630&314,054&314,630&314,630&314,054&314,630&314,630\\ 
+
+ Adj-pseudo $R^2$ &0.53786&1.68498&1.68616&1.67973&1.68829&1.68627&1.67984&1.68836&1.68835\\ 
+
+ BIC & 147,603.90&-133,532.38&-133,800.16&-114,967.38&-134,284.30&-133,779.73&-114,946.90&-134,253.74&-134,228.50\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1312.48. Sample average log rent: 7.11. Sample average HHI: 27.65. Sample average delta HHI: 0.1. Sample SD HHI: 55.09. Sample SD delta HHI: 0.12}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, No DHHI, Merger: Colony American - Starwood Waypoint, Control: Single Firm Zips} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccccc} 
+
+  & & & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{9}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)&(8)&(9)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ treated&0.0377\sym{***}&0.0334\sym{***}&0.0331\sym{***}&0.0331\sym{***}&0.0425\sym{***}&  &  &  &  \\ 
+
+   &(0.0048)&(0.0046)&(0.0044)&(0.0044)&(0.0043)&  &  &  &  \\ 
+
+ log_sqft&  &0.5611\sym{***}&0.5614\sym{***}&0.5614\sym{***}&0.5614\sym{***}&$-1.409\times 10^{-13}$NA&$-1.409\times 10^{-13}$NA&$-1.409\times 10^{-13}$NA&$-1.409\times 10^{-13}$NA\\ 
+
+   &  &(0.0097)&(0.0097)&(0.0098)&(0.0097)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ tot_unit_val&  &$2.512\times 10^{-9}$&$2.405\times 10^{-9}$&$2.405\times 10^{-9}$&$2.391\times 10^{-9}$&$1.41\times 10^{-7}$NA&$1.41\times 10^{-7}$NA&$1.41\times 10^{-7}$NA&$1.41\times 10^{-7}$NA\\ 
+
+   &  &($1.072\times 10^{-8}$)&($1.069\times 10^{-8}$)&($1.069\times 10^{-8}$)&($1.068\times 10^{-8}$)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ prop_unemp&  &  &-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&$-1.64\times 10^{-13}$NA&$-1.641\times 10^{-13}$NA&$-1.64\times 10^{-13}$NA&$-1.64\times 10^{-13}$NA\\ 
+
+   &  &  &(0.0898)&(0.0898)&(0.0893)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ median_household_income&  &  &$6.349\times 10^{-7}$\sym{**}&$6.35\times 10^{-7}$\sym{**}&$6.025\times 10^{-7}$\sym{**}&$5.448\times 10^{-7}$NA&$5.449\times 10^{-7}$NA&$5.448\times 10^{-7}$NA&$5.448\times 10^{-7}$NA\\ 
+
+   &  &  &($3.014\times 10^{-7}$)&($3.015\times 10^{-7}$)&($3.012\times 10^{-7}$)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &-0.02\sym{***}&  &  &$-1.49\times 10^{-12}$NA&$-1.49\times 10^{-12}$NA\\ 
+
+   &  &  &  &  &(0.0035)&  &  &(NA)&(NA)\\ 
+
+ treated:merge_position&  &  &  &  &  &$-1.824\times 10^{-12}$NA&$-1.824\times 10^{-12}$NA&$-1.824\times 10^{-12}$NA&$-1.824\times 10^{-12}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ treated:merge_positiontarget&  &  &  &  &  &$-1.829\times 10^{-15}$NA&$-1.829\times 10^{-15}$NA&$-1.829\times 10^{-15}$NA&$-1.829\times 10^{-15}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ treated:merge_positionacquiror&  &  &  &  &  &$-1.863\times 10^{-14}$NA&$-1.863\times 10^{-14}$NA&$-1.863\times 10^{-14}$NA&$-1.863\times 10^{-14}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &  &  &$-1.178\times 10^{-11}$NA\\ 
+
+   &  &  &  &  &  &  &  &  &(NA)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&No&Yes&No&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & & & \\ 
+
+ Observations& 2,855,658&2,607,452&2,604,538&2,604,536&2,604,538&2,604,538&2,604,536&2,604,538&2,604,538\\ 
+
+ Adj-pseudo $R^2$ &0.58967&1.17941&1.17997&1.17887&1.18011&0.63735&0.63625&0.63735&0.63735\\ 
+
+ BIC & 1,322,039.91&-465,598.84&-466,528.35&-420,436.47&-466,886.85&1,070,927.13&1,117,018.49&1,070,956.68&1,070,986.22\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1549.01. Sample average log rent: 7.25. Sample average HHI: 24.61. Sample average delta HHI: 0.1. Sample SD HHI: 51.29. Sample SD delta HHI: 0.12}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, No DHHI, Merger: Starwood Waypoint - Invitation Homes, Control: Within-Zip Non-Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccccc} 
+
+  & & & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{9}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)&(8)&(9)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ treated&0.0739\sym{***}&0.0146\sym{***}&0.0137\sym{***}&0.0137\sym{***}&0.0120\sym{***}&  &  &  &  \\ 
+
+   &(0.0052)&(0.0035)&(0.0035)&(0.0035)&(0.0033)&  &  &  &  \\ 
+
+ log_sqft&  &0.5544\sym{***}&0.5547\sym{***}&0.5547\sym{***}&0.5547\sym{***}&$-2.155\times 10^{-15}$NA&$-2.145\times 10^{-15}$NA&$-2.155\times 10^{-15}$NA&$1.449\times 10^{-10}$NA\\ 
+
+   &  &(0.0090)&(0.0090)&(0.0090)&(0.0090)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ tot_unit_val&  &$-4.077\times 10^{-9}$&$-4.123\times 10^{-9}$&$-4.123\times 10^{-9}$&$-4.118\times 10^{-9}$&$1.243\times 10^{-7}$NA&$1.243\times 10^{-7}$NA&$1.243\times 10^{-7}$NA&$1.243\times 10^{-7}$NA\\ 
+
+   &  &($9.073\times 10^{-9}$)&($9.062\times 10^{-9}$)&($9.065\times 10^{-9}$)&($9.062\times 10^{-9}$)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ prop_unemp&  &  &-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&$4.004\times 10^{-14}$NA&$4.001\times 10^{-14}$NA&$4.003\times 10^{-14}$NA&$8.559\times 10^{-12}$NA\\ 
+
+   &  &  &(0.0954)&(0.0954)&(0.0953)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ median_household_income&  &  &$-4.401\times 10^{-7}$&$-4.399\times 10^{-7}$&$-4.46\times 10^{-7}$&$-2.658\times 10^{-7}$NA&$-2.656\times 10^{-7}$NA&$-2.658\times 10^{-7}$NA&$-2.715\times 10^{-7}$NA\\ 
+
+   &  &  &($3.967\times 10^{-7}$)&($3.968\times 10^{-7}$)&($3.951\times 10^{-7}$)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &$7.145\times 10^{-5}$\sym{**}&  &  &$-2.048\times 10^{-11}$NA&$3.617\times 10^{-6}$NA\\ 
+
+   &  &  &  &  &($3.093\times 10^{-5}$)&  &  &(NA)&(NA)\\ 
+
+ treated:merge_position&  &  &  &  &  &$NaN\times 10^{-Inf}$NA&$NaN\times 10^{-Inf}$NA&$NaN\times 10^{-Inf}$NA&$NaN\times 10^{-Inf}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ treated:merge_positiontarget&  &  &  &  &  &$4.127\times 10^{-14}$NA&$4.125\times 10^{-14}$NA&$4.127\times 10^{-14}$NA&$2.365\times 10^{-10}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ treated:merge_positionacquiror&  &  &  &  &  &$1.615\times 10^{-14}$NA&$1.614\times 10^{-14}$NA&$1.615\times 10^{-14}$NA&$7.997\times 10^{-10}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &  &  &$2.266\times 10^{-5}$NA\\ 
+
+   &  &  &  &  &  &  &  &  &(NA)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&No&Yes&No&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & & & \\ 
+
+ Observations& 2,296,350&2,102,354&2,098,935&2,098,933&2,098,935&2,098,935&2,098,933&2,098,935&2,098,935\\ 
+
+ Adj-pseudo $R^2$ &0.6278&1.22815&1.22832&1.22694&1.22838&0.67331&0.67192&0.6733&0.67342\\ 
+
+ BIC & 955,667.78&-468,559.50&-468,188.03&-423,031.47&-468,286.95&773,044.32&818,200.35&773,073.43&772,831.14\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{10}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1560.4. Sample average log rent: 7.26. Sample average HHI: 25.28. Sample average delta HHI: 2.61. Sample SD HHI: 52.26. Sample SD delta HHI: 9.95}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, No DHHI, Merger: Starwood Waypoint - Invitation Homes, Control: Outside Zip Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccccc} 
+
+  & & & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{9}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)&(8)&(9)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ treated&0.1588\sym{**}&$3.285\times 10^{-20}$NA&$3.208\times 10^{-16}$NA&$2.206\times 10^{-16}$NA&$3.208\times 10^{-16}$NA&  &  &  &  \\ 
+
+   &(0.0667)&(NA)&(NA)&(NA)&(NA)&  &  &  &  \\ 
+
+ log_sqft&  &$2.885\times 10^{-14}$NA&$-2.032\times 10^{-15}$NA&$-2.008\times 10^{-15}$NA&$-2.032\times 10^{-15}$NA&$-2.032\times 10^{-15}$NA&$-2.008\times 10^{-15}$NA&$-2.032\times 10^{-15}$NA&$1.45\times 10^{-10}$NA\\ 
+
+   &  &(NA)&(NA)&(NA)&(NA)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ tot_unit_val&  &$1.245\times 10^{-7}$NA&$1.243\times 10^{-7}$NA&$1.243\times 10^{-7}$NA&$1.243\times 10^{-7}$NA&$1.243\times 10^{-7}$NA&$1.243\times 10^{-7}$NA&$1.243\times 10^{-7}$NA&$1.243\times 10^{-7}$NA\\ 
+
+   &  &(NA)&(NA)&(NA)&(NA)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ prop_unemp&  &  &$4.026\times 10^{-14}$NA&$4.024\times 10^{-14}$NA&$4.026\times 10^{-14}$NA&$4.026\times 10^{-14}$NA&$4.024\times 10^{-14}$NA&$4.026\times 10^{-14}$NA&$8.555\times 10^{-12}$NA\\ 
+
+   &  &  &(NA)&(NA)&(NA)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ median_household_income&  &  &$-2.673\times 10^{-7}$NA&$-2.672\times 10^{-7}$NA&$-2.673\times 10^{-7}$NA&$-2.673\times 10^{-7}$NA&$-2.672\times 10^{-7}$NA&$-2.673\times 10^{-7}$NA&$-2.73\times 10^{-7}$NA\\ 
+
+   &  &  &(NA)&(NA)&(NA)&(NA)&(NA)&(NA)&(NA)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &$-2.058\times 10^{-11}$NA&  &  &$-2.058\times 10^{-11}$NA&$3.618\times 10^{-6}$NA\\ 
+
+   &  &  &  &  &(NA)&  &  &(NA)&(NA)\\ 
+
+ treated:merge_position&  &  &  &  &  &$-5.743\times 10^{-14}$NA&$-5.75\times 10^{-14}$NA&$-5.743\times 10^{-14}$NA&$-1.036\times 10^{-9}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ treated:merge_positiontarget&  &  &  &  &  &$4.151\times 10^{-14}$NA&$4.149\times 10^{-14}$NA&$4.151\times 10^{-14}$NA&$2.366\times 10^{-10}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ treated:merge_positionacquiror&  &  &  &  &  &$1.625\times 10^{-14}$NA&$1.624\times 10^{-14}$NA&$1.625\times 10^{-14}$NA&$7.999\times 10^{-10}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)&(NA)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &  &  &$2.266\times 10^{-5}$NA\\ 
+
+   &  &  &  &  &  &  &  &  &(NA)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&No&Yes&No&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & & & \\ 
+
+ Observations& 2,296,462&2,102,447&2,099,028&2,099,012&2,099,028&2,099,028&2,099,012&2,099,028&2,099,028\\ 
+
+ Adj-pseudo $R^2$ &0.62753&0.67388&0.67332&0.67192&0.67332&0.67331&0.67192&0.67331&0.67343\\ 
+
+ BIC & 957,052.40&773,519.04&773,616.01&818,896.26&773,645.13&773,674.24&818,954.49&773,703.35&773,460.94\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1560.42. Sample average log rent: 7.26. Sample average HHI: 25.41. Sample average delta HHI: 2.61. Sample SD HHI: 52.75. Sample SD delta HHI: 9.95}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, No DHHI, Merger: Starwood Waypoint - Invitation Homes, Control: Single Firm Zips} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccccc} 
+
+  & & & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{9}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)&(8)&(9)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ treated&0.0537\sym{***}&0.0613\sym{***}&0.0583\sym{***}&0.0583\sym{***}&0.0575\sym{***}&  &  &  &  \\ 
+
+   &(0.0083)&(0.0094)&(0.0099)&(0.0100)&(0.0099)&  &  &  &  \\ 
+
+ log_sqft&  &0.5538\sym{***}&0.5541\sym{***}&0.5541\sym{***}&0.5541\sym{***}&0.5541\sym{***}&0.5541\sym{***}&0.5540\sym{***}&0.5541\sym{***}\\ 
+
+   &  &(0.0088)&(0.0088)&(0.0088)&(0.0088)&(0.0088)&(0.0088)&(0.0088)&(0.0088)\\ 
+
+ tot_unit_val&  &$-1.199\times 10^{-8}$&$-1.204\times 10^{-8}$&$-1.204\times 10^{-8}$&$-1.203\times 10^{-8}$&$-1.203\times 10^{-8}$&$-1.203\times 10^{-8}$&$-1.202\times 10^{-8}$&$-1.202\times 10^{-8}$\\ 
+
+   &  &($7.997\times 10^{-9}$)&($7.989\times 10^{-9}$)&($7.992\times 10^{-9}$)&($7.989\times 10^{-9}$)&($7.989\times 10^{-9}$)&($7.992\times 10^{-9}$)&($7.989\times 10^{-9}$)&($7.99\times 10^{-9}$)\\ 
+
+ prop_unemp&  &  &-0.8\sym{***}&-0.8\sym{***}&-0.8\sym{***}&-0.8\sym{***}&-0.8\sym{***}&-0.8\sym{***}&-0.8\sym{***}\\ 
+
+   &  &  &(0.0943)&(0.0944)&(0.0942)&(0.0943)&(0.0943)&(0.0941)&(0.0936)\\ 
+
+ median_household_income&  &  &$-3.726\times 10^{-7}$&$-3.725\times 10^{-7}$&$-3.77\times 10^{-7}$&$-3.702\times 10^{-7}$&$-3.7\times 10^{-7}$&$-3.747\times 10^{-7}$&$-3.606\times 10^{-7}$\\ 
+
+   &  &  &($3.916\times 10^{-7}$)&($3.918\times 10^{-7}$)&($3.9\times 10^{-7}$)&($3.913\times 10^{-7}$)&($3.915\times 10^{-7}$)&($3.898\times 10^{-7}$)&($3.892\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &$8.007\times 10^{-5}$\sym{***}&  &  &$7.709\times 10^{-5}$\sym{**}&-0.0005\sym{***}\\ 
+
+   &  &  &  &  &($3.029\times 10^{-5}$)&  &  &($3.05\times 10^{-5}$)&(0.0001)\\ 
+
+ treated:merge_position&  &  &  &  &  &0.0577\sym{***}&0.0577\sym{***}&0.0570\sym{***}&0.0552\sym{***}\\ 
+
+   &  &  &  &  &  &(0.0099)&(0.0100)&(0.0100)&(0.0100)\\ 
+
+ treated:merge_positiontarget&  &  &  &  &  &0.0663\sym{***}&0.0663\sym{***}&0.0646\sym{***}&0.0604\sym{***}\\ 
+
+   &  &  &  &  &  &(0.0107)&(0.0107)&(0.0107)&(0.0107)\\ 
+
+ treated:merge_positionacquiror&  &  &  &  &  &0.0755\sym{***}&0.0755\sym{***}&0.0724\sym{***}&0.0653\sym{***}\\ 
+
+   &  &  &  &  &  &(0.0107)&(0.0107)&(0.0106)&(0.0107)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &  &  &$9.533\times 10^{-5}$\sym{***}\\ 
+
+   &  &  &  &  &  &  &  &  &($2.073\times 10^{-5}$)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&No&Yes&No&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & & & \\ 
+
+ Observations& 2,351,601&2,154,000&2,150,581&2,150,577&2,150,581&2,150,581&2,150,577&2,150,581&2,150,581\\ 
+
+ Adj-pseudo $R^2$ &0.62607&1.2105&1.21067&1.2093&1.21074&1.21069&1.20932&1.21075&1.21105\\ 
+
+ BIC & 994,862.70&-445,193.25&-444,881.49&-398,334.79&-445,011.60&-444,873.20&-398,326.50&-444,990.80&-445,656.19\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1561.67. Sample average log rent: 7.26. Sample average HHI: 25.51. Sample average delta HHI: 2.61. Sample SD HHI: 53.58. Sample SD delta HHI: 9.95}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Within-Zip Non-Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lcccccccc} 
+
+  & & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{8}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)&(8)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&0.0032\sym{***}&-0.0007&-0.0006&-0.0006&0.0012\sym{**}&  &  &  \\ 
+
+   &(0.0010)&(0.0007)&(0.0007)&(0.0007)&(0.0006)&  &  &  \\ 
+
+ log_sqft&  &0.5558\sym{***}&0.5558\sym{***}&0.5558\sym{***}&0.5558\sym{***}&$-3.027\times 10^{-13}$NA&$-3.027\times 10^{-13}$NA&$-3.027\times 10^{-13}$NA\\ 
+
+   &  &(0.0120)&(0.0120)&(0.0120)&(0.0120)&(NA)&(NA)&(NA)\\ 
+
+ tot_unit_val&  &$4.075\times 10^{-8}$&$4.061\times 10^{-8}$&$4.061\times 10^{-8}$&$4.049\times 10^{-8}$&$2.819\times 10^{-7}$NA&$2.819\times 10^{-7}$NA&$2.819\times 10^{-7}$NA\\ 
+
+   &  &($3.104\times 10^{-8}$)&($3.101\times 10^{-8}$)&($3.102\times 10^{-8}$)&($3.098\times 10^{-8}$)&(NA)&(NA)&(NA)\\ 
+
+ prop_unemp&  &  &-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&$-2.501\times 10^{-13}$NA&$-2.501\times 10^{-13}$NA&$-2.501\times 10^{-13}$NA\\ 
+
+   &  &  &(0.0991)&(0.0991)&(0.0971)&(NA)&(NA)&(NA)\\ 
+
+ median_household_income&  &  &$9.167\times 10^{-7}$\sym{***}&$9.167\times 10^{-7}$\sym{***}&$9.308\times 10^{-7}$\sym{***}&$8.469\times 10^{-7}$NA&$8.469\times 10^{-7}$NA&$8.469\times 10^{-7}$NA\\ 
+
+   &  &  &($3.256\times 10^{-7}$)&($3.257\times 10^{-7}$)&($3.232\times 10^{-7}$)&(NA)&(NA)&(NA)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &-0.0008\sym{***}&  &  &$1.829\times 10^{-11}$NA\\ 
+
+   &  &  &  &  &(0.0002)&  &  &(NA)\\ 
+
+ dhhi_treated:merge_position&  &  &  &  &  &$NaN\times 10^{-Inf}$NA&$NaN\times 10^{-Inf}$NA&$NaN\times 10^{-Inf}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)\\ 
+
+ dhhi_treated:merge_positiontarget&  &  &  &  &  &$-2.796\times 10^{-16}$NA&$-2.796\times 10^{-16}$NA&$-2.794\times 10^{-16}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)\\ 
+
+ dhhi_treated:merge_positionacquiror&  &  &  &  &  &$7.92\times 10^{-13}$NA&$7.92\times 10^{-13}$NA&$7.92\times 10^{-13}$NA\\ 
+
+   &  &  &  &  &  &(NA)&(NA)&(NA)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & & \\ 
+
+ Observations& 2,854,978&2,606,211&2,603,872&2,603,872&2,603,872&2,603,872&2,603,872&2,603,872\\ 
+
+ Adj-pseudo $R^2$ &0.55365&1.20027&1.20094&1.19986&1.20129&0.63489&0.63381&0.63489\\ 
+
+ BIC & 1,319,583.17&-480,631.66&-481,742.70&-440,497.85&-482,644.46&984,814.29&1,026,059.14&984,843.84\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1479.26. Sample average log rent: 7.21. Sample average HHI: 25.25. Sample average delta HHI: 0.85. Sample SD HHI: 51.5. Sample SD delta HHI: 2.25}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Outside Zip Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lcccccccc} 
+
+  & & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{8}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)&(8)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&-0.002\sym{***}&-0.002\sym{***}&-0.002\sym{***}&-0.002\sym{***}&0.0026\sym{***}&  &  &  \\ 
+
+   &(0.0006)&(0.0007)&(0.0007)&(0.0007)&(0.0006)&  &  &  \\ 
+
+ log_sqft&  &0.5557\sym{***}&0.5557\sym{***}&0.5557\sym{***}&0.5557\sym{***}&0.5557\sym{***}&0.5557\sym{***}&0.5557\sym{***}\\ 
+
+   &  &(0.0120)&(0.0120)&(0.0120)&(0.0120)&(0.0120)&(0.0120)&(0.0120)\\ 
+
+ tot_unit_val&  &$4.067\times 10^{-8}$&$4.053\times 10^{-8}$&$4.053\times 10^{-8}$&$4.046\times 10^{-8}$&$4.053\times 10^{-8}$&$4.053\times 10^{-8}$&$4.046\times 10^{-8}$\\ 
+
+   &  &($3.102\times 10^{-8}$)&($3.099\times 10^{-8}$)&($3.099\times 10^{-8}$)&($3.097\times 10^{-8}$)&($3.099\times 10^{-8}$)&($3.099\times 10^{-8}$)&($3.097\times 10^{-8}$)\\ 
+
+ prop_unemp&  &  &-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}\\ 
+
+   &  &  &(0.0982)&(0.0983)&(0.0970)&(0.0982)&(0.0983)&(0.0970)\\ 
+
+ median_household_income&  &  &$9.383\times 10^{-7}$\sym{***}&$9.384\times 10^{-7}$\sym{***}&$9.148\times 10^{-7}$\sym{***}&$9.374\times 10^{-7}$\sym{***}&$9.375\times 10^{-7}$\sym{***}&$9.139\times 10^{-7}$\sym{***}\\ 
+
+   &  &  &($3.234\times 10^{-7}$)&($3.235\times 10^{-7}$)&($3.226\times 10^{-7}$)&($3.235\times 10^{-7}$)&($3.235\times 10^{-7}$)&($3.226\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &-0.001\sym{***}&  &  &-0.001\sym{***}\\ 
+
+   &  &  &  &  &(0.0002)&  &  &(0.0002)\\ 
+
+ dhhi_treated:merge_position&  &  &  &  &  &-0.002\sym{***}&-0.002\sym{***}&0.0026\sym{***}\\ 
+
+   &  &  &  &  &  &(0.0007)&(0.0007)&(0.0006)\\ 
+
+ dhhi_treated:merge_positiontarget&  &  &  &  &  &-0.003\sym{***}&-0.003\sym{***}&0.0018\\ 
+
+   &  &  &  &  &  &(0.0010)&(0.0010)&(0.0012)\\ 
+
+ dhhi_treated:merge_positionacquiror&  &  &  &  &  &-0.001&-0.001&0.0039\sym{***}\\ 
+
+   &  &  &  &  &  &(0.0010)&(0.0010)&(0.0009)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & & \\ 
+
+ Observations& 2,855,395&2,606,610&2,604,255&2,604,205&2,604,255&2,604,255&2,604,205&2,604,255\\ 
+
+ Adj-pseudo $R^2$ &0.55369&1.20013&1.20079&1.1997&1.20106&1.20079&1.1997&1.20106\\ 
+
+ BIC & 1,321,655.25&-478,600.40&-479,752.69&-438,716.62&-480,428.21&-479,702.23&-438,666.17&-480,378.18\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1479.32. Sample average log rent: 7.21. Sample average HHI: 24.9. Sample average delta HHI: 0.85. Sample SD HHI: 51.07. Sample SD delta HHI: 2.25}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Single Zip Firms} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lcccccccc} 
+
+  & & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{8}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)&(8)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&-0.002\sym{***}&-0.003\sym{***}&-0.003\sym{***}&-0.003\sym{***}&0.0029\sym{***}&  &  &  \\ 
+
+   &(0.0006)&(0.0007)&(0.0007)&(0.0007)&(0.0006)&  &  &  \\ 
+
+ log_sqft&  &0.5609\sym{***}&0.5612\sym{***}&0.5612\sym{***}&0.5612\sym{***}&0.5612\sym{***}&0.5612\sym{***}&0.5612\sym{***}\\ 
+
+   &  &(0.0106)&(0.0106)&(0.0106)&(0.0106)&(0.0106)&(0.0106)&(0.0106)\\ 
+
+ tot_unit_val&  &$1.799\times 10^{-8}$&$1.778\times 10^{-8}$&$1.778\times 10^{-8}$&$1.772\times 10^{-8}$&$1.778\times 10^{-8}$&$1.778\times 10^{-8}$&$1.772\times 10^{-8}$\\ 
+
+   &  &($1.884\times 10^{-8}$)&($1.879\times 10^{-8}$)&($1.88\times 10^{-8}$)&($1.878\times 10^{-8}$)&($1.879\times 10^{-8}$)&($1.88\times 10^{-8}$)&($1.878\times 10^{-8}$)\\ 
+
+ prop_unemp&  &  &-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}\\ 
+
+   &  &  &(0.0958)&(0.0958)&(0.0946)&(0.0958)&(0.0958)&(0.0946)\\ 
+
+ median_household_income&  &  &$1\times 10^{-6}$\sym{***}&$1\times 10^{-6}$\sym{***}&$9.653\times 10^{-7}$\sym{***}&$9.994\times 10^{-7}$\sym{***}&$9.995\times 10^{-7}$\sym{***}&$9.645\times 10^{-7}$\sym{***}\\ 
+
+   &  &  &($3.011\times 10^{-7}$)&($3.012\times 10^{-7}$)&($3.002\times 10^{-7}$)&($3.011\times 10^{-7}$)&($3.012\times 10^{-7}$)&($3.002\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &-0.001\sym{***}&  &  &-0.001\sym{***}\\ 
+
+   &  &  &  &  &(0.0002)&  &  &(0.0002)\\ 
+
+ dhhi_treated:merge_position&  &  &  &  &  &-0.003\sym{***}&-0.003\sym{***}&0.0029\sym{***}\\ 
+
+   &  &  &  &  &  &(0.0007)&(0.0007)&(0.0006)\\ 
+
+ dhhi_treated:merge_positiontarget&  &  &  &  &  &-0.004\sym{***}&-0.004\sym{***}&0.0022\sym{*}\\ 
+
+   &  &  &  &  &  &(0.0010)&(0.0010)&(0.0012)\\ 
+
+ dhhi_treated:merge_positionacquiror&  &  &  &  &  &-0.001&-0.001&0.0042\sym{***}\\ 
+
+   &  &  &  &  &  &(0.0011)&(0.0011)&(0.0009)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & & \\ 
+
+ Observations& 3,104,854&2,829,750&2,825,812&2,825,810&2,825,812&2,825,812&2,825,810&2,825,812\\ 
+
+ Adj-pseudo $R^2$ &0.56699&1.16347&1.16394&1.16292&1.16422&1.16395&1.16292&1.16422\\ 
+
+ BIC & 1,491,170.36&-452,257.59&-453,019.00&-406,940.09&-453,816.70&-452,967.54&-406,888.62&-453,765.69\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1529.67. Sample average log rent: 7.24. Sample average HHI: 24.91. Sample average delta HHI: 0.85. Sample SD HHI: 52.9. Sample SD delta HHI: 2.25}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, Sq Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Within Zip Non-Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lcccc} 
+
+  & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{4}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&0.0009&0.0007&  &  \\ 
+
+   &(0.0006)&(0.0006)&  &  \\ 
+
+ log_sqft&0.5570\sym{***}&0.5559\sym{***}&$-4.166\times 10^{-13}$NA&$-1.128\times 10^{-9}$NA\\ 
+
+   &(0.0120)&(0.0120)&(NA)&(NA)\\ 
+
+ tot_unit_val&$3.856\times 10^{-8}$&$4.048\times 10^{-8}$&$2.806\times 10^{-7}$NA&$2.819\times 10^{-7}$NA\\ 
+
+   &($3.026\times 10^{-8}$)&($3.098\times 10^{-8}$)&(NA)&(NA)\\ 
+
+ prop_unemp&-0.6\sym{***}&-0.7\sym{***}&$-4.875\times 10^{-13}$NA&$-6.739\times 10^{-11}$NA\\ 
+
+   &(0.0909)&(0.0970)&(NA)&(NA)\\ 
+
+ median_household_income&$1.51\times 10^{-6}$\sym{***}&$8.98\times 10^{-7}$\sym{***}&$1.518\times 10^{-6}$NA&$8.608\times 10^{-7}$NA\\ 
+
+   &($4.017\times 10^{-7}$)&($3.225\times 10^{-7}$)&(NA)&(NA)\\ 
+
+ delta_hhi:time_trend&  &-0.003\sym{***}&  &$-4.292\times 10^{-6}$NA\\ 
+
+   &  &(0.0006)&  &(NA)\\ 
+
+ delta_hhi:sq_time_trend&  &0.0002\sym{***}&  &$-4.36\times 10^{-5}$NA\\ 
+
+   &  &($5.556\times 10^{-5}$)&  &(NA)\\ 
+
+ dhhi_treated:merge_position&  &  &$NaN\times 10^{-Inf}$NA&$1.484\times 10^{-25}$NA\\ 
+
+   &  &  &(NA)&(NA)\\ 
+
+ dhhi_treated:merge_positiontarget&  &  &$6.867\times 10^{-13}$NA&$-1.285\times 10^{-8}$NA\\ 
+
+   &  &  &(NA)&(NA)\\ 
+
+ dhhi_treated:merge_positionacquiror&  &  &$6.475\times 10^{-13}$NA&$-3.285\times 10^{-8}$NA\\ 
+
+   &  &  &(NA)&(NA)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & \\ 
+
+ factor(year)&Yes&Yes&Yes&Yes\\ 
+
+ Zip5&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & \\ 
+
+ time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & \\ 
+
+ Observations& 2,603,872&2,603,872&2,603,872&2,603,872\\ 
+
+ Adj-pseudo $R^2$ &1.21895&1.20155&0.64385&0.63495\\ 
+
+ BIC & -451,504.82&-483,273.50&1,038,505.82&984,706.32\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1479.26. Sample average log rent: 7.21. Sample average HHI: 25.25. Sample average delta HHI: 0.85. Sample SD HHI: 51.5. Sample SD delta HHI: 2.25}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, Sq Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Outsize Zip Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lcccc} 
+
+  & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{4}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&0.0023\sym{***}&0.0002&  &  \\ 
+
+   &(0.0006)&(0.0004)&  &  \\ 
+
+ log_sqft&0.5569\sym{***}&0.5557\sym{***}&0.5569\sym{***}&0.5557\sym{***}\\ 
+
+   &(0.0120)&(0.0120)&(0.0120)&(0.0120)\\ 
+
+ tot_unit_val&$3.853\times 10^{-8}$&$4.045\times 10^{-8}$&$3.853\times 10^{-8}$&$4.045\times 10^{-8}$\\ 
+
+   &($3.024\times 10^{-8}$)&($3.097\times 10^{-8}$)&($3.024\times 10^{-8}$)&($3.097\times 10^{-8}$)\\ 
+
+ prop_unemp&-0.6\sym{***}&-0.7\sym{***}&-0.6\sym{***}&-0.7\sym{***}\\ 
+
+   &(0.0900)&(0.0970)&(0.0900)&(0.0970)\\ 
+
+ median_household_income&$1.468\times 10^{-6}$\sym{***}&$8.968\times 10^{-7}$\sym{***}&$1.469\times 10^{-6}$\sym{***}&$8.959\times 10^{-7}$\sym{***}\\ 
+
+   &($3.993\times 10^{-7}$)&($3.223\times 10^{-7}$)&($3.994\times 10^{-7}$)&($3.223\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &-0.003\sym{***}&  &-0.003\sym{***}\\ 
+
+   &  &(0.0006)&  &(0.0006)\\ 
+
+ delta_hhi:sq_time_trend&  &0.0002\sym{***}&  &0.0002\sym{***}\\ 
+
+   &  &($5.807\times 10^{-5}$)&  &($5.809\times 10^{-5}$)\\ 
+
+ dhhi_treated:merge_position&  &  &0.0023\sym{***}&0.0002\\ 
+
+   &  &  &(0.0006)&(0.0004)\\ 
+
+ dhhi_treated:merge_positiontarget&  &  &0.0012&-0.0008\\ 
+
+   &  &  &(0.0011)&(0.0008)\\ 
+
+ dhhi_treated:merge_positionacquiror&  &  &0.0034\sym{***}&0.0015\sym{*}\\ 
+
+   &  &  &(0.0010)&(0.0009)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & \\ 
+
+ factor(year)&Yes&Yes&Yes&Yes\\ 
+
+ Zip5&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & \\ 
+
+ time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & \\ 
+
+ Observations& 2,604,205&2,604,255&2,604,205&2,604,255\\ 
+
+ Adj-pseudo $R^2$ &1.21867&1.20126&1.21867&1.20127\\ 
+
+ BIC & -448,679.66&-480,934.83&-448,628.87&-480,885.28\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1479.32. Sample average log rent: 7.21. Sample average HHI: 24.9. Sample average delta HHI: 0.85. Sample SD HHI: 51.07. Sample SD delta HHI: 2.25}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, Sq Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Single Firm Zips} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lcccc} 
+
+  & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{4}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&0.0027\sym{***}&0.0003&  &  \\ 
+
+   &(0.0007)&(0.0004)&  &  \\ 
+
+ log_sqft&0.5623\sym{***}&0.5612\sym{***}&0.5623\sym{***}&0.5612\sym{***}\\ 
+
+   &(0.0105)&(0.0106)&(0.0105)&(0.0106)\\ 
+
+ tot_unit_val&$1.625\times 10^{-8}$&$1.771\times 10^{-8}$&$1.625\times 10^{-8}$&$1.771\times 10^{-8}$\\ 
+
+   &($1.832\times 10^{-8}$)&($1.878\times 10^{-8}$)&($1.832\times 10^{-8}$)&($1.878\times 10^{-8}$)\\ 
+
+ prop_unemp&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}\\ 
+
+   &(0.0900)&(0.0946)&(0.0900)&(0.0946)\\ 
+
+ median_household_income&$1.094\times 10^{-6}$\sym{***}&$9.479\times 10^{-7}$\sym{***}&$1.094\times 10^{-6}$\sym{***}&$9.47\times 10^{-7}$\sym{***}\\ 
+
+   &($4.156\times 10^{-7}$)&($2.998\times 10^{-7}$)&($4.157\times 10^{-7}$)&($2.998\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &-0.003\sym{***}&  &-0.003\sym{***}\\ 
+
+   &  &(0.0006)&  &(0.0006)\\ 
+
+ delta_hhi:sq_time_trend&  &0.0003\sym{***}&  &0.0003\sym{***}\\ 
+
+   &  &($5.994\times 10^{-5}$)&  &($5.996\times 10^{-5}$)\\ 
+
+ dhhi_treated:merge_position&  &  &0.0026\sym{***}&0.0002\\ 
+
+   &  &  &(0.0007)&(0.0004)\\ 
+
+ dhhi_treated:merge_positiontarget&  &  &0.0016&-0.0007\\ 
+
+   &  &  &(0.0011)&(0.0008)\\ 
+
+ dhhi_treated:merge_positionacquiror&  &  &0.0037\sym{***}&0.0015\sym{*}\\ 
+
+   &  &  &(0.0010)&(0.0009)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & \\ 
+
+ factor(year)&Yes&Yes&Yes&Yes\\ 
+
+ Zip5&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & \\ 
+
+ time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & \\ 
+
+ Observations& 2,825,810&2,825,812&2,825,810&2,825,812\\ 
+
+ Adj-pseudo $R^2$ &1.18012&1.16444&1.18012&1.16444\\ 
+
+ BIC & -416,015.81&-454,449.72&-415,963.90&-454,399.20\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1529.67. Sample average log rent: 7.24. Sample average HHI: 24.91. Sample average delta HHI: 0.85. Sample SD HHI: 52.9. Sample SD delta HHI: 2.25}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, Sq Merger: Colony American - Starwood Waypoint, Control: Within Zip Non-Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lcccc} 
+
+  & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{4}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&-0.05\sym{*}&-0.06\sym{**}&  &  \\ 
+
+   &(0.0279)&(0.0283)&  &  \\ 
+
+ log_sqft&0.5910\sym{***}&0.5907\sym{***}&$-6.578\times 10^{-13}$NA&$6.771\times 10^{-13}$NA\\ 
+
+   &(0.0414)&(0.0414)&(NA)&(NA)\\ 
+
+ tot_unit_val&$2.373\times 10^{-7}$&$2.38\times 10^{-7}$&$7.895\times 10^{-7}$NA&$7.9\times 10^{-7}$NA\\ 
+
+   &($1.881\times 10^{-7}$)&($1.884\times 10^{-7}$)&(NA)&(NA)\\ 
+
+ prop_unemp&-0.3\sym{***}&-0.5\sym{***}&$-4.8\times 10^{-13}$NA&$2.006\times 10^{-13}$NA\\ 
+
+   &(0.1073)&(0.1499)&(NA)&(NA)\\ 
+
+ median_household_income&$1.677\times 10^{-6}$\sym{*}&$-7.829\times 10^{-7}$&$9.703\times 10^{-7}$NA&$-2.279\times 10^{-7}$NA\\ 
+
+   &($8.613\times 10^{-7}$)&($9.129\times 10^{-7}$)&(NA)&(NA)\\ 
+
+ delta_hhi:time_trend&  &-0.03&  &$-3.526\times 10^{-13}$NA\\ 
+
+   &  &(0.0180)&  &(NA)\\ 
+
+ delta_hhi:sq_time_trend&  &0.0004&  &$-1.539\times 10^{-12}$NA\\ 
+
+   &  &(0.0020)&  &(NA)\\ 
+
+ dhhi_treated:merge_position&  &  &$NaN\times 10^{-Inf}$NA&$NaN\times 10^{-Inf}$NA\\ 
+
+   &  &  &(NA)&(NA)\\ 
+
+ dhhi_treated:merge_positiontarget&  &  &$1.349\times 10^{-15}$NA&$6.088\times 10^{-16}$NA\\ 
+
+   &  &  &(NA)&(NA)\\ 
+
+ dhhi_treated:merge_positionacquiror&  &  &$-2.274\times 10^{-14}$NA&$-1.059\times 10^{-14}$NA\\ 
+
+   &  &  &(NA)&(NA)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & \\ 
+
+ factor(year)&Yes&Yes&Yes&Yes\\ 
+
+ Zip5&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & \\ 
+
+ time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & \\ 
+
+ Observations& 291,101&291,101&291,101&291,101\\ 
+
+ Adj-pseudo $R^2$ &1.64395&1.63294&0.75532&0.74942\\ 
+
+ BIC & -133,410.52&-139,068.58&68,129.17&61,314.20\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1304.65. Sample average log rent: 7.1. Sample average HHI: 36.97. Sample average delta HHI: 0.1. Sample SD HHI: 75.48. Sample SD delta HHI: 0.12}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, Sq Merger: Colony American - Starwood Waypoint, Control: Outsize Zip Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lcccc} 
+
+  & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{4}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&0.0250&0.0434\sym{***}&  &  \\ 
+
+   &(0.0335)&(0.0145)&  &  \\ 
+
+ log_sqft&0.5816\sym{***}&0.5802\sym{***}&0.5816\sym{***}&0.5802\sym{***}\\ 
+
+   &(0.0403)&(0.0400)&(0.0403)&(0.0400)\\ 
+
+ tot_unit_val&$2.455\times 10^{-7}$&$2.454\times 10^{-7}$&$2.455\times 10^{-7}$&$2.454\times 10^{-7}$\\ 
+
+   &($1.902\times 10^{-7}$)&($1.884\times 10^{-7}$)&($1.902\times 10^{-7}$)&($1.884\times 10^{-7}$)\\ 
+
+ prop_unemp&-0.3\sym{***}&-0.6\sym{***}&-0.3\sym{***}&-0.6\sym{***}\\ 
+
+   &(0.1041)&(0.1438)&(0.1041)&(0.1439)\\ 
+
+ median_household_income&$1.719\times 10^{-6}$\sym{**}&$-9.547\times 10^{-7}$&$1.719\times 10^{-6}$\sym{**}&$-9.523\times 10^{-7}$\\ 
+
+   &($8.144\times 10^{-7}$)&($8.267\times 10^{-7}$)&($8.142\times 10^{-7}$)&($8.265\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &-0.02&  &-0.02\\ 
+
+   &  &(0.0154)&  &(0.0154)\\ 
+
+ delta_hhi:sq_time_trend&  &-0.0006&  &-0.0006\\ 
+
+   &  &(0.0016)&  &(0.0016)\\ 
+
+ dhhi_treated:merge_position&  &  &0.0277&0.0461\sym{***}\\ 
+
+   &  &  &(0.0335)&(0.0145)\\ 
+
+ dhhi_treated:merge_positiontarget&  &  &-0.2\sym{***}&-0.2\sym{**}\\ 
+
+   &  &  &(0.0919)&(0.0833)\\ 
+
+ dhhi_treated:merge_positionacquiror&  &  &-0.02&-0.02\\ 
+
+   &  &  &(0.0417)&(0.0302)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & \\ 
+
+ factor(year)&Yes&Yes&Yes&Yes\\ 
+
+ Zip5&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & \\ 
+
+ time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & \\ 
+
+ Observations& 314,054&314,630&314,054&314,630\\ 
+
+ Adj-pseudo $R^2$ &1.69524&1.6875&1.69526&1.68753\\ 
+
+ BIC & -95,457.24&-134,071.61&-95,416.27&-134,032.17\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1312.48. Sample average log rent: 7.11. Sample average HHI: 27.65. Sample average delta HHI: 0.1. Sample SD HHI: 55.09. Sample SD delta HHI: 0.12}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, Sq Merger: Colony American - Starwood Waypoint, Control: Single Firm Zips} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lcccc} 
+
+  & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{4}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&0.1460\sym{***}&0.0476\sym{***}&  &  \\ 
+
+   &(0.0232)&(0.0107)&  &  \\ 
+
+ log_sqft&0.5621\sym{***}&0.5614\sym{***}&$-3.683\times 10^{-13}$NA&$-1.409\times 10^{-13}$NA\\ 
+
+   &(0.0097)&(0.0098)&(NA)&(NA)\\ 
+
+ tot_unit_val&$1.522\times 10^{-9}$&$2.38\times 10^{-9}$&$1.403\times 10^{-7}$NA&$1.41\times 10^{-7}$NA\\ 
+
+   &($1.047\times 10^{-8}$)&($1.068\times 10^{-8}$)&(NA)&(NA)\\ 
+
+ prop_unemp&-0.6\sym{***}&-0.7\sym{***}&$-6.013\times 10^{-13}$NA&$-1.64\times 10^{-13}$NA\\ 
+
+   &(0.0796)&(0.0908)&(NA)&(NA)\\ 
+
+ median_household_income&$1.488\times 10^{-6}$\sym{***}&$4.97\times 10^{-7}$\sym{*}&$1.57\times 10^{-6}$NA&$5.448\times 10^{-7}$NA\\ 
+
+   &($3.98\times 10^{-7}$)&($3.012\times 10^{-7}$)&(NA)&(NA)\\ 
+
+ delta_hhi:time_trend&  &-0.06\sym{***}&  &$-1.49\times 10^{-12}$NA\\ 
+
+   &  &(0.0107)&  &(NA)\\ 
+
+ delta_hhi:sq_time_trend&  &0.0063\sym{***}&  &$-1.178\times 10^{-11}$NA\\ 
+
+   &  &(0.0014)&  &(NA)\\ 
+
+ dhhi_treated:merge_position&  &  &$6.181\times 10^{-14}$NA&$-1.649\times 10^{-13}$NA\\ 
+
+   &  &  &(NA)&(NA)\\ 
+
+ dhhi_treated:merge_positiontarget&  &  &$2.571\times 10^{-16}$NA&$-3.216\times 10^{-16}$NA\\ 
+
+   &  &  &(NA)&(NA)\\ 
+
+ dhhi_treated:merge_positionacquiror&  &  &$1.111\times 10^{-15}$NA&$-4.412\times 10^{-15}$NA\\ 
+
+   &  &  &(NA)&(NA)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & \\ 
+
+ factor(year)&Yes&Yes&Yes&Yes\\ 
+
+ Zip5&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & \\ 
+
+ time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & \\ 
+
+ Observations& 2,604,536&2,604,538&2,604,536&2,604,538\\ 
+
+ Adj-pseudo $R^2$ &1.19403&1.17976&0.64447&0.63735\\ 
+
+ BIC & -420,402.81&-465,886.57&1,136,731.50&1,070,986.22\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1549.01. Sample average log rent: 7.25. Sample average HHI: 24.61. Sample average delta HHI: 0.1. Sample SD HHI: 51.29. Sample SD delta HHI: 0.12}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, Sq Merger: Starwood Waypoint - Invitation Homes, Control: Within Zip Non-Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lcccc} 
+
+  & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{4}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&$-4.245\times 10^{-12}$NA&-0.0001&  &  \\ 
+
+   &(NA)&($8.011\times 10^{-5}$)&  &  \\ 
+
+ log_sqft&$-3.695\times 10^{-14}$NA&0.5547\sym{***}&$-3.695\times 10^{-14}$NA&$1.449\times 10^{-10}$NA\\ 
+
+   &(NA)&(0.0090)&(NA)&(NA)\\ 
+
+ tot_unit_val&$1.241\times 10^{-7}$NA&$-4.121\times 10^{-9}$&$1.241\times 10^{-7}$NA&$1.243\times 10^{-7}$NA\\ 
+
+   &(NA)&($9.063\times 10^{-9}$)&(NA)&(NA)\\ 
+
+ prop_unemp&$-3.033\times 10^{-13}$NA&-0.8\sym{***}&$-3.033\times 10^{-13}$NA&$8.559\times 10^{-12}$NA\\ 
+
+   &(NA)&(0.0948)&(NA)&(NA)\\ 
+
+ median_household_income&$8.33\times 10^{-7}$NA&$-4.302\times 10^{-7}$&$8.33\times 10^{-7}$NA&$-2.715\times 10^{-7}$NA\\ 
+
+   &(NA)&($3.945\times 10^{-7}$)&(NA)&(NA)\\ 
+
+ delta_hhi:time_trend&  &-0.0005\sym{***}&  &$3.617\times 10^{-6}$NA\\ 
+
+   &  &(0.0001)&  &(NA)\\ 
+
+ delta_hhi:sq_time_trend&  &$9.829\times 10^{-5}$\sym{***}&  &$2.266\times 10^{-5}$NA\\ 
+
+   &  &($2.159\times 10^{-5}$)&  &(NA)\\ 
+
+ dhhi_treated:merge_position&  &  &$NaN\times 10^{-Inf}$NA&$1.555\times 10^{-25}$NA\\ 
+
+   &  &  &(NA)&(NA)\\ 
+
+ dhhi_treated:merge_positiontarget&  &  &$-8.718\times 10^{-13}$NA&$1.894\times 10^{-8}$NA\\ 
+
+   &  &  &(NA)&(NA)\\ 
+
+ dhhi_treated:merge_positionacquiror&  &  &$-3.373\times 10^{-12}$NA&$6.118\times 10^{-8}$NA\\ 
+
+   &  &  &(NA)&(NA)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & \\ 
+
+ factor(year)&Yes&Yes&Yes&Yes\\ 
+
+ Zip5&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & \\ 
+
+ time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & \\ 
+
+ Observations& 2,098,933&2,098,935&2,098,933&2,098,935\\ 
+
+ Adj-pseudo $R^2$ &0.68006&1.22869&0.68006&0.67342\\ 
+
+ BIC & 842,008.83&-468,961.86&842,067.06&772,831.14\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1560.4. Sample average log rent: 7.26. Sample average HHI: 25.28. Sample average delta HHI: 2.61. Sample SD HHI: 52.26. Sample SD delta HHI: 9.95}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, Sq Merger: Starwood Waypoint - Invitation Homes, Control: Outsize Zip Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lcccc} 
+
+  & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{4}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&$-1.077\times 10^{-11}$NA&-0.0004\sym{***}&  &  \\ 
+
+   &(NA)&($9.795\times 10^{-5}$)&  &  \\ 
+
+ log_sqft&$-3.614\times 10^{-14}$NA&0.5547\sym{***}&$-3.614\times 10^{-14}$NA&0.5547\sym{***}\\ 
+
+   &(NA)&(0.0090)&(NA)&(0.0090)\\ 
+
+ tot_unit_val&$1.241\times 10^{-7}$NA&$-4.121\times 10^{-9}$&$1.241\times 10^{-7}$NA&$-4.121\times 10^{-9}$\\ 
+
+   &(NA)&($9.063\times 10^{-9}$)&(NA)&($9.063\times 10^{-9}$)\\ 
+
+ prop_unemp&$-3.034\times 10^{-13}$NA&-0.8\sym{***}&$-3.034\times 10^{-13}$NA&-0.8\sym{***}\\ 
+
+   &(NA)&(0.0948)&(NA)&(0.0948)\\ 
+
+ median_household_income&$8.332\times 10^{-7}$NA&$-4.304\times 10^{-7}$&$8.332\times 10^{-7}$NA&$-4.303\times 10^{-7}$\\ 
+
+   &(NA)&($3.943\times 10^{-7}$)&(NA)&($3.943\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &-0.0006\sym{***}&  &-0.0006\sym{***}\\ 
+
+   &  &(0.0001)&  &(0.0001)\\ 
+
+ delta_hhi:sq_time_trend&  &0.0001\sym{***}&  &0.0001\sym{***}\\ 
+
+   &  &($2.501\times 10^{-5}$)&  &($2.501\times 10^{-5}$)\\ 
+
+ dhhi_treated:merge_position&  &  &$-6.522\times 10^{-12}$NA&-0.0004\sym{***}\\ 
+
+   &  &  &(NA)&($9.58\times 10^{-5}$)\\ 
+
+ dhhi_treated:merge_positiontarget&  &  &$-8.717\times 10^{-13}$NA&-0.0003\\ 
+
+   &  &  &(NA)&(0.0002)\\ 
+
+ dhhi_treated:merge_positionacquiror&  &  &$-3.373\times 10^{-12}$NA&-0.0004\sym{***}\\ 
+
+   &  &  &(NA)&(0.0001)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & \\ 
+
+ factor(year)&Yes&Yes&Yes&Yes\\ 
+
+ Zip5&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & \\ 
+
+ time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & \\ 
+
+ Observations& 2,099,012&2,099,028&2,099,012&2,099,028\\ 
+
+ Adj-pseudo $R^2$ &0.68006&1.2287&0.68006&1.2287\\ 
+
+ BIC & 843,124.98&-468,425.38&843,183.20&-468,367.38\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1560.42. Sample average log rent: 7.26. Sample average HHI: 25.41. Sample average delta HHI: 2.61. Sample SD HHI: 52.75. Sample SD delta HHI: 9.95}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE, Sq Merger: Starwood Waypoint - Invitation Homes, Control: Single Firm Zips} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lcccc} 
+
+  & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{4}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&$-8.325\times 10^{-12}$NA&-0.0004\sym{***}&  &  \\ 
+
+   &(NA)&($9.955\times 10^{-5}$)&  &  \\ 
+
+ log_sqft&$-1.319\times 10^{-13}$NA&0.5541\sym{***}&$-1.319\times 10^{-13}$NA&0.5541\sym{***}\\ 
+
+   &(NA)&(0.0088)&(NA)&(0.0088)\\ 
+
+ tot_unit_val&$1.096\times 10^{-7}$NA&$-1.202\times 10^{-8}$&$1.096\times 10^{-7}$NA&$-1.202\times 10^{-8}$\\ 
+
+   &(NA)&($7.993\times 10^{-9}$)&(NA)&($7.993\times 10^{-9}$)\\ 
+
+ prop_unemp&$-2.992\times 10^{-13}$NA&-0.8\sym{***}&$-2.992\times 10^{-13}$NA&-0.8\sym{***}\\ 
+
+   &(NA)&(0.0937)&(NA)&(0.0937)\\ 
+
+ median_household_income&$7.991\times 10^{-7}$NA&$-3.862\times 10^{-7}$&$7.991\times 10^{-7}$NA&$-3.862\times 10^{-7}$\\ 
+
+   &(NA)&($3.904\times 10^{-7}$)&(NA)&($3.904\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &-0.0006\sym{***}&  &-0.0006\sym{***}\\ 
+
+   &  &(0.0001)&  &(0.0001)\\ 
+
+ delta_hhi:sq_time_trend&  &0.0001\sym{***}&  &0.0001\sym{***}\\ 
+
+   &  &($2.54\times 10^{-5}$)&  &($2.54\times 10^{-5}$)\\ 
+
+ dhhi_treated:merge_position&  &  &$-4.628\times 10^{-12}$NA&-0.0004\sym{***}\\ 
+
+   &  &  &(NA)&($9.707\times 10^{-5}$)\\ 
+
+ dhhi_treated:merge_positiontarget&  &  &$-7.425\times 10^{-13}$NA&-0.0004\\ 
+
+   &  &  &(NA)&(0.0002)\\ 
+
+ dhhi_treated:merge_positionacquiror&  &  &$-2.954\times 10^{-12}$NA&-0.0005\sym{***}\\ 
+
+   &  &  &(NA)&(0.0001)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & \\ 
+
+ factor(year)&Yes&Yes&Yes&Yes\\ 
+
+ Zip5&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & \\ 
+
+ time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&Yes&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & \\ 
+
+ Observations& 2,150,577&2,150,581&2,150,577&2,150,581\\ 
+
+ Adj-pseudo $R^2$ &0.67439&1.21088&0.67439&1.21088\\ 
+
+ BIC & 885,745.20&-445,305.74&885,803.53&-445,247.68\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1561.67. Sample average log rent: 7.26. Sample average HHI: 25.51. Sample average delta HHI: 2.61. Sample SD HHI: 53.58. Sample SD delta HHI: 9.95}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE ZILLOW, Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Within-Zip Non-Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccc} 
+
+  & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{7}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&0.0022\sym{**}&-0.001&-0.0009&-0.0009&0.0011&0.0008&0.0006\\ 
+
+   &(0.0011)&(0.0008)&(0.0008)&(0.0008)&(0.0007)&(0.0007)&(0.0007)\\ 
+
+ log_sqft&  &0.5568\sym{***}&0.5568\sym{***}&0.5568\sym{***}&0.5568\sym{***}&0.5577\sym{***}&0.5568\sym{***}\\ 
+
+   &  &(0.0132)&(0.0132)&(0.0132)&(0.0132)&(0.0131)&(0.0132)\\ 
+
+ tot_unit_val&  &$3.499\times 10^{-8}$&$3.494\times 10^{-8}$&$3.494\times 10^{-8}$&$3.481\times 10^{-8}$&$3.364\times 10^{-8}$&$3.48\times 10^{-8}$\\ 
+
+   &  &($3.032\times 10^{-8}$)&($3.03\times 10^{-8}$)&($3.031\times 10^{-8}$)&($3.027\times 10^{-8}$)&($2.975\times 10^{-8}$)&($3.027\times 10^{-8}$)\\ 
+
+ prop_unemp&  &  &-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.6\sym{***}&-0.7\sym{***}\\ 
+
+   &  &  &(0.1099)&(0.1099)&(0.1075)&(0.1028)&(0.1074)\\ 
+
+ median_household_income&  &  &$4.606\times 10^{-7}$&$4.606\times 10^{-7}$&$4.606\times 10^{-7}$&$1.727\times 10^{-6}$\sym{***}&$4.336\times 10^{-7}$\\ 
+
+   &  &  &($3.12\times 10^{-7}$)&($3.121\times 10^{-7}$)&($3.062\times 10^{-7}$)&($4.628\times 10^{-7}$)&($3.067\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &-0.0008\sym{***}&  &-0.003\sym{***}\\ 
+
+   &  &  &  &  &(0.0002)&  &(0.0007)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &0.0002\sym{***}\\ 
+
+   &  &  &  &  &  &  &($6.173\times 10^{-5}$)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&No&No&No&No&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & \\ 
+
+ Observations& 2,473,548&2,260,142&2,257,803&2,257,803&2,257,803&2,257,803&2,257,803\\ 
+
+ Adj-pseudo $R^2$ &0.54101&1.21239&1.21271&1.21171&1.21315&1.22754&1.21341\\ 
+
+ BIC & 1,150,099.92&-437,775.11&-437,855.92&-405,845.70&-438,807.60&-410,852.62&-439,339.61\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1501.39. Sample average log rent: 7.23. Sample average HHI: 26.89. Sample average delta HHI: 0.86. Sample SD HHI: 55.89. Sample SD delta HHI: 2.31}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE ZILLOW, Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Outside Zip Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccc} 
+
+  & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{7}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&-0.002\sym{***}&-0.003\sym{***}&-0.003\sym{***}&-0.003\sym{***}&0.0024\sym{***}&0.0023\sym{***}&$-2.942\times 10^{-5}$\\ 
+
+   &(0.0007)&(0.0007)&(0.0007)&(0.0007)&(0.0007)&(0.0007)&(0.0004)\\ 
+
+ log_sqft&  &0.5568\sym{***}&0.5568\sym{***}&0.5568\sym{***}&0.5568\sym{***}&0.5577\sym{***}&0.5568\sym{***}\\ 
+
+   &  &(0.0132)&(0.0132)&(0.0132)&(0.0132)&(0.0131)&(0.0132)\\ 
+
+ tot_unit_val&  &$3.493\times 10^{-8}$&$3.488\times 10^{-8}$&$3.488\times 10^{-8}$&$3.481\times 10^{-8}$&$3.364\times 10^{-8}$&$3.48\times 10^{-8}$\\ 
+
+   &  &($3.03\times 10^{-8}$)&($3.029\times 10^{-8}$)&($3.029\times 10^{-8}$)&($3.027\times 10^{-8}$)&($2.974\times 10^{-8}$)&($3.027\times 10^{-8}$)\\ 
+
+ prop_unemp&  &  &-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.6\sym{***}&-0.7\sym{***}\\ 
+
+   &  &  &(0.1088)&(0.1088)&(0.1073)&(0.1017)&(0.1074)\\ 
+
+ median_household_income&  &  &$4.751\times 10^{-7}$&$4.751\times 10^{-7}$&$4.492\times 10^{-7}$&$1.696\times 10^{-6}$\sym{***}&$4.341\times 10^{-7}$\\ 
+
+   &  &  &($3.079\times 10^{-7}$)&($3.08\times 10^{-7}$)&($3.061\times 10^{-7}$)&($4.602\times 10^{-7}$)&($3.066\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &-0.001\sym{***}&  &-0.003\sym{***}\\ 
+
+   &  &  &  &  &(0.0002)&  &(0.0007)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &0.0002\sym{***}\\ 
+
+   &  &  &  &  &  &  &($6.519\times 10^{-5}$)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&No&No&No&No&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & \\ 
+
+ Observations& 2,473,548&2,260,142&2,257,803&2,257,803&2,257,803&2,257,803&2,257,803\\ 
+
+ Adj-pseudo $R^2$ &0.54106&1.21258&1.21289&1.2119&1.21319&1.22758&1.21341\\ 
+
+ BIC & 1,149,974.75&-438,191.28&-438,262.58&-406,252.35&-438,896.02&-410,934.13&-439,337.64\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1501.39. Sample average log rent: 7.23. Sample average HHI: 26.89. Sample average delta HHI: 0.86. Sample SD HHI: 55.89. Sample SD delta HHI: 2.31}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE ZILLOW, Merger: Beazer Pre-Owned - American Homes 4 Rent, Control: Single Firm Zips} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccc} 
+
+  & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{7}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&-0.002\sym{***}&-0.003\sym{***}&-0.003\sym{***}&-0.003\sym{***}&0.0024\sym{***}&0.0023\sym{***}&$-2.942\times 10^{-5}$\\ 
+
+   &(0.0007)&(0.0007)&(0.0007)&(0.0007)&(0.0007)&(0.0007)&(0.0004)\\ 
+
+ log_sqft&  &0.5568\sym{***}&0.5568\sym{***}&0.5568\sym{***}&0.5568\sym{***}&0.5577\sym{***}&0.5568\sym{***}\\ 
+
+   &  &(0.0132)&(0.0132)&(0.0132)&(0.0132)&(0.0131)&(0.0132)\\ 
+
+ tot_unit_val&  &$3.493\times 10^{-8}$&$3.488\times 10^{-8}$&$3.488\times 10^{-8}$&$3.481\times 10^{-8}$&$3.364\times 10^{-8}$&$3.48\times 10^{-8}$\\ 
+
+   &  &($3.03\times 10^{-8}$)&($3.029\times 10^{-8}$)&($3.029\times 10^{-8}$)&($3.027\times 10^{-8}$)&($2.974\times 10^{-8}$)&($3.027\times 10^{-8}$)\\ 
+
+ prop_unemp&  &  &-0.7\sym{***}&-0.7\sym{***}&-0.7\sym{***}&-0.6\sym{***}&-0.7\sym{***}\\ 
+
+   &  &  &(0.1088)&(0.1088)&(0.1073)&(0.1017)&(0.1074)\\ 
+
+ median_household_income&  &  &$4.751\times 10^{-7}$&$4.751\times 10^{-7}$&$4.492\times 10^{-7}$&$1.696\times 10^{-6}$\sym{***}&$4.341\times 10^{-7}$\\ 
+
+   &  &  &($3.079\times 10^{-7}$)&($3.08\times 10^{-7}$)&($3.061\times 10^{-7}$)&($4.602\times 10^{-7}$)&($3.066\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &-0.001\sym{***}&  &-0.003\sym{***}\\ 
+
+   &  &  &  &  &(0.0002)&  &(0.0007)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &0.0002\sym{***}\\ 
+
+   &  &  &  &  &  &  &($6.519\times 10^{-5}$)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&No&No&No&No&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & \\ 
+
+ Observations& 2,473,548&2,260,142&2,257,803&2,257,803&2,257,803&2,257,803&2,257,803\\ 
+
+ Adj-pseudo $R^2$ &0.54106&1.21258&1.21289&1.2119&1.21319&1.22758&1.21341\\ 
+
+ BIC & 1,149,974.75&-438,191.28&-438,262.58&-406,252.35&-438,896.02&-410,934.13&-439,337.64\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1501.39. Sample average log rent: 7.23. Sample average HHI: 26.89. Sample average delta HHI: 0.86. Sample SD HHI: 55.89. Sample SD delta HHI: 2.31}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE ZILLOW, Merger: Colony American - Starwood Waypoint, Control: Within-Zip Non-Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccc} 
+
+  & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{7}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&-0.05&-0.1\sym{***}&-0.1\sym{***}&-0.1\sym{***}&-0.06\sym{**}&-0.05\sym{*}&-0.06\sym{**}\\ 
+
+   &(0.0444)&(0.0315)&(0.0300)&(0.0300)&(0.0302)&(0.0282)&(0.0286)\\ 
+
+ log_sqft&  &0.5919\sym{***}&0.5919\sym{***}&0.5919\sym{***}&0.5921\sym{***}&0.5925\sym{***}&0.5921\sym{***}\\ 
+
+   &  &(0.0422)&(0.0422)&(0.0422)&(0.0422)&(0.0422)&(0.0422)\\ 
+
+ tot_unit_val&  &$2.339\times 10^{-7}$&$2.339\times 10^{-7}$&$2.339\times 10^{-7}$&$2.336\times 10^{-7}$&$2.328\times 10^{-7}$&$2.335\times 10^{-7}$\\ 
+
+   &  &($1.872\times 10^{-7}$)&($1.873\times 10^{-7}$)&($1.873\times 10^{-7}$)&($1.871\times 10^{-7}$)&($1.868\times 10^{-7}$)&($1.871\times 10^{-7}$)\\ 
+
+ prop_unemp&  &  &-0.5\sym{***}&-0.5\sym{***}&-0.5\sym{***}&-0.3\sym{**}&-0.5\sym{***}\\ 
+
+   &  &  &(0.1799)&(0.1799)&(0.1572)&(0.1133)&(0.1561)\\ 
+
+ median_household_income&  &  &$-8.447\times 10^{-7}$&$-8.447\times 10^{-7}$&$-7.982\times 10^{-7}$&$1.6\times 10^{-6}$\sym{*}&$-7.958\times 10^{-7}$\\ 
+
+   &  &  &($9.804\times 10^{-7}$)&($9.807\times 10^{-7}$)&($9.371\times 10^{-7}$)&($8.921\times 10^{-7}$)&($9.377\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &-0.03\sym{***}&  &-0.03\\ 
+
+   &  &  &  &  &(0.0042)&  &(0.0185)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &0.0005\\ 
+
+   &  &  &  &  &  &  &(0.0020)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&No&No&No&No&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & \\ 
+
+ Observations& 290,686&279,483&279,483&279,483&279,483&279,483&279,483\\ 
+
+ Adj-pseudo $R^2$ &0.48993&1.60489&1.6058&1.60429&1.60805&1.61922&1.60805\\ 
+
+ BIC & 122,736.71&-129,289.45&-129,443.73&-125,280.22&-129,918.55&-124,740.97&-129,894.69\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1310.09. Sample average log rent: 7.11. Sample average HHI: 35.97. Sample average delta HHI: 0.1. Sample SD HHI: 73.71. Sample SD delta HHI: 0.13}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE ZILLOW, Merger: Colony American - Starwood Waypoint, Control: Outside Zip Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccc} 
+
+  & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{7}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&-0.08\sym{***}&-0.1\sym{***}&-0.1\sym{***}&-0.1\sym{***}&0.0250&0.0277&0.0459\sym{***}\\ 
+
+   &(0.0217)&(0.0223)&(0.0198)&(0.0198)&(0.0365)&(0.0368)&(0.0165)\\ 
+
+ log_sqft&  &0.5920\sym{***}&0.5920\sym{***}&0.5920\sym{***}&0.5921\sym{***}&0.5924\sym{***}&0.5921\sym{***}\\ 
+
+   &  &(0.0422)&(0.0422)&(0.0422)&(0.0422)&(0.0422)&(0.0422)\\ 
+
+ tot_unit_val&  &$2.338\times 10^{-7}$&$2.338\times 10^{-7}$&$2.338\times 10^{-7}$&$2.336\times 10^{-7}$&$2.328\times 10^{-7}$&$2.336\times 10^{-7}$\\ 
+
+   &  &($1.872\times 10^{-7}$)&($1.872\times 10^{-7}$)&($1.873\times 10^{-7}$)&($1.871\times 10^{-7}$)&($1.868\times 10^{-7}$)&($1.871\times 10^{-7}$)\\ 
+
+ prop_unemp&  &  &-0.5\sym{***}&-0.5\sym{***}&-0.5\sym{***}&-0.3\sym{**}&-0.5\sym{***}\\ 
+
+   &  &  &(0.1698)&(0.1699)&(0.1559)&(0.1141)&(0.1552)\\ 
+
+ median_household_income&  &  &$-8.319\times 10^{-7}$&$-8.319\times 10^{-7}$&$-8\times 10^{-7}$&$1.6\times 10^{-6}$\sym{*}&$-8.051\times 10^{-7}$\\ 
+
+   &  &  &($9.544\times 10^{-7}$)&($9.547\times 10^{-7}$)&($9.367\times 10^{-7}$)&($8.951\times 10^{-7}$)&($9.375\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &-0.03\sym{***}&  &-0.02\\ 
+
+   &  &  &  &  &(0.0071)&  &(0.0166)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &-0.001\\ 
+
+   &  &  &  &  &  &  &(0.0017)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&No&No&No&No&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & \\ 
+
+ Observations& 290,686&279,483&279,483&279,483&279,483&279,483&279,483\\ 
+
+ Adj-pseudo $R^2$ &0.49015&1.60577&1.60663&1.60512&1.60806&1.61924&1.60806\\ 
+
+ BIC & 122,685.61&-129,484.66&-129,627.17&-125,463.66&-129,918.97&-124,744.61&-129,896.92\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1310.09. Sample average log rent: 7.11. Sample average HHI: 35.97. Sample average delta HHI: 0.1. Sample SD HHI: 73.71. Sample SD delta HHI: 0.13}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE ZILLOW, Merger: Colony American - Starwood Waypoint, Control: Single Firm Zips} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccc} 
+
+  & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{7}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&-0.08\sym{***}&-0.1\sym{***}&-0.1\sym{***}&-0.1\sym{***}&0.0250&0.0277&0.0459\sym{***}\\ 
+
+   &(0.0217)&(0.0223)&(0.0198)&(0.0198)&(0.0365)&(0.0368)&(0.0165)\\ 
+
+ log_sqft&  &0.5920\sym{***}&0.5920\sym{***}&0.5920\sym{***}&0.5921\sym{***}&0.5924\sym{***}&0.5921\sym{***}\\ 
+
+   &  &(0.0422)&(0.0422)&(0.0422)&(0.0422)&(0.0422)&(0.0422)\\ 
+
+ tot_unit_val&  &$2.338\times 10^{-7}$&$2.338\times 10^{-7}$&$2.338\times 10^{-7}$&$2.336\times 10^{-7}$&$2.328\times 10^{-7}$&$2.336\times 10^{-7}$\\ 
+
+   &  &($1.872\times 10^{-7}$)&($1.872\times 10^{-7}$)&($1.873\times 10^{-7}$)&($1.871\times 10^{-7}$)&($1.868\times 10^{-7}$)&($1.871\times 10^{-7}$)\\ 
+
+ prop_unemp&  &  &-0.5\sym{***}&-0.5\sym{***}&-0.5\sym{***}&-0.3\sym{**}&-0.5\sym{***}\\ 
+
+   &  &  &(0.1698)&(0.1699)&(0.1559)&(0.1141)&(0.1552)\\ 
+
+ median_household_income&  &  &$-8.319\times 10^{-7}$&$-8.319\times 10^{-7}$&$-8\times 10^{-7}$&$1.6\times 10^{-6}$\sym{*}&$-8.051\times 10^{-7}$\\ 
+
+   &  &  &($9.544\times 10^{-7}$)&($9.547\times 10^{-7}$)&($9.367\times 10^{-7}$)&($8.951\times 10^{-7}$)&($9.375\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &-0.03\sym{***}&  &-0.02\\ 
+
+   &  &  &  &  &(0.0071)&  &(0.0166)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &-0.001\\ 
+
+   &  &  &  &  &  &  &(0.0017)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&No&No&No&No&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & \\ 
+
+ Observations& 290,686&279,483&279,483&279,483&279,483&279,483&279,483\\ 
+
+ Adj-pseudo $R^2$ &0.49015&1.60577&1.60663&1.60512&1.60806&1.61924&1.60806\\ 
+
+ BIC & 122,685.61&-129,484.66&-129,627.17&-125,463.66&-129,918.97&-124,744.61&-129,896.92\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1310.09. Sample average log rent: 7.11. Sample average HHI: 35.97. Sample average delta HHI: 0.1. Sample SD HHI: 73.71. Sample SD delta HHI: 0.13}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE ZILLOW, Merger: Starwood Waypoint - Invitation Homes, Control: Within-Zip Non-Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccc} 
+
+  & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{7}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&0.0010\sym{***}&0.0006\sym{***}&0.0007\sym{***}&0.0007\sym{***}&0.0005\sym{***}&$-4.149\times 10^{-12}$NA&$-8.117\times 10^{-5}$\\ 
+
+   &(0.0003)&(0.0001)&(0.0001)&(0.0001)&(0.0001)&(NA)&($7.523\times 10^{-5}$)\\ 
+
+ log_sqft&  &0.5536\sym{***}&0.5536\sym{***}&0.5536\sym{***}&0.5536\sym{***}&$3.286\times 10^{-14}$NA&0.5536\sym{***}\\ 
+
+   &  &(0.0099)&(0.0100)&(0.0100)&(0.0100)&(NA)&(0.0100)\\ 
+
+ tot_unit_val&  &$-5.82\times 10^{-9}$&$-5.765\times 10^{-9}$&$-5.765\times 10^{-9}$&$-5.759\times 10^{-9}$&$1.158\times 10^{-7}$NA&$-5.755\times 10^{-9}$\\ 
+
+   &  &($8.788\times 10^{-9}$)&($8.795\times 10^{-9}$)&($8.798\times 10^{-9}$)&($8.796\times 10^{-9}$)&(NA)&($8.797\times 10^{-9}$)\\ 
+
+ prop_unemp&  &  &-0.8\sym{***}&-0.8\sym{***}&-0.8\sym{***}&$-2.731\times 10^{-13}$NA&-0.8\sym{***}\\ 
+
+   &  &  &(0.1063)&(0.1063)&(0.1062)&(NA)&(0.1056)\\ 
+
+ median_household_income&  &  &$-1.023\times 10^{-6}$\sym{***}&$-1.023\times 10^{-6}$\sym{***}&$-1.024\times 10^{-6}$\sym{***}&$8.218\times 10^{-7}$NA&$-10\times 10^{-7}$\sym{***}\\ 
+
+   &  &  &($3.857\times 10^{-7}$)&($3.858\times 10^{-7}$)&($3.85\times 10^{-7}$)&(NA)&($3.842\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &$4.639\times 10^{-5}$&  &-0.0005\sym{***}\\ 
+
+   &  &  &  &  &($3.355\times 10^{-5}$)&  &(0.0001)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &$9.507\times 10^{-5}$\sym{***}\\ 
+
+   &  &  &  &  &  &  &($2.098\times 10^{-5}$)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&No&No&No&No&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & \\ 
+
+ Observations& 2,001,321&1,832,962&1,831,012&1,831,012&1,831,012&1,831,012&1,831,012\\ 
+
+ Adj-pseudo $R^2$ &0.61777&1.23631&1.23656&1.23527&1.23659&0.67045&1.23693\\ 
+
+ BIC & 838,916.58&-420,800.34&-420,812.91&-385,050.37&-420,834.86&733,153.39&-421,465.19\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1588.45. Sample average log rent: 7.28. Sample average HHI: 26.56. Sample average delta HHI: 3.04. Sample SD HHI: 56.04. Sample SD delta HHI: 11.04}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE ZILLOW, Merger: Starwood Waypoint - Invitation Homes, Control: Outside Zip Firm} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccc} 
+
+  & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{7}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&0.0009\sym{***}&0.0007\sym{***}&0.0007\sym{***}&0.0007\sym{***}&0.0008\sym{***}&$-7.506\times 10^{-12}$NA&-0.0004\sym{***}\\ 
+
+   &(0.0002)&(0.0002)&(0.0002)&(0.0002)&(0.0002)&(NA)&($9.441\times 10^{-5}$)\\ 
+
+ log_sqft&  &0.5536\sym{***}&0.5536\sym{***}&0.5536\sym{***}&0.5536\sym{***}&$3.285\times 10^{-14}$NA&0.5536\sym{***}\\ 
+
+   &  &(0.0099)&(0.0100)&(0.0100)&(0.0100)&(NA)&(0.0100)\\ 
+
+ tot_unit_val&  &$-5.811\times 10^{-9}$&$-5.755\times 10^{-9}$&$-5.755\times 10^{-9}$&$-5.756\times 10^{-9}$&$1.158\times 10^{-7}$NA&$-5.756\times 10^{-9}$\\ 
+
+   &  &($8.789\times 10^{-9}$)&($8.796\times 10^{-9}$)&($8.799\times 10^{-9}$)&($8.796\times 10^{-9}$)&(NA)&($8.797\times 10^{-9}$)\\ 
+
+ prop_unemp&  &  &-0.8\sym{***}&-0.8\sym{***}&-0.8\sym{***}&$-2.731\times 10^{-13}$NA&-0.8\sym{***}\\ 
+
+   &  &  &(0.1060)&(0.1061)&(0.1061)&(NA)&(0.1056)\\ 
+
+ median_household_income&  &  &$-1.017\times 10^{-6}$\sym{***}&$-1.017\times 10^{-6}$\sym{***}&$-1.016\times 10^{-6}$\sym{***}&$8.218\times 10^{-7}$NA&$-9.988\times 10^{-7}$\sym{***}\\ 
+
+   &  &  &($3.847\times 10^{-7}$)&($3.848\times 10^{-7}$)&($3.848\times 10^{-7}$)&(NA)&($3.841\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &$-1.778\times 10^{-5}$&  &-0.0006\sym{***}\\ 
+
+   &  &  &  &  &($3.947\times 10^{-5}$)&  &(0.0001)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &0.0001\sym{***}\\ 
+
+   &  &  &  &  &  &  &($2.416\times 10^{-5}$)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&No&No&No&No&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & \\ 
+
+ Observations& 2,001,321&1,832,962&1,831,012&1,831,012&1,831,012&1,831,012&1,831,012\\ 
+
+ Adj-pseudo $R^2$ &0.61785&1.23645&1.2367&1.2354&1.2367&0.67045&1.23694\\ 
+
+ BIC & 838,746.88&-421,056.31&-421,071.41&-385,308.87&-421,047.69&733,153.39&-421,489.51\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1588.45. Sample average log rent: 7.28. Sample average HHI: 26.56. Sample average delta HHI: 3.04. Sample SD HHI: 56.04. Sample SD delta HHI: 11.04}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
+\global\long\def\sym#1{\ifmmode^{#1}\else\ensuremath{^{#1}}\fi} 
+
+ \begin{table}[H]\centering 
+
+ \caption{\label{2-Way FE ZILLOW, Merger: Starwood Waypoint - Invitation Homes, Control: Single Firm Zips} no title} 
+
+ \resizebox{\textwidth}{!}{\begin{tabular}{lccccccc} 
+
+  & & & & & & & \tabularnewline 
+
+ \hline 
+
+ \hline 
+
+ Dependent Variable:&\multicolumn{7}{c}{log_rent}\\ 
+
+ Model:&(1)&(2)&(3)&(4)&(5)&(6)&(7)\\ 
+
+ \hline 
+
+ \emph{Variables}\tabularnewline 
+
+ dhhi_treated&0.0009\sym{***}&0.0007\sym{***}&0.0007\sym{***}&0.0007\sym{***}&0.0008\sym{***}&$-7.506\times 10^{-12}$NA&-0.0004\sym{***}\\ 
+
+   &(0.0002)&(0.0002)&(0.0002)&(0.0002)&(0.0002)&(NA)&($9.441\times 10^{-5}$)\\ 
+
+ log_sqft&  &0.5536\sym{***}&0.5536\sym{***}&0.5536\sym{***}&0.5536\sym{***}&$3.285\times 10^{-14}$NA&0.5536\sym{***}\\ 
+
+   &  &(0.0099)&(0.0100)&(0.0100)&(0.0100)&(NA)&(0.0100)\\ 
+
+ tot_unit_val&  &$-5.811\times 10^{-9}$&$-5.755\times 10^{-9}$&$-5.755\times 10^{-9}$&$-5.756\times 10^{-9}$&$1.158\times 10^{-7}$NA&$-5.756\times 10^{-9}$\\ 
+
+   &  &($8.789\times 10^{-9}$)&($8.796\times 10^{-9}$)&($8.799\times 10^{-9}$)&($8.796\times 10^{-9}$)&(NA)&($8.797\times 10^{-9}$)\\ 
+
+ prop_unemp&  &  &-0.8\sym{***}&-0.8\sym{***}&-0.8\sym{***}&$-2.731\times 10^{-13}$NA&-0.8\sym{***}\\ 
+
+   &  &  &(0.1060)&(0.1061)&(0.1061)&(NA)&(0.1056)\\ 
+
+ median_household_income&  &  &$-1.017\times 10^{-6}$\sym{***}&$-1.017\times 10^{-6}$\sym{***}&$-1.016\times 10^{-6}$\sym{***}&$8.218\times 10^{-7}$NA&$-9.988\times 10^{-7}$\sym{***}\\ 
+
+   &  &  &($3.847\times 10^{-7}$)&($3.848\times 10^{-7}$)&($3.848\times 10^{-7}$)&(NA)&($3.841\times 10^{-7}$)\\ 
+
+ delta_hhi:time_trend&  &  &  &  &$-1.778\times 10^{-5}$&  &-0.0006\sym{***}\\ 
+
+   &  &  &  &  &($3.947\times 10^{-5}$)&  &(0.0001)\\ 
+
+ delta_hhi:sq_time_trend&  &  &  &  &  &  &0.0001\sym{***}\\ 
+
+   &  &  &  &  &  &  &($2.416\times 10^{-5}$)\\ 
+
+ \hline 
+
+ \emph{Fixed-Effects}&  & & & & & & \\ 
+
+ Zip5&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ factor(year)&Yes&Yes&Yes&Yes&Yes&Yes&Yes\\ 
+
+ \hline 
+
+ \emph{Varying Slopes}&  & & & & & & \\ 
+
+ time_trend (Zip5)&No&No&No&Yes&No&Yes&No\\ 
+
+ sq_time_trend (Zip5)&No&No&No&No&No&Yes&No\\ 
+
+ \hline 
+
+ \emph{Fit statistics}&  & & & & & & \\ 
+
+ Observations& 2,001,321&1,832,962&1,831,012&1,831,012&1,831,012&1,831,012&1,831,012\\ 
+
+ Adj-pseudo $R^2$ &0.61785&1.23645&1.2367&1.2354&1.2367&0.67045&1.23694\\ 
+
+ BIC & 838,746.88&-421,056.31&-421,071.41&-385,308.87&-421,047.69&733,153.39&-421,489.51\\ 
+
+ \hline 
+
+ \hline 
+
+ \multicolumn{9}{l} {\parbox[t]{\textwidth}{ \textit{Notes:} Sample is property level, with year and zip FE. Sample average rent: 1588.45. Sample average log rent: 7.28. Sample average HHI: 26.56. Sample average delta HHI: 3.04. Sample SD HHI: 56.04. Sample SD delta HHI: 11.04}} \\ 
+
+ \end{tabular}} 
+
+ \end{table} 
+
