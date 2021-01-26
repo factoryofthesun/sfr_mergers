@@ -49,8 +49,8 @@ getAvailMem()
 
 # ============= (0) Preprocessing ===================================================
 # Impute tracts (not sure if necessary)
-dt[, st_tract := argmax_na(st_tract), id]
-dt[, st_tract := as.integer(st_tract)]
+dt[, st_tract := argmax_na(st_tract_cl), id]
+dt[, st_tract := as.integer(st_tract_cl)]
 
 # Drop missing st_tract and out of bounds years
 dt <- dt[!is.na(st_tract) & year <= 2020 & year >= 2000]
