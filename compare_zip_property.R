@@ -174,6 +174,7 @@ ggplot(dt_month_zori, aes(x = monthyear, y = med_zori, color = dhhi_quart)) + ge
 
 # ============= Residuals of Zip Code Time Trends on HHI/log_rent ==============
 library(lfe)
+library(fixest)
 
 # log rent on Zip Time Trends ------------
 merge_labels <- c("Beazer Pre-Owned - American Homes 4 Rent", "Beazer Pre-Owned - American Homes 4 Rent", 
@@ -193,29 +194,33 @@ for (merge_id in c(1,2,4)){
   treated_var <- paste0("treated_", merge_id)
   post_var <- paste0("post_", merge_id)
   delta_hhi_var <- paste0("delta_hhi_", merge_id)
-  dt[, treated := 0]
-  dt[get(treated_var) == 1 & get(post_var) == 1, treated := 1]
+  sample1_var <- paste0("sample_", merge_id, "_c1")
+  sample3_var <- paste0("sample_", merge_id, "_c3")
+  
+  dt[, treated := get(sample1_var)]
   dt[,delta_hhi := get(delta_hhi_var)]
   
-  sample1_var <- paste0("sample_", merge_id, "_c3")
   dt_tmp <- dt[((year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year )
-               & get(sample1_var) == 1]
+               & get(sample1_var) == 1 & get(sample3_var) == 1]
   dt_tmp[, min_year := min_na(year)]
   dt_tmp[,time_trend := year - min_year]
   dt_tmp[,sq_time_trend := time_trend^2]
+  dt_tmp[, n_zip_trend := uniqueN(.SD[time_trend]), Zip5]
   
-  reg <- feols(log_rent ~ 0|factor(year) + Zip5[time_trend], data = dt_tmp)
+  reg <- feols(log_rent ~ 0|factor(year) + Zip5[time_trend], data = dt_tmp[n_zip_trend >= 3])
   
   resids <- reg$residuals
-  dt_tmp[, resid := resids]
+  dt_tmp[n_zip_trend >= 3, resid := resids]
   
   # Just take 10% of points for each year
-  sampled_resids <- dt_tmp[,.SD[sample(.N, 0.1*.N)], year]
-  ggplot(sampled_resids, aes(x = year, y = resid)) + geom_point(size = 1) + 
-    labs(title = merge_label) + 
+  sampled_resids <- dt_tmp[delta_hhi > 0,.SD[sample(.N, 0.01*.N)], year]
+  sampled_resids[, scaled_resid := delta_hhi * resid]
+  ggplot(sampled_resids, aes(x = year, y = scaled_resid)) + geom_point(size = 0.1) + 
+    labs(title = merge_label, x= "Year", y = "Residuals Scaled by Simulated Increase in Concentration") + 
     ggsave(paste0(mergers_path, "figs/diagnostics/zip_rent_resids_", merge_id, "_point.pdf"))
   
-  med_resids <- dt_tmp[,.(resid = median(resid)), year]
+  med_resids <- dt_tmp[delta_hhi > 0 & !is.na(resid) & !is.na(delta_hhi),.(resid = mean(resid), 
+                  weighted_resid = sum(resid*delta_hhi)/sum(delta_hhi)), year]
   med_resids[, merger := merge_label]
   ggplot(med_resids, aes(x = year, y = resid)) + geom_line() +
   labs(title = merge_label) + 
@@ -225,16 +230,18 @@ for (merge_id in c(1,2,4)){
   lin_resids[[merge_id]] <- med_resids
   
   # Check if fixest is faster -- yeah it is!
-  reg <- feols(log_rent ~ 0 | factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp)
+  reg <- feols(log_rent ~ 0 | factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp[n_zip_trend >= 3])
 
   resids <- reg$residuals
-  dt_tmp[, resid := resids]
-  
-  ggplot(dt_tmp, aes(x = year, y = resid)) + geom_point(size = 1) + 
-    labs(title = merge_label) + 
+  dt_tmp[n_zip_trend >= 3, resid := resids]
+  sampled_resids <- dt_tmp[delta_hhi > 0,.SD[sample(.N, 0.01*.N)], year]
+  sampled_resids[, scaled_resid := delta_hhi * resid]
+  ggplot(dt_tmp, aes(x = year, y = resid)) + geom_point(size = 0.1) + 
+    labs(title = merge_label, x= "Year", y = "Residuals Scaled by Simulated Increase in Concentration") + 
     ggsave(paste0(mergers_path, "figs/diagnostics/zip_rent_sq_resids_", merge_id, "_point.pdf"))
   
-  med_resids <- dt_tmp[,.(resid = median(resid)), year]
+  med_resids <- dt_tmp[delta_hhi > 0 & !is.na(resid) & !is.na(delta_hhi),.(resid = mean(resid), 
+                      weighted_resid = sum(resid*delta_hhi)/sum(delta_hhi)), year]
   med_resids[, merger := merge_label]
   sq_resids[[merge_id]] <- med_resids
   ggplot(med_resids, aes(x = year, y = resid)) + geom_line() +
@@ -247,11 +254,34 @@ lin_resid_dt <- rbindlist(lin_resids)
 ggplot(lin_resid_dt, aes(x = year, y = resid, color = merger)) + geom_line() +
   labs(color = "Merger", title = "Residuals of 2-Way FE Regression on Log Rent and Zip Time Trends", y = "Median Residual") + 
   ggsave(paste0(mergers_path, "figs/for_paper/zip_rent_resids_line.pdf"))
+ggplot(lin_resid_dt, aes(x = year, y = weighted_resid, color = merger)) + geom_line() +
+  labs(color = "Merger", title = "Residuals of 2-Way FE Regression on Log Rent and Zip Time Trends", y = "Median Residual") + 
+  ggsave(paste0(mergers_path, "figs/for_paper/zip_rent_weighted_resids_line.pdf"))
+
+# Let's get both on one PLOT 
+compare_resid <- rbindlist(list(lin_resid_dt[,.(weighted_resid, year, merger, source = "Weighted")], 
+                                lin_resid_dt[,.(resid, year, merger, source = "Unweighted")]), use.names = F)
+ggplot(compare_resid, aes(x = year, y = weighted_resid, color = merger, linetype = source)) + geom_line() + 
+  scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Weighted", "Unweighted")) + 
+  labs(x = "Year", y = "Mean Residuals", title = "Residuals of 2-Way FE Regression on Log Rent and Zip Time Trends", 
+       linetype = "Type", color = "Merger") + 
+  ggsave(paste0(mergers_path, "figs/for_paper/zip_rent_resids_compare.pdf"))
 
 sq_resid_dt <- rbindlist(sq_resids)
 ggplot(sq_resid_dt, aes(x = year, y = resid, color = merger)) + geom_line() +
   labs(color = "Merger", title = "Residuals of 2-Way FE Regression on Log Rent and Zip Quadratic Time Trends", y = "Median Residual") + 
   ggsave(paste0(mergers_path, "figs/for_paper/zip_sq_rent_resids_line.pdf"))
+ggplot(sq_resid_dt, aes(x = year, y = weighted_resid, color = merger)) + geom_line() +
+  labs(color = "Merger", title = "Residuals of 2-Way FE Regression on Log Rent and Zip Quadratic Time Trends", y = "Median Residual") + 
+  ggsave(paste0(mergers_path, "figs/for_paper/zip_sq_rent_resids_line.pdf"))
+
+# Just Beazer
+beazer_resid <- lin_resids[[1]]
+beazer_stack <- rbindlist(list(beazer_resid[,.(resid, year, source = "Unweighted")], 
+                               beazer_resid[,.(weighted_resid, year, source = "Weighted")]), use.names=F)
+ggplot(beazer_stack, aes(x = year, y = resid, linetype = source)) + geom_line() + geom_point(shape=16, size=2, color="red") + 
+  labs(x = "Year", y = "Mean Residuals", title = "Residuals of 2-Way FE Regression on Log Rent and Zip Time Trends") + 
+  ggsave(paste0(mergers_path, "figs/for_paper/beazer_resid_comp.pdf"))
 
 # ================ Parallel Plots ====================
 # Zip comparison of different characteristics
@@ -286,7 +316,7 @@ for (merge_id in c(1,2,4)){
                 "sqft")){
     dt_tmp_plot <- dt_tmp[, .(tmp = median_na(get(var))), .(dhhi_quart, year)]
     y_label <- acs_to_name[var]
-    first_year <- min(dt_tmp[!is.na(tmp)])
+    first_year <- min(dt_tmp[!is.na(tmp), year])
     ggplot(dt_tmp_plot[year <= 2018 & year >= first_year], aes(x = year, y = tmp, color = dhhi_quart)) + geom_line() +
       geom_vline(aes(linetype = "Merge Effective", xintercept = merge_eff_year)) + 
       geom_vline(aes(linetype="Merge Announced", xintercept = merge_announce_year)) + 
@@ -299,25 +329,44 @@ for (merge_id in c(1,2,4)){
 # ======================= Beazer Reconciliation =======================
 beazer_zips <- unique(dt[sample_1_c3 == 1, Zip5])
 dt[,treated := sample_1_c1]
-dt_prop_zip <- dt[Zip5 %in% beazer_zips, .(med_log_rent = median_na(log_rent)), .(Zip5, year, treated)]
-beazer_dt <- merge(dt_prop_zip, dt_zip[!is.na(log_zori) & sample_1 == 1], by = c("Zip5", "year"), all = T) # 1:M
+dt_prop_zip <- dt[Zip5 %in% beazer_zips, .(med_log_rent = median_na(log_rent), delta_hhi_1 = median(delta_hhi_1)), .(Zip5, year, treated)]
+beazer_dt <- merge(dt_prop_zip, dt_zip[!is.na(log_zori) & sample_1 == 1], by = c("Zip5", "year"), all = T, suffixes = c("_cl", "_zill")) # 1:M
 beazer_dt[, rent_diff := med_log_rent - log_zori]
 beazer_dt[, med_annual_log_rent := median_na(med_log_rent), year]
 beazer_dt[, med_annual_zori := median_na(log_zori), year]
-ggplot(beazer_dt, aes(x = year, y = rent_diff)) + geom_point() 
+ggplot(beazer_dt, aes(x = year, y = rent_diff)) + geom_point(size = 0.1) 
 
 beazer_diff <- beazer_dt[,.(mean_diff = mean_na(rent_diff), median_diff = mean_na(rent_diff), sd_diff = sd(rent_diff, na.rm=T), 
-                            diff_of_median = median_na(med_annual_log_rent - med_annual_zori)), year]
+                            diff_of_median = median_na(med_annual_log_rent - med_annual_zori)), .(year, treated_cl)]
 beazer_diff[,`:=`(upper_se = mean_diff + sd_diff, lower_se = mean_diff - sd_diff)]
-ggplot(beazer_diff[!is.na(mean_diff)], aes(x = year, y = mean_diff, color=treated)) + geom_line() + 
-  geom_point(shape=16, size = 2,color="red") +
+diff_in_diff <- merge(beazer_diff[treated_cl == 1], beazer_diff[treated_cl == 0], by = c("year"), suffixes = c("_1", "_0"))
+
+ggplot(diff_in_diff, aes(x = year, y = mean_diff, color=factor(treated_cl))) + geom_line() + 
+  geom_point(shape=16, size = 2) +
   scale_x_continuous(breaks = unique(beazer_diff$year)) + 
   geom_vline(xintercept = 2014) + 
-    labs(y = "Log(Rent/ZORI)", title = "Beazer Pre-Owned - American Homes 4 Rent: MLS and ZORI Rent Difference", x = "Year") +
-    ggsave(paste0(mergers_path, "figs/for_paper/beazer_rent_recon.png"))
+  labs(y = "Log(Rent) - Log(ZORI)", title = "Beazer Pre-Owned - American Homes 4 Rent: MLS and ZORI Rent Difference", x = "Year") +
+  ggsave(paste0(mergers_path, "figs/for_paper/beazer_rent_recon.png"))
+
+# Another way -- difference of agg by year weighted by dhhi
+dt_annual_treated <- dt[Zip5 %in% beazer_zips, .(med_log_rent = median_na(log_rent), weighted_rent = median_na(log_rent * delta_hhi_1)), year]
+zip_annual_treated <- dt_zip[!is.na(log_zori) & sample_1 == 1, .(med_zip_rent = median_na(log_zori), 
+                                                             weighted_zip_rent = median_na(log_zori * delta_hhi_1)), year]
+beazer_year <- merge(dt_annual_treated, zip_annual_treated, by = "year")
+beazer_year[,`:=`(diff = med_log_rent - med_zip_rent, weighted_diff = weighted_rent - weighted_zip_rent)]
+beazer_year_comp <- rbindlist(list(beazer_year[, .(diff, year, difference = "Unweighted")], 
+                                   beazer_year[, .(weighted_diff, year, difference = "Weighted")]), use.names=F)
+ggplot(beazer_year_comp, aes(x = year, y = diff, linetype = difference)) + geom_line() + 
+  geom_point(shape=16, size = 2, color = "red") +
+  scale_x_continuous(breaks = unique(beazer_diff$year)) + 
+  geom_vline(xintercept = 2014) + 
+  labs(y = "Log(Rent) - Log(ZORI)", title = "Beazer Pre-Owned - American Homes 4 Rent: MLS and ZORI Rent Difference", x = "Year",
+       linetype = "Difference") +
+  ggsave(paste0(mergers_path, "figs/for_paper/beazer_rent_weight_recon.png"))
 
 
-# for (merge_id in c(1,2,4)){
+
+  # for (merge_id in c(1,2,4)){
 #   # Delta prepost log zori
 #   merge_announce_date <- min(mergers[MergeID_1 == merge_id, DateAnnounced])
 #   merge_eff_date <- max(mergers[MergeID_1 == merge_id, DateEffective])
@@ -339,76 +388,3 @@ ggplot(beazer_diff[!is.na(mean_diff)], aes(x = year, y = mean_diff, color=treate
 
 # 
 # # ======================= (1) Comparison of Trends =========================
-# # Zip code coverage 
-# prop_zips <- unique(dt[!is.na(RentPrice), Zip5])
-# zip_zips <- unique(dt_zip[!is.na(ZORI), Zip5])
-# length(setdiff(prop_zips, zip_zips))
-# length(setdiff(zip_zips, prop_zips))
-# 
-# # DHHI Distributions (larger zips actually have somewhat lower DHHI)
-# quantile(dt[delta_hhi > 0, delta_hhi])
-# quantile(dt_zip[!is.na(ZORI) & delta_hhi > 0, delta_hhi])
-# 
-# # Plot DHHI distribution for each merger
-# unique_hhi <- unique(dt_zip[,.(Zip5, delta_hhi_1, delta_hhi_2, delta_hhi_4, delta_hhi_5)])
-# unique_hhi_long <- melt(unique_hhi, id.vars = c("Zip5"))
-# ggplot(unique_hhi_long, aes(x = variable, y = value)) + geom_point() + 
-#   labs(x = "Merger", y = "Delta HHI", title = "DHHI Distribution by Merger") + 
-#   ggsave(paste0(mergers_path, "figs/diagnostics/dhhi_distr.png"))
-# 
-# # Plot trends against quartiles of DHHI 
-# dt[,monthyear := as.POSIXct(ymd(year, truncated = 2))]
-# setnames(dt_zip, "log_zori", "log_rent")
-# dt[,rent_type := "MLS"]
-# dt_zip[,rent_type := "ZORI"]
-# dt[delta_hhi > 0,dhhi_quart := cut(delta_hhi, breaks=c(quantile(delta_hhi,probs=seq(0,1,by=0.5),na.rm=T)),
-#                            labels=c("Upper 50%", "Lower 50%"), include.lowest = T)]
-# dt_zip[delta_hhi > 0,dhhi_quart := cut(delta_hhi, breaks=c(quantile(delta_hhi,probs=seq(0,1,by=0.5),na.rm=T)),
-#                            labels=c("Upper 50%", "Lower 50%"), include.lowest = T)]
-# 
-# dt_tot <- rbindlist(list(dt[!is.na(dhhi_quart)], dt_zip[!is.na(dhhi_quart)]), fill = T)
-# dt_tot <- dt_tot[,.(med_rent = median_na(log_rent)), .(monthyear, dhhi_quart, rent_type)]
-# ggplot(dt_tot[!is.na(dhhi_quart)], aes(x = monthyear, y = med_rent, color = dhhi_quart, linetype = rent_type)) + 
-#   geom_line() + geom_line(stat="smooth", method="lm", alpha=0.7) +
-#   labs(x = "date", y = "median log rent", title = "DHHI Rent Trends: All", color = "DHHI Quantile", 
-#                      linetype = "Rent Source") + ggsave(paste0(mergers_path, "figs/diagnostics/", "dhhi_trends.png"))
-# 
-# # Plot differences in trends 
-# dt_tot_wide <- dcast(dt_tot, rent_type + monthyear ~ dhhi_quart, value.var="med_rent")
-# dt_tot_wide[, trend_diff := `Upper 50%` - `Lower 50%`]
-# ggplot(dt_tot_wide, aes(x = monthyear, y = trend_diff, linetype = rent_type)) + geom_line() + 
-#   geom_smooth(method = "lm", color = "grey", alpha = 0.7, se = F) + 
-#   labs(x = "date", y = "Upper-Lower 50% Log DHHI Trend Difference", title = "DHHI Rent Trends: All",
-#        linetype = "Rent Source") + ggsave(paste0(mergers_path, "figs/diagnostics/", "dhhi_delta_trends.png"))
-# 
-# # Is the discontinuity at 2018 caused by multi-merge zips?
-# setorder(dt_zip, Zip5, monthyear)
-# dt_zip[,dhhi_change := delta_hhi != shift(delta_hhi), .(Zip5)]
-# dt_zip[,.(N = sum_na(dhhi_change)), .(monthyear)] # It appears so 
-# 
-# # Separate trend plots for each merger
-# for (i in c(1,2,4,5)){
-#   sample_var <- paste0("sample_", i)
-#   sample_prop_var <- paste0("sample_", i, "_c1")
-#   merge_label_var <- paste0("merge_label_", i)
-#   dhhi_var <- paste0("delta_hhi_", i)
-#   merge_label <- unique(dt[get(sample_prop_var) == 1 & get(merge_label_var) != "", get(merge_label_var)])
-#   dt[get(dhhi_var) > 0 & get(sample_prop_var) == 1,dhhi_quart := cut(get(dhhi_var), breaks=c(quantile(get(dhhi_var),probs=seq(0,1,by=0.5),na.rm=T)),
-#                                           labels=c("Upper 50%", "Lower 50%"), include.lowest = T)]
-#   dt_zip[get(dhhi_var) > 0 & get(sample_var) == 1,dhhi_quart := cut(get(dhhi_var), breaks=c(quantile(get(dhhi_var),probs=seq(0,1,by=0.5),na.rm=T)),
-#                                          labels=c("Upper 50%", "Lower 50%"), include.lowest = T)]
-#   
-#   dt_tot <- rbindlist(list(dt[!is.na(dhhi_quart)], dt_zip[!is.na(dhhi_quart)]), fill = T)
-#   dt_tot <- dt_tot[,.(med_rent = median_na(log_rent)), .(monthyear, dhhi_quart, rent_type)]
-#   ggplot(dt_tot[!is.na(dhhi_quart)], aes(x = monthyear, y = med_rent, color = dhhi_quart, linetype = rent_type)) + 
-#     geom_line() + geom_line(stat="smooth", method="lm", alpha=0.7) +
-#     labs(x = "date", y = "median log rent", title = paste0("DHHI Rent Trends: ", merge_label), color = "DHHI Quantile", 
-#          linetype = "Rent Source") + ggsave(paste0(mergers_path, "figs/diagnostics/", "dhhi_trends_", i, ".png"))
-#   
-#   dt_tot_wide <- dcast(dt_tot, rent_type + monthyear ~ dhhi_quart, value.var="med_rent")
-#   dt_tot_wide[, trend_diff := `Upper 50%` - `Lower 50%`]
-#   ggplot(dt_tot_wide, aes(x = monthyear, y = trend_diff, linetype = rent_type)) + geom_line() + 
-#     geom_smooth(method = "lm", color = "grey", alpha = 0.7, se = F) + 
-#     labs(x = "date", y = "Upper-Lower 50% Log DHHI Trend Difference", title = paste0("DHHI Rent Trends: ", merge_label),
-#          linetype = "Rent Source") + ggsave(paste0(mergers_path, "figs/diagnostics/", "dhhi_", i, "_delta_trends.png"))
-# }

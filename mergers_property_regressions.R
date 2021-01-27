@@ -326,12 +326,22 @@ for (merge_id in c(1,2,4)){
   
   years <- years[1:length(coefs)]
   event_month_dt <- data.table(coefs = coefs, event_years = event_years, se_ub = coefs + se, se_lb = coefs - se, date = years)
-  ggplot(event_month_dt, aes(x = date, y = coefs)) + geom_line() + geom_point(shape=16, size=2, color="red") + 
-    geom_ribbon(aes(ymin = se_lb, ymax = se_ub), alpha=0.5) + geom_vline(aes(linetype = "Merge Effective", xintercept = merge_eff_year)) + 
-    geom_vline(aes(linetype="Merge Announced", xintercept = merge_announce_year)) + 
-    scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 
-    labs(x = "Date", y = "Estimate Scaled by Average Simulated \u0394 HHI", title = merge_label) + 
-    ggsave(paste0(mergers_path, "figs/regs/year_coefs_", merge_id, ".png"), width = 20)
+  
+  if (merge_id == 4){
+    ggplot(event_month_dt, aes(x = date, y = coefs)) + geom_line() + geom_point(shape=16, size=2, color="red") + 
+      geom_ribbon(aes(ymin = se_lb, ymax = se_ub), alpha=0.5) + geom_vline(aes(linetype = "Merge Effective", xintercept = merge_eff_year)) + 
+      geom_vline(aes(linetype="Merge Announced", xintercept = merge_announce_year)) + ylim(-0.0045, 0.004) + 
+      scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 
+      labs(x = "Date", y = "Estimate Scaled by Average Simulated \u0394 HHI", title = merge_label) + 
+      ggsave(paste0(mergers_path, "figs/regs/year_coefs_", merge_id, ".png"), width = 10)
+  } else{
+    ggplot(event_month_dt, aes(x = date, y = coefs)) + geom_line() + geom_point(shape=16, size=2, color="red") + 
+      geom_ribbon(aes(ymin = se_lb, ymax = se_ub), alpha=0.5) + geom_vline(aes(linetype = "Merge Effective", xintercept = merge_eff_year)) + 
+      geom_vline(aes(linetype="Merge Announced", xintercept = merge_announce_year)) + 
+      scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 
+      labs(x = "Date", y = "Estimate Scaled by Average Simulated \u0394 HHI", title = merge_label) + 
+      ggsave(paste0(mergers_path, "figs/regs/year_coefs_", merge_id, ".png"), width = 10)
+  }
   
   # Same thing but also interact with merger owner
   dt_tmp[,merge_position := ""]
@@ -344,7 +354,7 @@ for (merge_id in c(1,2,4)){
   # Plot event time coefficients with 1 SE shading 
   years <- sort(unique(dt_tmp$year))
   
-  # Enforce reference level at event month 0 for each merge position
+  # Enforce reference level at event month 0 for outside firms
   tot_coefs <- c()
   tot_se <- c()
   positions <- rep(c("Outside", "Target", "Acquiror"), each = length(tot_event_yr))
@@ -358,9 +368,9 @@ for (merge_id in c(1,2,4)){
       coefs <- c(coefs, 0)
       event_year_tmp <- c(event_year_tmp, setdiff(tot_event_yr, event_year_tmp))
     }
-    coefs[is.na(coefs)] <- 0
-    ref_coef <- coefs[which(event_year_tmp == 0)]
-    coefs <- coefs - ref_coef
+    if (i == 1){
+      ref_coef <- coefs[which(event_year_tmp == 0)]
+    }
     tot_coefs <- c(tot_coefs, coefs)
     
     se <- c(se(event_reg, cluster="Zip5")[names(event_reg$coefficients) %in% names(coefs)] * 1.96)
@@ -370,7 +380,7 @@ for (merge_id in c(1,2,4)){
     se[is.na(se)] <- se[which(event_year_tmp == 0)]
     tot_se <- c(tot_se, se)
   }
-    
+  tot_coefs <- tot_coefs - ref_coef
   tot_years <- rep(years[1:length(tot_event_yr)], 3)
   event_month_dt <- data.table(coefs = tot_coefs, event_years = rep(tot_event_yr, 3), 
                                se_ub = tot_coefs + tot_se, se_lb = tot_coefs - tot_se, date = tot_years,
@@ -854,10 +864,14 @@ for (merge_id in unique(mergers$MergeID_1)){
   avg_delta_hhi <- round(mean_na0(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi]), digits=2)
   sd_delta_hhi <- round(sd(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi], na.rm=T), digits=2)
   
-  reg0 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp[n_zip_trend >= 3])
-  reg1 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp)
-  reg2 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp[n_zip_trend >= 3])
-  reg3 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp)
+  reg0 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|
+                  factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp[n_zip_trend >= 3], fixef.tol = 1e-10)
+  reg1 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend + delta_hhi:sq_time_trend|
+                  Zip5 + factor(year), data = dt_tmp, fixef.tol = 1e-10)
+  reg2 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|
+                  factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp[n_zip_trend >= 3], fixef.tol = 1e-10)
+  reg3 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + 
+                  delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp, fixef.tol = 1e-10)
   
   zip_trend_line <- c("Yes", "No", "Yes", "No")
   hhi_trend_line <- c("No", "Yes", "No", "Yes")
@@ -909,10 +923,14 @@ for (merge_id in unique(mergers$MergeID_1)){
   avg_delta_hhi <- round(mean_na0(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi]), digits=2)
   sd_delta_hhi <- round(sd(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi], na.rm=T), digits=2)
   
-  reg0 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp[n_zip_trend >= 3])
-  reg1 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp)
-  reg2 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp[n_zip_trend >= 3])
-  reg3 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp)
+  reg0 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|
+                  factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp[n_zip_trend >= 3], fixef.tol = 1e-10)
+  reg1 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend + delta_hhi:sq_time_trend|
+                  Zip5 + factor(year), data = dt_tmp, fixef.tol = 1e-10)
+  reg2 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|
+                  factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp[n_zip_trend >= 3], fixef.tol = 1e-10)
+  reg3 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + 
+                  delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp, fixef.tol = 1e-10)
   
   zip_trend_line <- c("Yes", "No", "Yes", "No")
   hhi_trend_line <- c("No", "Yes", "No", "Yes")
@@ -959,10 +977,14 @@ for (merge_id in unique(mergers$MergeID_1)){
   avg_hhi <- round(mean_na0(dt_tmp[,.(hhi = median_na(hhi)), .(Zip5)][,hhi]), digits=2)
   sd_hhi <- round(sd(dt_tmp[hhi != 0,.(hhi = median_na(hhi)), .(Zip5)][,hhi], na.rm=T), digits=2)
   
-  reg0 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp[n_zip_trend >= 3])
-  reg1 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp)
-  reg2 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp[n_zip_trend >= 3])
-  reg3 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp)
+  reg0 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|
+                  factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp[n_zip_trend >= 3], fixef.tol = 1e-10)
+  reg1 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend + delta_hhi:sq_time_trend|
+                  Zip5 + factor(year), data = dt_tmp, fixef.tol = 1e-10)
+  reg2 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|
+                  factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp[n_zip_trend >= 3], fixef.tol = 1e-10)
+  reg3 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + 
+                  delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp, fixef.tol = 1e-10)
   
   zzip_trend_line <- c("Yes", "No", "Yes", "No")
   hhi_trend_line <- c("No", "Yes", "No", "Yes")
