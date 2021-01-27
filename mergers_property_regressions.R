@@ -201,10 +201,11 @@ reg4 <- feols(hhi ~ dhhi_treated + prop_unemp + median_household_income|factor(y
 reg5 <- feols(hhi ~ dhhi_treated + prop_unemp + median_household_income + delta_hhi:year_trend |factor(year) + factor(Zip5), data = dt_hhi)
 reg6 <- feols(hhi ~ dhhi_treated + prop_unemp + median_household_income + delta_hhi:year_trend + delta_hhi:sq_year_trend|factor(year) + factor(Zip5), data = dt_hhi)
 
-covariates_line <- c("Zip Controls", "No", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes")
-zip_trend_line <- c("Zip Time Trend", "No", "No","No", "Yes", "Sq", "No", "No")
-hhi_trend_line <- c("$\\Delta \\text{sim\\_HHI}$ Time Trend", "No", "No", "No","No", "No", "Yes", "Sq")
-lines <- list(covariates_line, zip_trend_line, hhi_trend_line)
+covariates_line <- c("No", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes")
+zip_trend_line <- c("No", "No","No", "Yes", "Sq", "No", "No")
+hhi_trend_line <- c("No", "No", "No","No", "No", "Yes", "Sq")
+lines <- list("Zip Controls" = covariates_line, "Zip Time Trend" = zip_trend_line, 
+              "$\\Delta \\text{sim\\_HHI}$ Time Trend" = hhi_trend_line)
 
 out <- capture.output(esttex(reg0,reg1, reg2, reg3,reg4,reg5,reg6, cluster="Zip5",
                                 extraline=lines, se="cluster", order = c("treated", "prop_unemp", "median_household_income", "year_trend"),
@@ -245,9 +246,9 @@ reg4 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val +
 reg5 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + 
                delta_hhi:time_trend + delta_hhi:sq_time_trend|factor(year) + Zip5, data = dt_tmp)
 
-zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "Yes", "No", "No")
-hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "Yes", "Yes")
-lines <- list(zip_trend_line, hhi_trend_line)
+zip_trend_line <- c("No", "No", "No", "Yes", "No", "No")
+hhi_trend_line <- c("No", "No", "No", "No", "Yes", "Yes")
+lines <- list("Zip*Linear Trend" = zip_trend_line,"Delta HHI*Linear Trend" = hhi_trend_line)
 out <- capture.output(esttex(reg0,reg1, reg2, reg3, reg4, reg5,cluster="Zip5",
                                 extraline = lines,se="cluster",
                                 label = "2-Way FE with delta HHI and firm owned indicator, All Treated Zips, OG"))
@@ -299,24 +300,28 @@ for (merge_id in c(1,2,4)){
                  (get(sample_var) == 1 | get(sample1_var) == 1)]
   dt_tmp[, event_yr := factor(year - merge_eff_year)]
   avg_delta_hhi <- round(mean_na0(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi]), digits=2)
-  
-  event_reg <- felm(log_rent ~ delta_hhi:event_yr + log_sqft + tot_unit_val + 
-                      prop_unemp + median_household_income|factor(year) + factor(Zip5)|0|Zip5, 
+  tot_event_yr <- as.integer(levels(unique(dt_tmp$event_yr)))
+  event_reg <- feols(log_rent ~ delta_hhi:event_yr + log_sqft + tot_unit_val + 
+                      prop_unemp + median_household_income|factor(year) + factor(Zip5), 
                     data = dt_tmp)
   
   # Plot event time coefficients with 1 SE shading 
-  varnames <- rownames(event_reg$coefficients)[-1:-4]
+  varnames <- names(event_reg$coefficients)[-1:-4]
   event_years <- as.integer(gsub("delta_hhi:event_yr", "", varnames, fixed = T))
   years <- sort(unique(dt_tmp$year))
   
-  # Enforce reference level at event month 0
+  # One year always removed as reference level
+  event_years <- c(event_years, setdiff(tot_event_yr, event_years))
+  
+  # Enforce reference level at event year 0
   coefs <- event_reg$coefficients[-1:-4] 
+  coefs <- c(coefs, NA) # Add back the reference year
   coefs[is.na(coefs)] <- 0
   ref_coef <- coefs[which(event_years == 0)]
   coefs <- coefs - ref_coef
   
   coefs <- coefs * avg_delta_hhi
-  se <- se(event_reg, cluster="Zip5")[-1:-4] * 1.96
+  se <- c(se(event_reg, cluster="Zip5")[-1:-4] * 1.96, NA)
   se[is.na(se)] <- se[which(event_years == 0)]
   
   years <- years[1:length(coefs)]
@@ -332,40 +337,47 @@ for (merge_id in c(1,2,4)){
   dt_tmp[,merge_position := ""]
   dt_tmp[Merger_Owner_Fill %in% merge_target, merge_position := "target"]
   dt_tmp[Merger_Owner_Fill %in% merge_acquiror, merge_position := "acquiror"]
-  
-  event_reg <- felm(log_rent ~ delta_hhi:event_yr:merge_position + log_sqft + tot_unit_val + 
-                      prop_unemp + median_household_income|factor(year) + factor(Zip5)|0|Zip5, 
+  event_reg <- feols(log_rent ~ interact(delta_hhi, event_yr, merge_position) + log_sqft + tot_unit_val + 
+                      prop_unemp + median_household_income|factor(year) + factor(Zip5), 
                     data = dt_tmp)
   
   # Plot event time coefficients with 1 SE shading 
-  varnames <- grep("merge_positiontarget", rownames(event_reg$coefficients), value = T)
-  event_years <- as.integer(gsub(":merge_positiontarget", "", gsub("delta_hhi:event_yr", "", varnames, fixed = T)))
   years <- sort(unique(dt_tmp$year))
   
   # Enforce reference level at event month 0 for each merge position
   tot_coefs <- c()
   tot_se <- c()
-  positions <- rep(c("Outside", "Target", "Acquiror"), length(event_years))
-  for (i in 0:2){
-    coefs <- event_reg$coefficients[(5+i*length(event_years)):(4 + (i+1)*length(event_years))] 
+  positions <- rep(c("Outside", "Target", "Acquiror"), each = length(tot_event_yr))
+  search <- c("NA", "target", "acquiror")
+  for (i in 1:3){
+    search_tmp <- search[i]
+    coefs <- event_reg$coefficients[grepl(search_tmp, names(event_reg$coefficients), fixed=T)] 
+    event_year_tmp <- as.integer(gsub(paste0(":merge_position::", search_tmp), "", 
+                                      gsub("delta_hhi:event_yr::", "", names(coefs), fixed = T), fixed = T))
+    if (length(coefs) < length(tot_event_yr)){
+      coefs <- c(coefs, 0)
+      event_year_tmp <- c(event_year_tmp, setdiff(tot_event_yr, event_year_tmp))
+    }
     coefs[is.na(coefs)] <- 0
-    ref_coef <- coefs[which(event_years == 0)]
+    ref_coef <- coefs[which(event_year_tmp == 0)]
     coefs <- coefs - ref_coef
     tot_coefs <- c(tot_coefs, coefs)
     
-    se <- event_reg$se[(5+i*length(event_years)):(4 + (i+1)*length(event_years))] * 1.96
-    se[is.na(se)] <- se[which(event_years == 0)]
+    se <- c(se(event_reg, cluster="Zip5")[names(event_reg$coefficients) %in% names(coefs)] * 1.96)
+    if (length(se) < length(tot_event_yr)){
+      se <- c(se, 0)
+    }
+    se[is.na(se)] <- se[which(event_year_tmp == 0)]
     tot_se <- c(tot_se, se)
   }
     
-  tot_years <- rep(years[1:length(event_years)], 3)
-  event_month_dt <- data.table(coefs = tot_coefs, event_years = rep(event_years, 3), 
+  tot_years <- rep(years[1:length(tot_event_yr)], 3)
+  event_month_dt <- data.table(coefs = tot_coefs, event_years = rep(tot_event_yr, 3), 
                                se_ub = tot_coefs + tot_se, se_lb = tot_coefs - tot_se, date = tot_years,
                                positions = positions)
-  ggplot(event_month_dt, aes(x = date, y = coefs, color = positions)) + geom_line() + geom_point(shape=16, size=2, color="red") + 
+  ggplot(event_month_dt, aes(x = date, y = coefs, color = positions)) + geom_line() + geom_point(shape=16, size=2) + 
     geom_vline(aes(linetype = "Merge Effective", xintercept = merge_eff_year)) + 
     geom_vline(aes(linetype="Merge Announced", xintercept = merge_announce_year)) + 
-    geom_ribbon(aes(ymin = se_lb, ymax = se_ub), alpha=0.5) +
     scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 
     labs(x = "Date", y = "Estimate Scaled by Average Simulated \u0394 HHI", title = merge_label, color="Market Position") + 
     ggsave(paste0(mergers_path, "figs/regs/year_prop_coefs_", merge_id, ".png"), width = 10)
@@ -433,9 +445,9 @@ for (merge_id in unique(mergers$MergeID_1)){
   reg8 <- feols(log_rent ~ treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + 
                  delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp)
   
-  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "Yes", "No", "No", "Yes", "No", "No")
-  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "Yes","No", "No", "Yes", "Sq")
-  lines <- list(zip_trend_line, hhi_trend_line)
+  zip_trend_line <- c("No", "No", "No", "Yes", "No", "No", "Yes", "No", "No")
+  hhi_trend_line <- c("No", "No", "No", "No", "Yes","No", "No", "Yes", "Sq")
+  lines <- list("Zip*Linear Trend" = zip_trend_line, "Delta HHI*Linear Trend" = hhi_trend_line)
   
   out <- capture.output(esttex(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7,reg8, cluster="Zip5",
                                   extraline = lines,se="cluster",
@@ -492,9 +504,9 @@ for (merge_id in unique(mergers$MergeID_1)){
   reg8 <- feols(log_rent ~ treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + 
                  delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp)
   
-  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "Yes", "No", "No", "Yes", "No", "No")
-  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "Yes","No", "No", "Yes", "Sq")
-  lines <- list(zip_trend_line, hhi_trend_line)
+  zip_trend_line <- c("No", "No", "No", "Yes", "No", "No", "Yes", "No", "No")
+  hhi_trend_line <- c("No", "No", "No", "No", "Yes","No", "No", "Yes", "Sq")
+  lines <- list("Zip*Linear Trend" = zip_trend_line, "Delta HHI*Linear Trend" = hhi_trend_line)
   
   out <- capture.output(esttex(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7,reg8, cluster="Zip5",
                                extraline = lines,se="cluster",
@@ -547,9 +559,9 @@ for (merge_id in unique(mergers$MergeID_1)){
   reg8 <- feols(log_rent ~ treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + 
                  delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp)
   
-  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "Yes", "No", "No", "Yes", "No", "No")
-  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "Yes","No", "No", "Yes", "Sq")
-  lines <- list(zip_trend_line, hhi_trend_line)
+  zip_trend_line <- c("No", "No", "No", "Yes", "No", "No", "Yes", "No", "No")
+  hhi_trend_line <- c("No", "No", "No", "No", "Yes","No", "No", "Yes", "Sq")
+  lines <- list("Zip*Linear Trend" = zip_trend_line, "Delta HHI*Linear Trend" = hhi_trend_line)
   
   out <- capture.output(esttex(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7,reg8, cluster="Zip5",
                                extraline = lines,se="cluster",
@@ -608,16 +620,16 @@ for (merge_id in unique(mergers$MergeID_1)){
   sample1_var <- paste0("sample_", merge_id, "_c1")
   dt_tmp <- dt[((year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year )
                & get(sample1_var) == 1]
-  
-  # Add linear time trend to regressions 
+
+  # Add linear time trend to regressions
   dt_tmp[, min_year := min_na(year)]
   dt_tmp[,time_trend := year - min_year]
   dt_tmp[,sq_time_trend := time_trend^2]
-  
+
   # We will need to remove the zips that we observe for under 3 periods
   dt_tmp[, n_zip_trend := uniqueN(.SD[!is.na(sqft) & !is.na(tot_unit_val), time_trend]), Zip5]
   dt_tmp[, dhhi_treated := delta_hhi*treated]
-  
+
   # Save averages
   avg_rent <- round(mean_na(dt_tmp$RentPrice), digits=2)
   avg_log_rent <- round(mean_na(dt_tmp$log_rent), digits=2)
@@ -625,66 +637,7 @@ for (merge_id in unique(mergers$MergeID_1)){
   sd_hhi <- round(sd(dt_tmp[hhi != 0,.(hhi = median_na(hhi)), .(Zip5)][,hhi], na.rm=T), digits=2)
   avg_delta_hhi <- round(mean_na0(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi]), digits=2)
   sd_delta_hhi <- round(sd(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi], na.rm=T), digits=2)
-  
-  reg0 <- feols(log_rent ~ dhhi_treated|Zip5 + factor(year), data = dt_tmp)
-  reg1 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val|Zip5 + factor(year), data = dt_tmp)
-  reg2 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year), data = dt_tmp)
-  reg3 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5[time_trend], data = dt_tmp[n_zip_trend >= 3])
-  reg4 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|Zip5 + factor(year), data = dt_tmp)
-  reg5 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year), data = dt_tmp)
-  reg6 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5[time_trend], data = dt_tmp[n_zip_trend >= 3])
-  reg7 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|Zip5 + factor(year), data = dt_tmp)
-  
-  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "Yes", "No", "No", "Yes", "No")
-  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "Yes","No", "No", "Yes")
-  lines <- list(zip_trend_line, hhi_trend_line)
-  
-  out <- capture.output(esttex(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7, cluster="Zip5",
-                               extraline = lines,se="cluster",
-                               label = paste0("2-Way FE, Merger: ", merge_label,", Control: Within-Zip Non-Firm")))
-  
-  # Wrap tabular environment in resizebox
-  out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
-  out <- gsub("\\end{tabular}", "\\end{tabular}}", out, fixed = T)
-  
-  # Set position
-  out <- gsub("htbp", "H", out, fixed = T)
-  
-  # Replace notes
-  note.latex <- paste0("\\multicolumn{9}{l} {\\parbox[t]{\\textwidth}{ \\textit{Notes:} Sample is property level, with year and zip FE. 
-                     Sample average rent: ", avg_rent, ". Sample average log rent: ", avg_log_rent, 
-                       ". Sample average HHI: ", avg_hhi, ". Sample average delta HHI: ", avg_delta_hhi, 
-                       ". Sample SD HHI: ", sd_hhi, ". Sample SD delta HHI: ", sd_delta_hhi, 
-                       "}} \\\\")
-  note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
-  out[grepl("Signif Codes",out)] <- note.latex
-  
-  cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
-  
-  # 2) Control = merging firms in unmerged zips; include all c1 properties as treated now
-  dt[, treated := 0]
-  dt[get(post_var) == 1, treated := get(sample1_var)]
-  sample_var <- paste0("sample_", merge_id, "_c2")
-  dt_tmp <- dt[((year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year) & 
-                 (get(sample_var) == 1 | get(sample1_var) == 1)]
-  
-  # Add linear time trend to regressions 
-  dt_tmp[, min_year := min_na(year)]
-  dt_tmp[,time_trend := year - min_year]
-  dt_tmp[,sq_time_trend := time_trend^2]
-  
-  # We will need to remove the zips that we only observe for 1 period
-  dt_tmp[,n_zip_trend := uniqueN(.SD[!is.na(sqft) & !is.na(tot_unit_val), time_trend]), Zip5]
-  dt_tmp[, dhhi_treated := delta_hhi*treated]
-  
-  # Save averages
-  avg_rent <- round(mean_na(dt_tmp$RentPrice), digits=2)
-  avg_log_rent <- round(mean_na(dt_tmp$log_rent), digits=2)
-  avg_hhi <- round(mean_na0(dt_tmp[,.(hhi = median_na(hhi)), .(Zip5)][,hhi]), digits=2)
-  sd_hhi <- round(sd(dt_tmp[hhi != 0,.(hhi = median_na(hhi)), .(Zip5)][,hhi], na.rm=T), digits=2)
-  avg_delta_hhi <- round(mean_na0(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi]), digits=2)
-  sd_delta_hhi <- round(sd(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi], na.rm=T), digits=2)
-  
+
   reg0 <- feols(log_rent ~ dhhi_treated|Zip5 + factor(year), data = dt_tmp)
   reg1 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val|Zip5 + factor(year), data = dt_tmp)
   reg2 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year), data = dt_tmp)
@@ -694,31 +647,90 @@ for (merge_id in unique(mergers$MergeID_1)){
   reg6 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5[time_trend], data = dt_tmp[n_zip_trend >= 3])
   reg7 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|Zip5 + factor(year), data = dt_tmp)
 
-  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "Yes", "No", "No", "Yes", "No")
-  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "Yes","No", "No", "Yes")
-  lines <- list(zip_trend_line, hhi_trend_line)
-  
+  zip_trend_line <- c("No", "No", "No", "Yes", "No", "No", "Yes", "No")
+  hhi_trend_line <- c("No", "No", "No", "No", "Yes","No", "No", "Yes")
+  lines <- list("Zip*Linear Trend" = zip_trend_line, "Delta HHI*Linear Trend" = hhi_trend_line)
+
   out <- capture.output(esttex(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7, cluster="Zip5",
                                extraline = lines,se="cluster",
-                               label = paste0("2-Way FE, Merger: ", merge_label,", Control: Outside Zip Firm")))
-  
+                               label = paste0("2-Way FE, Merger: ", merge_label,", Control: Within-Zip Non-Firm")))
+
   # Wrap tabular environment in resizebox
   out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
   out <- gsub("\\end{tabular}", "\\end{tabular}}", out, fixed = T)
-  
+
   # Set position
   out <- gsub("htbp", "H", out, fixed = T)
-  
+
   # Replace notes
-  note.latex <- paste0("\\multicolumn{9}{l} {\\parbox[t]{\\textwidth}{ \\textit{Notes:} Sample is property level, with year and zip FE. 
-                     Sample average rent: ", avg_rent, ". Sample average log rent: ", avg_log_rent, 
-                       ". Sample average HHI: ", avg_hhi, ". Sample average delta HHI: ", avg_delta_hhi, 
-                       ". Sample SD HHI: ", sd_hhi, ". Sample SD delta HHI: ", sd_delta_hhi, 
+  note.latex <- paste0("\\multicolumn{9}{l} {\\parbox[t]{\\textwidth}{ \\textit{Notes:} Sample is property level, with year and zip FE.
+                     Sample average rent: ", avg_rent, ". Sample average log rent: ", avg_log_rent,
+                       ". Sample average HHI: ", avg_hhi, ". Sample average delta HHI: ", avg_delta_hhi,
+                       ". Sample SD HHI: ", sd_hhi, ". Sample SD delta HHI: ", sd_delta_hhi,
+                       "}} \\\\")
+  note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
+  out[grepl("Signif Codes",out)] <- note.latex
+
+  cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
+
+  # 2) Control = merging firms in unmerged zips; include all c1 properties as treated now
+  dt[, treated := 0]
+  dt[get(post_var) == 1, treated := get(sample1_var)]
+  sample_var <- paste0("sample_", merge_id, "_c2")
+  dt_tmp <- dt[((year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year) &
+                 (get(sample_var) == 1 | get(sample1_var) == 1)]
+
+  # Add linear time trend to regressions
+  dt_tmp[, min_year := min_na(year)]
+  dt_tmp[,time_trend := year - min_year]
+  dt_tmp[,sq_time_trend := time_trend^2]
+
+  # We will need to remove the zips that we only observe for 1 period
+  dt_tmp[,n_zip_trend := uniqueN(.SD[!is.na(sqft) & !is.na(tot_unit_val), time_trend]), Zip5]
+  dt_tmp[, dhhi_treated := delta_hhi*treated]
+
+  # Save averages
+  avg_rent <- round(mean_na(dt_tmp$RentPrice), digits=2)
+  avg_log_rent <- round(mean_na(dt_tmp$log_rent), digits=2)
+  avg_hhi <- round(mean_na0(dt_tmp[,.(hhi = median_na(hhi)), .(Zip5)][,hhi]), digits=2)
+  sd_hhi <- round(sd(dt_tmp[hhi != 0,.(hhi = median_na(hhi)), .(Zip5)][,hhi], na.rm=T), digits=2)
+  avg_delta_hhi <- round(mean_na0(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi]), digits=2)
+  sd_delta_hhi <- round(sd(dt_tmp[delta_hhi != 0,.(delta_hhi = median_na(delta_hhi)), .(Zip5)][,delta_hhi], na.rm=T), digits=2)
+
+  reg0 <- feols(log_rent ~ dhhi_treated|Zip5 + factor(year), data = dt_tmp)
+  reg1 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val|Zip5 + factor(year), data = dt_tmp)
+  reg2 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year), data = dt_tmp)
+  reg3 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5[time_trend], data = dt_tmp[n_zip_trend >= 3])
+  reg4 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|Zip5 + factor(year), data = dt_tmp)
+  reg5 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year), data = dt_tmp)
+  reg6 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5[time_trend], data = dt_tmp[n_zip_trend >= 3])
+  reg7 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|Zip5 + factor(year), data = dt_tmp)
+
+  zip_trend_line <- c( "No", "No", "No", "Yes", "No", "No", "Yes", "No")
+  hhi_trend_line <- c("No", "No", "No", "No", "Yes","No", "No", "Yes")
+  lines <- list("Zip*Linear Trend" = zip_trend_line, "Delta HHI*Linear Trend" = hhi_trend_line)
+
+  out <- capture.output(esttex(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7, cluster="Zip5",
+                               extraline = lines,se="cluster",
+                               label = paste0("2-Way FE, Merger: ", merge_label,", Control: Outside Zip Firm")))
+
+  # Wrap tabular environment in resizebox
+  out <- gsub("\\begin{tabular}", "\\resizebox{\\textwidth}{!}{\\begin{tabular}", out, fixed = T)
+  out <- gsub("\\end{tabular}", "\\end{tabular}}", out, fixed = T)
+
+  # Set position
+  out <- gsub("htbp", "H", out, fixed = T)
+
+  # Replace notes
+  note.latex <- paste0("\\multicolumn{9}{l} {\\parbox[t]{\\textwidth}{ \\textit{Notes:} Sample is property level, with year and zip FE.
+                     Sample average rent: ", avg_rent, ". Sample average log rent: ", avg_log_rent,
+                       ". Sample average HHI: ", avg_hhi, ". Sample average delta HHI: ", avg_delta_hhi,
+                       ". Sample SD HHI: ", sd_hhi, ". Sample SD delta HHI: ", sd_delta_hhi,
                        "}} \\\\")
   note.latex <- gsub("[\t\r\v]|\\s\\s+", " ", note.latex)
   out[grepl("Signif Codes",out)] <- note.latex
   cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
-  
+
   # 3) Control = all properties unmerged zips with 1 firm
   sample_var <- paste0("sample_", merge_id, "_c3")
   dt_tmp <- dt[((year >= merge_announce_year-5 & year <= merge_announce_year) | year >=merge_eff_year) & 
@@ -748,9 +760,9 @@ for (merge_id in unique(mergers$MergeID_1)){
   reg6 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5[time_trend], data = dt_tmp[n_zip_trend >= 3])
   reg7 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend|Zip5 + factor(year), data = dt_tmp)
   
-  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "Yes", "No", "No", "Yes", "No")
-  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "Yes","No", "No", "Yes")
-  lines <- list(zip_trend_line, hhi_trend_line)
+  zip_trend_line <- c("No", "No", "No", "Yes", "No", "No", "Yes", "No")
+  hhi_trend_line <- c("No", "No", "No", "No", "Yes","No", "No", "Yes")
+  lines <- list("Zip*Linear Trend" = zip_trend_line, "Delta HHI*Linear Trend" = hhi_trend_line)
   
   out <- capture.output(esttex(reg0,reg1, reg2, reg3, reg4, reg5,reg6,reg7, cluster="Zip5",
                                extraline = lines, se="cluster",
@@ -774,16 +786,24 @@ for (merge_id in unique(mergers$MergeID_1)){
   cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
   
   # Plot sample of reg6, reg7 residuals
-  dt_tmp[, resid := reg6$residuals]
-  sampled_resids <- dt_tmp[,.SD[sample(.N, 0.1*.N)], year]
-  ggplot(sampled_resids, aes(x = year, y = resid)) + geom_point(size = 1) + 
-    labs(title = merge_label) + 
+  dt_tmp[(n_zip_trend >= 3) & !is.na(log_sqft) & !is.na(prop_unemp) & !is.na(median_household_income) & 
+           !is.na(tot_unit_val), resid := reg6$residuals]
+  sampled_resids <- dt_tmp[!is.na(resid) & delta_hhi > 0,.SD[sample(.N, 0.1*.N)], year]
+  sampled_resids[, scaled_resid := resid * delta_hhi] 
+  ggplot(sampled_resids, aes(x = year, y = scaled_resid)) + geom_point(size = 1) + 
+    labs(title = merge_label, x = "Year", y = "Residuals Scaled by Predicted Increase in Concentration") + 
     ggsave(paste0(mergers_path, "figs/regs/prop_zip_resids_", merge_id, "_point.pdf"))
   
-  dt_tmp[, resid := reg7$residuals]
-  sampled_resids <- dt_tmp[,.SD[sample(.N, 0.1*.N)], year]
+  # ggplot(sampled_resids[, .(resid = mean_na(resid)), year], aes(x = year, y = resid)) + geom_line() + 
+  #   labs(title = merge_label) + 
+  #   ggsave(paste0(mergers_path, "figs/regs/prop_zip_resids_", merge_id, "_line.pdf"))
+  # 
+  dt_tmp[!is.na(log_sqft) & !is.na(prop_unemp) & !is.na(median_household_income) & 
+           !is.na(tot_unit_val), resid := reg7$residuals]
+  sampled_resids <- dt_tmp[!is.na(resid) & delta_hhi > 0,.SD[sample(.N, 0.1*.N)], year]
+  sampled_resids[, scaled_resid := resid * delta_hhi] 
   ggplot(sampled_resids, aes(x = year, y = resid)) + geom_point(size = 1) + 
-    labs(title = merge_label) + 
+    labs(title = merge_label, x = "Year", y = "Residuals Scaled by Predicted Increase in Concentration") + 
     ggsave(paste0(mergers_path, "figs/regs/prop_dhhi_resids_", merge_id, "_point.pdf"))
 }
 
@@ -839,9 +859,9 @@ for (merge_id in unique(mergers$MergeID_1)){
   reg2 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp[n_zip_trend >= 3])
   reg3 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp)
   
-  zip_trend_line <- c("Zip*Sq Linear Trend", "Yes", "No", "Yes", "No")
-  hhi_trend_line <- c("Delta HHI*Sq Linear Trend", "No", "Yes", "No", "Yes")
-  lines <- list(zip_trend_line, hhi_trend_line)
+  zip_trend_line <- c("Yes", "No", "Yes", "No")
+  hhi_trend_line <- c("No", "Yes", "No", "Yes")
+  lines <- list("Zip*Sq Linear Trend" = zip_trend_line, "Delta HHI*Sq Linear Trend" = hhi_trend_line)
   
   out <- capture.output(esttex(reg0,reg1, reg2, reg3, cluster="Zip5",
                                extraline = lines,se="cluster",
@@ -894,9 +914,9 @@ for (merge_id in unique(mergers$MergeID_1)){
   reg2 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp[n_zip_trend >= 3])
   reg3 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp)
   
-  zip_trend_line <- c("Zip*Sq Linear Trend", "Yes", "No", "Yes", "No")
-  hhi_trend_line <- c("Delta HHI*Sq Linear Trend", "No", "Yes", "No", "Yes")
-  lines <- list(zip_trend_line, hhi_trend_line)
+  zip_trend_line <- c("Yes", "No", "Yes", "No")
+  hhi_trend_line <- c("No", "Yes", "No", "Yes")
+  lines <- list("Zip*Sq Linear Trend" = zip_trend_line, "Delta HHI*Sq Linear Trend" = hhi_trend_line)
   
   out <- capture.output(esttex(reg0,reg1, reg2, reg3, cluster="Zip5",
                                extraline = lines,se="cluster",
@@ -944,9 +964,9 @@ for (merge_id in unique(mergers$MergeID_1)){
   reg2 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income|Zip5 + factor(year) + Zip5[time_trend, sq_time_trend], data = dt_tmp[n_zip_trend >= 3])
   reg3 <- feols(log_rent ~ dhhi_treated:merge_position + log_sqft + tot_unit_val + prop_unemp + median_household_income + delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp)
   
-  zip_trend_line <- c("Zip*Sq Linear Trend", "Yes", "No", "Yes", "No")
-  hhi_trend_line <- c("Delta HHI*Sq Linear Trend", "No", "Yes", "No", "Yes")
-  lines <- list(zip_trend_line, hhi_trend_line)
+  zzip_trend_line <- c("Yes", "No", "Yes", "No")
+  hhi_trend_line <- c("No", "Yes", "No", "Yes")
+  lines <- list("Zip*Sq Linear Trend" = zip_trend_line, "Delta HHI*Sq Linear Trend" = hhi_trend_line)
   
   out <- capture.output(esttex(reg0,reg1, reg2, reg3, cluster="Zip5",
                                extraline = lines,se="cluster",
@@ -1031,9 +1051,9 @@ for (merge_id in unique(mergers$MergeID_1)){
   reg6 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income + 
                  delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp)
   
-  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "Yes", "No", "Sq", "No")
-  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "Yes","No", "Sq")
-  lines <- list(zip_trend_line, hhi_trend_line)
+  zip_trend_line <- c("No", "No", "No", "Yes", "No", "Sq", "No")
+  hhi_trend_line <- c("No", "No", "No", "No", "Yes","No", "Sq")
+  lines <- list("Zip*Linear Trend" = zip_trend_line, "Delta HHI*Linear Trend" = hhi_trend_line)
   
   out <- capture.output(esttex(reg0,reg1, reg2, reg3, reg4, reg5,reg6, cluster="Zip5",
                                   extraline = lines,se="cluster",
@@ -1090,9 +1110,9 @@ for (merge_id in unique(mergers$MergeID_1)){
   reg6 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income + 
                  delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp)
   
-  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "Yes", "No", "Sq", "No")
-  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "Yes","No", "Sq")
-  lines <- list(zip_trend_line, hhi_trend_line)
+  zip_trend_line <- c("No", "No", "No", "Yes", "No", "Sq", "No")
+  hhi_trend_line <- c("No", "No", "No", "No", "Yes","No", "Sq")
+  lines <- list("Zip*Linear Trend" = zip_trend_line, "Delta HHI*Linear Trend" = hhi_trend_line)
   
   out <- capture.output(esttex(reg0,reg1, reg2, reg3, reg4, reg5,reg6, cluster="Zip5",
                                extraline = lines,se="cluster",
@@ -1145,9 +1165,9 @@ for (merge_id in unique(mergers$MergeID_1)){
   reg6 <- feols(log_rent ~ dhhi_treated + log_sqft + tot_unit_val + prop_unemp + median_household_income + 
                  delta_hhi:time_trend + delta_hhi:sq_time_trend|Zip5 + factor(year), data = dt_tmp)
   
-  zip_trend_line <- c("Zip*Linear Trend", "No", "No", "No", "Yes", "No", "Sq", "No")
-  hhi_trend_line <- c("Delta HHI*Linear Trend", "No", "No", "No", "No", "Yes","No", "Sq")
-  lines <- list(zip_trend_line, hhi_trend_line)
+  zip_trend_line <- c("No", "No", "No", "Yes", "No", "Sq", "No")
+  hhi_trend_line <- c("No", "No", "No", "No", "Yes","No", "Sq")
+  lines <- list("Zip*Linear Trend" = zip_trend_line, "Delta HHI*Linear Trend" = hhi_trend_line)
   
   out <- capture.output(esttex(reg0,reg1, reg2, reg3, reg4, reg5,reg6, cluster="Zip5",
                                extraline = lines,se="cluster",

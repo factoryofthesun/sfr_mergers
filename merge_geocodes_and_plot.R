@@ -14,7 +14,6 @@ library(readxl)
 library(rlist)
 library(bit64)
 library(argparse)
-library(vroom)
 setwd("~/project")
 
 source("/gpfs/loomis/project/humphries/rl874/rent_project/code/cleaning/fn_dedup_rent.R")
@@ -29,9 +28,6 @@ figs_path <- "/gpfs/loomis/project/humphries/rl874/mergers_project/figs/map/"
 # Read mergers data and restrict to merge-owned properties
 mergers <- fread(paste0(mergers_path, "panel_hhi.csv"), 
                  select=c("fips", "apn_unformatted", "Merger_Owner_Fill", "RentPrice", "st_lat", "st_long","st_state"))
-# mergers <- fread(paste0(mergers_path, "panel_hhi.csv"),select=c("fips", "apn_unformatted", "Merger_Owner_Fill", "st_lat", "st_long","st_state"), nrows = 1e5)
-# library(vroom)
-# mergers <- as.data.table(vroom(paste0(mergers_path, "panel_hhi.csv"), col_select=c("fips", "apn_unformatted", "Merger_Owner_Fill", "st_lat", "st_long","st_state"), n_max = 1e5))
 mergers <- mergers[!is.na(Merger_Owner_Fill) & Merger_Owner_Fill != ""]
 
 # Read and merge geocoded addresses
@@ -60,6 +56,7 @@ print(paste0(n_bad, " bad rows after imputing."))
 theme_set(theme_bw())
 library(maps)
 library(ggmap)
+library(ggthemes)
 
 merge_labels <- c("Invitation Homes Inc", "American Homes 4 Rent", "Starwood Waypoint Residential",
                   "Colony American Homes Inc", "Silver Bay Realty Trust Corp", "Tricon Capital Group Inc",
@@ -70,17 +67,19 @@ states <- map_data("state")
 ggplot() + geom_polygon(data = states, aes(x = long, y = lat, group=group), color = "black", fill = "white") + 
   coord_fixed(1.3) + 
   geom_point(data=mergers[!is.na(Merger_Owner_Fill)], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
-  scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size = 3))) + 
-  labs(title = "SFR Owners", color="Firm") + 
-  ggsave(paste0(figs_path, "US.png"))
+  scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size = 1))) + 
+  labs(title = "SFR Owners in the US", color="Firm")+ theme_map() + 
+  theme(legend.title = element_text(size=3), legend.text = element_text(size=2), legend.position = "bottom") +
+  ggsave(paste0(figs_path, "US.png"), width = 10)
 
 # Plot separate on just properties with rent price
 ggplot() + geom_polygon(data = states, aes(x = long, y = lat, group=group), color = "black", fill = "white") + 
   coord_fixed(1.3) + 
   geom_point(data=mergers[!is.na(Merger_Owner_Fill) & !is.na(RentPrice) & RentPrice != ""], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
-  scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size = 3))) + 
+  scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size = 1))) + theme_map() +
+  theme(legend.title = element_text(size=3), legend.text = element_text(size=2), legend.position = "bottom") +
   labs(title = "SFR Owners", color="Firm") + 
-  ggsave(paste0(figs_path, "US_rent.png"))
+  ggsave(paste0(figs_path, "US_rent.png"), width = 10)
 
 # Plot each state individually 
 for (state in unique(mergers$st_state)){
@@ -97,7 +96,8 @@ for (state in unique(mergers$st_state)){
     coord_fixed(1.3) + 
     geom_point(data=tmp[!is.na(Merger_Owner_Fill)], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
     scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size = 3))) + 
-    labs(title = paste0("SFR Owners in ", state), color="Firm") + 
+    labs(title = paste0("SFR Owners in ", state), color="Firm") + theme_map() + 
+    theme(legend.position = "bottom") +
     ggsave(paste0(figs_path, state, ".png"))
   
   # Plot separate on just properties with rent price
@@ -105,7 +105,8 @@ for (state in unique(mergers$st_state)){
     coord_fixed(1.3) + 
     geom_point(data=tmp[!is.na(Merger_Owner_Fill) & !is.na(RentPrice) & RentPrice != ""], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
     scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size = 3))) + 
-    labs(title = paste0("SFR Owners in ", state), color="Firm") + 
+    labs(title = paste0("SFR Owners in ", state), color="Firm") + theme_map() + 
+    theme(legend.position = "bottom") +
     ggsave(paste0(figs_path, state, "_rent.png"))
 }
 

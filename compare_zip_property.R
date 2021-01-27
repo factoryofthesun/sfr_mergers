@@ -298,7 +298,8 @@ for (merge_id in c(1,2,4)){
 
 # ======================= Beazer Reconciliation =======================
 beazer_zips <- unique(dt[sample_1_c3 == 1, Zip5])
-dt_prop_zip <- dt[Zip5 %in% beazer_zips, .(med_log_rent = median_na(log_rent)), .(Zip5, year)]
+dt[,treated := sample_1_c1]
+dt_prop_zip <- dt[Zip5 %in% beazer_zips, .(med_log_rent = median_na(log_rent)), .(Zip5, year, treated)]
 beazer_dt <- merge(dt_prop_zip, dt_zip[!is.na(log_zori) & sample_1 == 1], by = c("Zip5", "year"), all = T) # 1:M
 beazer_dt[, rent_diff := med_log_rent - log_zori]
 beazer_dt[, med_annual_log_rent := median_na(med_log_rent), year]
@@ -308,7 +309,8 @@ ggplot(beazer_dt, aes(x = year, y = rent_diff)) + geom_point()
 beazer_diff <- beazer_dt[,.(mean_diff = mean_na(rent_diff), median_diff = mean_na(rent_diff), sd_diff = sd(rent_diff, na.rm=T), 
                             diff_of_median = median_na(med_annual_log_rent - med_annual_zori)), year]
 beazer_diff[,`:=`(upper_se = mean_diff + sd_diff, lower_se = mean_diff - sd_diff)]
-ggplot(beazer_diff[!is.na(mean_diff)], aes(x = year, y = mean_diff)) + geom_line() + geom_point(shape=16, size = 2,color="red") +
+ggplot(beazer_diff[!is.na(mean_diff)], aes(x = year, y = mean_diff, color=treated)) + geom_line() + 
+  geom_point(shape=16, size = 2,color="red") +
   scale_x_continuous(breaks = unique(beazer_diff$year)) + 
   geom_vline(xintercept = 2014) + 
     labs(y = "Log(Rent/ZORI)", title = "Beazer Pre-Owned - American Homes 4 Rent: MLS and ZORI Rent Difference", x = "Year") +
