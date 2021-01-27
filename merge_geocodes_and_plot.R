@@ -59,17 +59,16 @@ library(ggmap)
 library(ggthemes)
 
 merge_labels <- c("Invitation Homes Inc", "American Homes 4 Rent", "Starwood Waypoint Residential",
-                  "Colony American Homes Inc", "Silver Bay Realty Trust Corp", "Tricon Capital Group Inc",
-                  "Beazer Pre-Owned Rental Homes", "Ellington Housing", "American Residential Ppty Inc")
-colors <- c("coral1", "forestgreen", "dodgerblue", "darkorange", "violet", "brown", "gold3", "turquoise", "gray")
+                  "Colony American Homes Inc", "Silver Bay Realty Trust Corp", "Beazer Pre-Owned Rental Homes")
+colors <- c("coral1", "forestgreen", "dodgerblue", "darkorange", "violet", "gold3")
 
 states <- map_data("state")
 ggplot() + geom_polygon(data = states, aes(x = long, y = lat, group=group), color = "black", fill = "white") + 
   coord_fixed(1.3) + 
   geom_point(data=mergers[!is.na(Merger_Owner_Fill)], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
-  scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size = 1))) + 
+  scale_color_manual(breaks = merge_labels, values = colors) + guides(color = guide_legend(override.aes = list(size=6))) + 
   labs(title = "SFR Owners in the US", color="Firm")+ theme_map() + 
-  theme(legend.title = element_text(size=3), legend.text = element_text(size=2), legend.position = "bottom") +
+  theme(legend.position = "bottom") +
   ggsave(paste0(figs_path, "US.png"), width = 10)
 
 # Plot separate on just properties with rent price
@@ -77,8 +76,8 @@ ggplot() + geom_polygon(data = states, aes(x = long, y = lat, group=group), colo
   coord_fixed(1.3) + 
   geom_point(data=mergers[!is.na(Merger_Owner_Fill) & !is.na(RentPrice) & RentPrice != ""], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
   scale_color_manual(breaks = merge_labels, values = colors) + theme_map() +
-  theme(legend.position = "bottom") +
-  labs(title = "SFR Owners", color="Firm") + 
+  theme(legend.position = "bottom") + guides(color = guide_legend(override.aes = list(size=6))) + 
+  labs(title = "SFR Owners in the US", color="Firm") + 
   ggsave(paste0(figs_path, "US_rent.png"), width = 10)
 
 # Plot each state individually 
@@ -95,19 +94,20 @@ for (state in unique(mergers$st_state)){
   ggplot() + geom_polygon(data = tmp_state, aes(x = long, y = lat, group=group), color = "black", fill = "white") + 
     coord_fixed(1.3) + 
     geom_point(data=tmp[!is.na(Merger_Owner_Fill)], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
-    scale_color_manual(breaks = merge_labels, values = colors) + 
+    scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size=3))) + 
     labs(title = paste0("SFR Owners in ", state), color="Firm") + theme_map() + 
     theme(legend.position = "bottom") +
-    ggsave(paste0(figs_path, state, ".png"), width = 7, height = 5)
+    ggsave(paste0(figs_path, state, ".png"), width = 5, height = 5)
   
   # Plot separate on just properties with rent price
   ggplot() + geom_polygon(data = tmp_state, aes(x = long, y = lat, group=group), color = "black", fill = "white") + 
     coord_fixed(1.3) + 
-    geom_point(data=tmp[!is.na(Merger_Owner_Fill) & !is.na(RentPrice) & RentPrice != ""], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
-    scale_color_manual(breaks = merge_labels, values = colors) + 
+    geom_point(data=tmp[!is.na(Merger_Owner_Fill) & !is.na(RentPrice) & RentPrice != ""], 
+               aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
+    scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size=3))) + 
     labs(title = paste0("SFR Owners in ", state), color="Firm") + theme_map() + 
     theme(legend.position = "bottom") +
-    ggsave(paste0(figs_path, state, "_rent.png"), width = 7, height = 5)
+    ggsave(paste0(figs_path, state, "_rent.png"), width = 5, height = 5)
 }
 
 

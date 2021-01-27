@@ -365,6 +365,9 @@ ggplot(beazer_year_comp, aes(x = year, y = diff, linetype = difference)) + geom_
   ggsave(paste0(mergers_path, "figs/for_paper/beazer_rent_weight_recon.png"))
 
 
+# Stats for tables
+quantile(dt[delta_hhi_1 > 0, delta_hhi_1])
+
 
   # for (merge_id in c(1,2,4)){
 #   # Delta prepost log zori
