@@ -65,19 +65,18 @@ colors <- c("coral1", "forestgreen", "dodgerblue", "darkorange", "violet", "gold
 states <- map_data("state")
 ggplot() + geom_polygon(data = states, aes(x = long, y = lat, group=group), color = "black", fill = "white") + 
   coord_fixed(1.3) + 
-  geom_point(data=mergers[!is.na(Merger_Owner_Fill)], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
-  scale_color_manual(breaks = merge_labels, values = colors) + guides(color = guide_legend(override.aes = list(size=6))) + 
-  labs(title = "SFR Owners in the US", color="Firm")+ theme_map() + 
-  theme(legend.position = "bottom") +
+  geom_point(data=mergers[Merger_Owner_Fill %in% merge_labels], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
+  scale_color_manual(breaks = merge_labels, values = colors) + guides(color = guide_legend(override.aes = list(size=3))) + 
+  theme_map() + 
+  theme(legend.position = "bottom", legend.title = element_blank()) +
   ggsave(paste0(figs_path, "US.png"), width = 10)
 
 # Plot separate on just properties with rent price
 ggplot() + geom_polygon(data = states, aes(x = long, y = lat, group=group), color = "black", fill = "white") + 
   coord_fixed(1.3) + 
-  geom_point(data=mergers[!is.na(Merger_Owner_Fill) & !is.na(RentPrice) & RentPrice != ""], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
+  geom_point(data=mergers[Merger_Owner_Fill %in% merge_labels & !is.na(RentPrice) & RentPrice != ""], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
   scale_color_manual(breaks = merge_labels, values = colors) + theme_map() +
-  theme(legend.position = "bottom") + guides(color = guide_legend(override.aes = list(size=6))) + 
-  labs(title = "SFR Owners in the US", color="Firm") + 
+  theme(legend.position = "bottom", legend.title = element_blank()) + guides(color = guide_legend(override.aes = list(size=3))) + 
   ggsave(paste0(figs_path, "US_rent.png"), width = 10)
 
 # Plot each state individually 
@@ -93,21 +92,20 @@ for (state in unique(mergers$st_state)){
   
   ggplot() + geom_polygon(data = tmp_state, aes(x = long, y = lat, group=group), color = "black", fill = "white") + 
     coord_fixed(1.3) + 
-    geom_point(data=tmp[!is.na(Merger_Owner_Fill)], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
-    scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size=3))) + 
-    labs(title = paste0("SFR Owners in ", state), color="Firm") + theme_map() + 
-    theme(legend.position = "bottom") +
-    ggsave(paste0(figs_path, state, ".png"), width = 5, height = 5)
+    geom_point(data=tmp[Merger_Owner_Fill %in% merge_labels], aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
+    scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size=3), nrow = 2)) + theme_map() + 
+    theme(legend.position = "bottom", legend.title = element_blank()) + 
+    ggsave(paste0(figs_path, state, ".png"), width = 7, height = 5)
   
   # Plot separate on just properties with rent price
   ggplot() + geom_polygon(data = tmp_state, aes(x = long, y = lat, group=group), color = "black", fill = "white") + 
     coord_fixed(1.3) + 
-    geom_point(data=tmp[!is.na(Merger_Owner_Fill) & !is.na(RentPrice) & RentPrice != ""], 
+    geom_point(data=tmp[Merger_Owner_Fill %in% merge_labels & !is.na(RentPrice) & RentPrice != ""], 
                aes(x = X, y = Y, color = Merger_Owner_Fill),size = 0.1,shape=16) + 
-    scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size=3))) + 
-    labs(title = paste0("SFR Owners in ", state), color="Firm") + theme_map() + 
-    theme(legend.position = "bottom") +
-    ggsave(paste0(figs_path, state, "_rent.png"), width = 5, height = 5)
+    scale_color_manual(breaks = merge_labels, values = colors, guide=guide_legend(override.aes=list(size=3), nrow = 2)) + 
+    theme_map() + 
+    theme(legend.position = "bottom", legend.title = element_blank()) +
+    ggsave(paste0(figs_path, state, "_rent.png"), width = 7, height = 5)
 }
 
 
