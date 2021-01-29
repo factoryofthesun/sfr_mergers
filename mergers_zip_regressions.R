@@ -444,8 +444,8 @@ for (merge_id in unique(mergers$MergeID_1)){
   # TODO: WHY IS REGRESSION RANK DEFICIENT + DROPPING SOME MONTHS????
   months <- months[1:length(coefs)]
   event_month_dt <- data.table(coefs = coefs, event_months = event_months, se_ub = coefs + se, se_lb = coefs - se, date = months)
-  ggplot(event_month_dt[event_months >= -30 & event_months <= 40], aes(x = date, y = coefs)) + geom_line() + geom_point(shape=16, size=1) + 
-    geom_ribbon(aes(ymin = se_lb, ymax = se_ub), fill="lightgrey", alpha=0.7) + geom_vline(aes(linetype = "Merge Effective", xintercept = merge_eff_date)) + 
+  ggplot(event_month_dt[event_months >= -30 & event_months <= 40], aes(x = date, y = coefs)) + geom_line() + geom_point(shape=16, size=2, color="red") + 
+    geom_ribbon(aes(ymin = se_lb, ymax = se_ub), alpha=0.5) + geom_vline(aes(linetype = "Merge Effective", xintercept = merge_eff_date)) + 
     geom_vline(aes(linetype="Merge Announced", xintercept = merge_announce_date)) + 
     scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 
     labs(x = "Date", y = "Estimate Scaled by Average Simulated \u0394 HHI", title = merge_label) + 
