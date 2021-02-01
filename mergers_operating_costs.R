@@ -82,7 +82,9 @@ dt[, q_year := as.yearqtr(paste0(year, "-", quarter), "%Y-%q")]
 ggplot(data = dt, aes(x = q_year, y = marginal_cost, color = firm)) + geom_line() + geom_point() + 
   geom_vline(xintercept = as.yearqtr("2017-4", "%Y-%q")) + scale_x_yearqtr(breaks = unique(dt$q_year)) + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) + 
-  labs(x = "Year-Quarter", y = "Per-Home Operating Expense (Thousands)", title = "Invitation Homes and Starwood Waypoint Per-Home Operating Expenses") + 
+  labs(x = "Year-Quarter", y = "Per-Home Operating Expense (Thousands)", color = "Firm",
+       title = "Invitation Homes and Starwood Waypoint Per-Home Operating Expenses") + 
+  theme(legend.position = "bottom") +
   ggsave(paste0(mergers_path, "figs/ivh_starwood_costs.png"))
 
 dt[, avg_rent := rent_rev/num_homes * 1000/3]
