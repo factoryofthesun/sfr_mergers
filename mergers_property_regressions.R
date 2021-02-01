@@ -333,13 +333,15 @@ for (merge_id in c(1,2,4)){
       geom_vline(aes(linetype="Merge Announced", xintercept = merge_announce_year)) + ylim(-0.0045, 0.004) + 
       scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 
       labs(x = "Date", y = "Estimate Scaled by Average Simulated \u0394 HHI", title = merge_label) + 
+      theme(legend.position = "bottom") + 
       ggsave(paste0(mergers_path, "figs/regs/year_coefs_", merge_id, ".png"), width = 10)
   } else{
     ggplot(event_month_dt, aes(x = date, y = coefs)) + geom_line() + geom_point(shape=16, size=2, color="red") + 
       geom_ribbon(aes(ymin = se_lb, ymax = se_ub), alpha=0.5) + geom_vline(aes(linetype = "Merge Effective", xintercept = merge_eff_year)) + 
       geom_vline(aes(linetype="Merge Announced", xintercept = merge_announce_year)) + 
       scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 
-      labs(x = "Date", y = "Estimate Scaled by Average Simulated \u0394 HHI", title = merge_label) + 
+      labs(x = "Date", y = "Estimate Scaled by Average Simulated \u0394 HHI", title = merge_label) +
+      theme(legend.position = "bottom") + 
       ggsave(paste0(mergers_path, "figs/regs/year_coefs_", merge_id, ".png"), width = 10)
   }
   
@@ -390,6 +392,7 @@ for (merge_id in c(1,2,4)){
     geom_vline(aes(linetype="Merge Announced", xintercept = merge_announce_year)) + 
     scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 
     labs(x = "Date", y = "Estimate Scaled by Average Simulated \u0394 HHI", title = merge_label, color="Market Position") + 
+    theme(legend.position = "bottom") + 
     ggsave(paste0(mergers_path, "figs/regs/year_prop_coefs_", merge_id, ".png"), width = 10)
 }
 
@@ -796,25 +799,25 @@ for (merge_id in unique(mergers$MergeID_1)){
   cat(paste(out, "\n\n"), file = paste0(estimate_path, "property_did.tex"), append=T)
   
   # Plot sample of reg6, reg7 residuals
-  dt_tmp[(n_zip_trend >= 3) & !is.na(log_sqft) & !is.na(prop_unemp) & !is.na(median_household_income) & 
-           !is.na(tot_unit_val), resid := reg6$residuals]
-  sampled_resids <- dt_tmp[!is.na(resid) & delta_hhi > 0,.SD[sample(.N, 0.1*.N)], year]
-  sampled_resids[, scaled_resid := resid * delta_hhi] 
-  ggplot(sampled_resids, aes(x = year, y = scaled_resid)) + geom_point(size = 1) + 
-    labs(title = merge_label, x = "Year", y = "Residuals Scaled by Predicted Increase in Concentration") + 
-    ggsave(paste0(mergers_path, "figs/regs/prop_zip_resids_", merge_id, "_point.pdf"))
-  
+  # dt_tmp[(n_zip_trend >= 3) & !is.na(log_sqft) & !is.na(prop_unemp) & !is.na(median_household_income) & 
+  #          !is.na(tot_unit_val), resid := reg6$residuals]
+  # sampled_resids <- dt_tmp[!is.na(resid) & delta_hhi > 0,.SD[sample(.N, 0.1*.N)], year]
+  # sampled_resids[, scaled_resid := resid * delta_hhi] 
+  # ggplot(sampled_resids, aes(x = year, y = scaled_resid)) + geom_point(size = 1) + 
+  #   labs(title = merge_label, x = "Year", y = "Residuals Scaled by Predicted Increase in Concentration") + 
+  #   ggsave(paste0(mergers_path, "figs/regs/prop_zip_resids_", merge_id, "_point.pdf"))
+  # 
   # ggplot(sampled_resids[, .(resid = mean_na(resid)), year], aes(x = year, y = resid)) + geom_line() + 
   #   labs(title = merge_label) + 
   #   ggsave(paste0(mergers_path, "figs/regs/prop_zip_resids_", merge_id, "_line.pdf"))
   # 
-  dt_tmp[!is.na(log_sqft) & !is.na(prop_unemp) & !is.na(median_household_income) & 
-           !is.na(tot_unit_val), resid := reg7$residuals]
-  sampled_resids <- dt_tmp[!is.na(resid) & delta_hhi > 0,.SD[sample(.N, 0.1*.N)], year]
-  sampled_resids[, scaled_resid := resid * delta_hhi] 
-  ggplot(sampled_resids, aes(x = year, y = resid)) + geom_point(size = 1) + 
-    labs(title = merge_label, x = "Year", y = "Residuals Scaled by Predicted Increase in Concentration") + 
-    ggsave(paste0(mergers_path, "figs/regs/prop_dhhi_resids_", merge_id, "_point.pdf"))
+  # dt_tmp[!is.na(log_sqft) & !is.na(prop_unemp) & !is.na(median_household_income) & 
+  #          !is.na(tot_unit_val), resid := reg7$residuals]
+  # sampled_resids <- dt_tmp[!is.na(resid) & delta_hhi > 0,.SD[sample(.N, 0.1*.N)], year]
+  # sampled_resids[, scaled_resid := resid * delta_hhi] 
+  # ggplot(sampled_resids, aes(x = year, y = resid)) + geom_point(size = 1) + 
+  #   labs(title = merge_label, x = "Year", y = "Residuals Scaled by Predicted Increase in Concentration") + 
+  #   ggsave(paste0(mergers_path, "figs/regs/prop_dhhi_resids_", merge_id, "_point.pdf"))
 }
 
 # Same regs with squared time trends
@@ -1241,6 +1244,7 @@ for (merge_id in unique(mergers$MergeID_1)){
     geom_vline(aes(linetype="Merge Announced", xintercept = merge_announce_year)) + 
     scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 
     labs(x = "Date", y = "Estimate Scaled by Average Simulated \u0394 HHI", title = paste0(merge_label, " Zillow Zips")) + 
+    theme(legend.position = "bottom") + 
     ggsave(paste0(mergers_path, "figs/regs/year_zillow_coefs_", merge_id, ".png"), width = 20)
   
 }

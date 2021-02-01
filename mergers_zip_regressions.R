@@ -396,6 +396,7 @@ for (merge_id in unique(mergers$MergeID_1)){
     geom_vline(aes(linetype="Merge Announced", xintercept = merge_announce_date)) + 
     scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 
     labs(x = "Date", y = "Median Zip Log Rent", color = "sim\u0394 HHI Quartile", title = merge_label) +
+    theme(legend.position = "bottom") + 
     ggsave(paste0(mergers_path, "figs/for_paper/zori_", merge_id, ".png"))
 
   # Figure: Delta log ZORI between treated and control zips with SE bars
@@ -419,6 +420,7 @@ for (merge_id in unique(mergers$MergeID_1)){
     geom_vline(aes(linetype="Merge Announced", xintercept = merge_announce_date)) + 
     scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 
     labs(x = "Date", y = "\u0394 Log(ZORI)", title = merge_label) + 
+    theme(legend.position = "bottom") + 
     ggsave(paste0(mergers_path, "figs/for_paper/delta_zori_", merge_id, ".png"), width = 10)
   
   # Event-time regression ---------------------------
@@ -449,6 +451,7 @@ for (merge_id in unique(mergers$MergeID_1)){
     geom_vline(aes(linetype="Merge Announced", xintercept = merge_announce_date)) + 
     scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 
     labs(x = "Date", y = "Estimate Scaled by Average Simulated \u0394 HHI", title = merge_label) + 
+    theme(legend.position = "bottom") + 
     ggsave(paste0(mergers_path, "figs/regs/month_coefs_", merge_id, ".png"), width = 20)
   
   # Zip comparison of different characteristics
@@ -463,6 +466,7 @@ for (merge_id in unique(mergers$MergeID_1)){
       geom_vline(aes(linetype="Merge Announced", xintercept = year(merge_announce_date))) + 
       scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Merge Effective", "Merge Announced"), name = "Timing") + 
       labs(x = "Date", y = color_label, color = "sim\u0394 HHI Quartile", title = merge_label) +
+      theme(legend.position = "bottom") + 
       ggsave(paste0(mergers_path, "figs/for_paper/", var, "_", merge_id, ".png"))
     
   }
