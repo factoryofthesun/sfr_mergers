@@ -265,8 +265,8 @@ ggplot(compare_resid, aes(x = year, y = weighted_resid, color = merger, linetype
   scale_linetype_manual(values = c("solid", "dashed"), breaks = c("Weighted", "Unweighted")) + 
   labs(x = "Year", y = "Mean Residuals", title = "Residuals of 2-Way FE Regression on Log Rent and Zip Time Trends", 
        linetype = "Type", color = "Merger") + 
-  theme(legend.position = "bottom") +
-  ggsave(paste0(mergers_path, "figs/for_paper/zip_rent_resids_compare.pdf"))
+  theme(legend.position = "bottom") + guides(color=guide_legend(nrow=2))+
+  ggsave(paste0(mergers_path, "figs/for_paper/zip_rent_resids_compare.pdf"), width = 10)
 
 sq_resid_dt <- rbindlist(sq_resids)
 ggplot(sq_resid_dt, aes(x = year, y = resid, color = merger)) + geom_line() +
