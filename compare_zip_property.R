@@ -363,6 +363,7 @@ ggplot(beazer_year_comp, aes(x = year, y = diff, linetype = difference)) + geom_
   geom_vline(xintercept = 2014) + 
   labs(y = "Log(Rent) - Log(ZORI)", title = "Beazer Pre-Owned - American Homes 4 Rent: MLS and ZORI Rent Difference", x = "Year",
        linetype = "Difference") +
+  theme(legend.position = "bottom") +
   ggsave(paste0(mergers_path, "figs/for_paper/beazer_rent_weight_recon.png"))
 
 
